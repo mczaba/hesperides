@@ -46,7 +46,6 @@ async function start() {
 
   // error middleware
   app.use((error, req, res, next) => {
-    console.log(`from error middleware : ${error}`)
     res.status(error.statusCode).send(error.message)
   })
 
