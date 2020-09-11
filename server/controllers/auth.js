@@ -15,12 +15,12 @@ const transporter = nodemailer.createTransport({
 
 exports.createAdmin = [
   validator
-    .body('login', 'un login est requis')
+    .body('login', 'Le login doit faire au moins 5 caractères')
     .escape()
-    .isLength({ min: 1 })
+    .isLength({ min: 5 })
     .trim(),
   validator
-    .body('email', 'un Email est requis')
+    .body('email', 'un Email valide est requis')
     .isLength({ min: 1 })
     .normalizeEmail()
     .isEmail()
@@ -122,12 +122,12 @@ exports.login = (req, res, next) => {
 
 exports.createAccount = [
   validator
-    .body('login', 'un login est requis')
+    .body('login', 'Le login doit faire au moins 5 caractères')
     .escape()
-    .isLength({ min: 1 })
+    .isLength({ min: 5 })
     .trim(),
   validator
-    .body('email', 'un Email est requis')
+    .body('email', 'un Email valide est requis')
     .isLength({ min: 1 })
     .normalizeEmail()
     .isEmail()
@@ -243,7 +243,7 @@ exports.changeEmail = [
     .isLength({ min: 1 })
     .trim(),
   validator
-    .body('newEmail', 'un Email est requis')
+    .body('newEmail', 'un Email valide est requis')
     .isLength({ min: 1 })
     .normalizeEmail()
     .isEmail()

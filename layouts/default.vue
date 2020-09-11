@@ -1,58 +1,63 @@
 <template>
   <v-app>
-    <v-navigation-drawer
-      :mini-variant="miniVariant"
-      :clipped="clipped"
-      fixed
-      app
-    >
-      <v-list>
-        <v-list-item
-          v-for="(item, i) in items"
-          :key="i"
-          :to="item.to"
-          router
-          exact
-        >
-          <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
+    <v-navigation-drawer v-if="user" fixed app class="pt-6">
+      <v-layout column>
+        <h2 class="text-center mb-6">{{ user.login }}</h2>
+        <v-list>
+          <v-list-item
+            v-for="(item, i) in items"
+            :key="i"
+            :to="item.to"
+            router
+            exact
+          >
+            <v-list-item-action>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title v-text="item.title" />
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-layout>
     </v-navigation-drawer>
-    <v-app-bar :clipped-left="clipped" fixed app>
-      <v-btn @click.stop="miniVariant = !miniVariant" icon>
-        <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
+    <v-app-bar fixed app>
+      <v-btn @click="switchTheme" icon>
+        <v-icon>{{ themeButtonIcon }}</v-icon>
       </v-btn>
-      <v-btn @click.stop="clipped = !clipped" icon>
-        <v-icon>mdi-application</v-icon>
-      </v-btn>
-      <v-btn @click.stop="fixed = !fixed" icon>
-        <v-icon>mdi-minus</v-icon>
-      </v-btn>
-      <v-toolbar-title v-text="title" />
       <v-spacer />
+      <v-menu v-if="user" v-model="showMenu" offset-y>
+        <v-btn slot="activator" @click="showMenu = true" text
+          >{{ user.login }}<v-icon>mdi-chevron-down</v-icon></v-btn
+        >
+        <v-list>
+          <change-mail @clicked="showMenu = false" />
+          <change-pass @clicked="showMenu = false" />
+          <v-list-item @click="logout">
+            <v-list-item-title>Se déconnecter</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </v-app-bar>
     <v-main>
       <v-container>
         <nuxt />
       </v-container>
     </v-main>
-    <v-footer :fixed="fixed" app>
-      <span>&copy; 2019</span>
-    </v-footer>
   </v-app>
 </template>
 
 <script>
+import changeMail from '../components/changeMailForm'
+import changePass from '../components/changePassForm'
+
 export default {
+  components: {
+    changeMail,
+    changePass
+  },
   data() {
     return {
-      clipped: false,
-      fixed: false,
       items: [
         {
           icon: 'mdi-apps',
@@ -65,10 +70,37 @@ export default {
           to: '/inspire'
         }
       ],
-      miniVariant: false,
-      right: true,
-      rightDrawer: false,
-      title: 'Vuetify.js'
+      showMenu: false
+    }
+  },
+  computed: {
+    themeButtonIcon() {
+      return this.$vuetify.theme.dark ? 'mdi-brightness-7' : 'mdi-brightness-2'
+    },
+    user() {
+      return this.$store.state.user
+    }
+  },
+  methods: {
+    switchTheme() {
+      this.$vuetify.theme.dark = !this.$vuetify.theme.dark
+    },
+    callFunction(functionName) {
+      this[functionName]()
+    },
+
+    changemail() {
+      this.changeMailPopUp = true
+      setTimeout(() => {
+        this.changeMailPopUp = false
+      }, 1000)
+    },
+    changepass() {
+      console.log('pass')
+    },
+    logout() {
+      this.$store.commit('logOut')
+      this.showMenu = false
     }
   }
 }
