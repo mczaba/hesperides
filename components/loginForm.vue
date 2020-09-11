@@ -54,13 +54,12 @@ export default {
                 token: response.data.token,
                 user: response.data.user
               }
-              console.log(payload)
               this.$store.commit('logIn', payload)
             } else {
               this.error = response.data
             }
           })
-          .catch((err) => console.log(err))
+          .catch((err) => (this.error = err))
       }
     }
   }

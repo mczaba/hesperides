@@ -208,6 +208,13 @@ exports.changePassword = [
       const token = req.headers.authorization.split(' ')[1]
       const userID = jwt.verify(token, '11051990').user.Id
       let user = null
+      if (!userID) {
+        const error = new Error(
+          "Vous n'avez pas l'aurotisation pour cette action"
+        )
+        error.statusCode = 403
+        next(error)
+      }
       Membres.findByPk(userID)
         .then((foundUser) => {
           user = foundUser
@@ -271,6 +278,13 @@ exports.changeEmail = [
       const token = req.headers.authorization.split(' ')[1]
       const userID = jwt.verify(token, '11051990').user.Id
       let user = null
+      if (!userID) {
+        const error = new Error(
+          "Vous n'avez pas l'aurotisation pour cette action"
+        )
+        error.statusCode = 403
+        next(error)
+      }
       Membres.findByPk(userID)
         .then((foundUser) => {
           user = foundUser
@@ -295,3 +309,31 @@ exports.changeEmail = [
     }
   }
 ]
+
+exports.get_all = (req, res, next) => {
+  Membres.findAll()
+    .then((memberList) => {
+      const memberListFiltered = memberList.map((membre) => {
+        return {
+          Id: membre.dataValues.Id,
+          login: membre.dataValues.login,
+          email: membre.dataValues.email,
+          admin: membre.dataValues.admin,
+          gestionnaire: membre.dataValues.gestionnaire
+        }
+      })
+      res.json(memberListFiltered)
+    })
+    .catch((err) => next(err))
+}
+
+exports.deleter_user = (req, res, next) => {
+  Membres.findByPk(req.params.id)
+    .then((membre) => {
+      return membre.destroy()
+    })
+    .then((result) => {
+      res.status(200).send('Le compte a bien été supprimé')
+    })
+    .catch((error) => next(error))
+}

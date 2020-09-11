@@ -4,6 +4,22 @@
       <v-layout column>
         <h2 class="text-center mb-6">{{ user.login }}</h2>
         <v-list>
+          <v-list-item v-if="user.admin" to="/account-list" router exact>
+            <v-list-item-action>
+              <v-icon>mdi-account-multiple</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>Liste des comptes</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item v-if="user.admin" to="/account-create" router exact>
+            <v-list-item-action>
+              <v-icon>mdi-account-plus</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>Créer un compte</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
           <v-list-item
             v-for="(item, i) in items"
             :key="i"
@@ -39,7 +55,7 @@
         </v-list>
       </v-menu>
     </v-app-bar>
-    <v-main>
+    <v-main class="secondary">
       <v-container>
         <nuxt />
       </v-container>
@@ -87,16 +103,6 @@ export default {
     },
     callFunction(functionName) {
       this[functionName]()
-    },
-
-    changemail() {
-      this.changeMailPopUp = true
-      setTimeout(() => {
-        this.changeMailPopUp = false
-      }, 1000)
-    },
-    changepass() {
-      console.log('pass')
     },
     logout() {
       this.$store.commit('logOut')
