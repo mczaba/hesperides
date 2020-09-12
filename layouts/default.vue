@@ -4,7 +4,7 @@
       <v-layout column>
         <h2 class="text-center mb-6">{{ user.login }}</h2>
         <v-list>
-          <v-list-item v-if="user.admin" to="/account-list" router exact>
+          <v-list-item v-if="user.admin" to="/account/list" router exact>
             <v-list-item-action>
               <v-icon>mdi-account-multiple</v-icon>
             </v-list-item-action>
@@ -12,7 +12,13 @@
               <v-list-item-title>Liste des comptes</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item v-if="user.admin" to="/account-create" router exact>
+          <v-list-item
+            v-if="user.admin"
+            to="/account/create"
+            router
+            exact
+            class="mb-5"
+          >
             <v-list-item-action>
               <v-icon>mdi-account-plus</v-icon>
             </v-list-item-action>
@@ -76,9 +82,9 @@ export default {
     return {
       items: [
         {
-          icon: 'mdi-apps',
-          title: 'Welcome',
-          to: '/'
+          icon: 'mdi-account-multiple',
+          title: 'Liste des propriétaires',
+          to: '/proprietaire/list'
         },
         {
           icon: 'mdi-chart-bubble',
