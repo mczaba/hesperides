@@ -20,6 +20,9 @@
           ></v-text-field>
           <p v-if="error" class="error--text">{{ error }}</p>
           <v-btn @click="submit" class="primary my-6">connexion</v-btn>
+          <NuxtLink to="/password-reset">
+            Mot de passe oublié ?
+          </NuxtLink>
         </v-form>
       </v-card>
     </v-dialog>

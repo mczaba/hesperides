@@ -132,48 +132,51 @@ exports.createAccount = [
     .normalizeEmail()
     .isEmail()
     .trim(),
+  validator
+    .body('permissions', 'Vous devez renseigner les permissions du compte')
+    .escape()
+    .isLength({ min: 1 })
+    .trim(),
   (req, res, next) => {
     const errors = validator.validationResult(req)
     if (!errors.isEmpty()) {
       res.status(220).json(JSON.stringify(errors))
     } else {
-      Membres.findOne({ where: { login: req.body.login } }).then(
-        (foundUser) => {
+      const randomstring = Math.random()
+        .toString(36)
+        .slice(-8)
+      Membres.findOne({ where: { login: req.body.login } })
+        .then((foundUser) => {
           if (foundUser) {
-            res.status(220).json({
-              message: 'Un utilisateur avec ce login existe déjà'
-            })
+            const error = new Error('Un utilisateur avec ce login existe déjà')
+            error.statusCode = 220
+            throw error
           } else {
-            const randomstring = Math.random()
-              .toString(36)
-              .slice(-8)
-            bcrypt.hash(randomstring, 10, (err, hashedpassword) => {
-              if (err) {
-                res.send(err)
-              } else {
-                Membres.create({
-                  login: req.body.login,
-                  email: req.body.email,
-                  password: hashedpassword,
-                  admin: req.body.admin === 'true',
-                  gestionnaire: req.body.gestionnaire === 'true'
-                })
-                  .then(() => {
-                    const message = {
-                      from: 'Etude Cuny Morel',
-                      to: req.body.email,
-                      subject: 'création de compte',
-                      html: `<p>Votre compte a été créé.</p><p>login : ${req.body.login}</p><p> mot de passe : ${randomstring}</p>`
-                    }
-                    transporter.sendMail(message)
-                    res.send('Le nouveau compte a bien été créé')
-                  })
-                  .catch((err) => next(err))
-              }
-            })
+            return bcrypt.hash(randomstring, 10)
           }
-        }
-      )
+        })
+        .then((hashedpassword) => {
+          return Membres.create({
+            login: req.body.login,
+            email: req.body.email,
+            password: hashedpassword,
+            admin: req.body.permissions === 'Admin',
+            gestionnaire:
+              req.body.permissions === 'Admin' ||
+              req.body.permissions === 'Gestionnaire'
+          })
+        })
+        .then(() => {
+          const message = {
+            from: 'Etude Cuny Morel',
+            to: req.body.email,
+            subject: 'création de compte',
+            html: `<p>Votre compte a été créé.</p><p>login : ${req.body.login}</p><p> mot de passe : ${randomstring}</p>`
+          }
+          transporter.sendMail(message)
+          res.send('Le nouveau compte a bien été créé')
+        })
+        .catch((err) => next(err))
     }
   }
 ]
@@ -224,7 +227,6 @@ exports.changePassword = [
           if (!isEqual) {
             const error = new Error('Mauvais mot de passe')
             error.statusCode = 220
-            error.tosend = 'Mauvais mot de passe'
             throw error
           }
           return bcrypt.hash(req.body.newPassword, 10)
@@ -334,6 +336,44 @@ exports.deleter_user = (req, res, next) => {
     })
     .then((result) => {
       res.status(200).send('Le compte a bien été supprimé')
+    })
+    .catch((error) => next(error))
+}
+
+exports.reset_password = (req, res, next) => {
+  const randomstring = Math.random()
+    .toString(36)
+    .slice(-8)
+  let password = ''
+  return bcrypt
+    .hash(randomstring, 10)
+    .then((hashedpassword) => {
+      password = hashedpassword
+      return Membres.findOne({ where: { login: req.body.login } })
+    })
+    .then((foundUser) => {
+      if (!foundUser) {
+        const error = new Error(
+          "Aucun utilisateur avec ce login n'a été trouvé"
+        )
+        error.statusCode = 220
+        throw error
+      } else {
+        foundUser.password = password
+        return foundUser.save()
+      }
+    })
+    .then((foundUser) => {
+      const message = {
+        from: 'Etude Cuny Morel',
+        to: foundUser.email,
+        subject: 'réinitialisation de mot de passe',
+        html: `<p>Le mot de passe de votre compte ${foundUser.login} a été réinitialisé</p><p> nouveau mot de passe : ${randomstring}</p>`
+      }
+      transporter.sendMail(message)
+      res.send(
+        'Votre mot de passe a été réinitialisé. Veuillez vérifier vos mails'
+      )
     })
     .catch((error) => next(error))
 }

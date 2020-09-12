@@ -107,6 +107,7 @@ export default {
     logout() {
       this.$store.commit('logOut')
       this.showMenu = false
+      this.$router.push('/')
     }
   }
 }

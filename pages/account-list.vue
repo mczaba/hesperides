@@ -15,7 +15,7 @@
             <div>{{ account.login }}</div>
           </v-flex>
           <v-flex xs3>
-            <div class="caption grey--text">admin</div>
+            <div class="caption grey--text">Admin</div>
             <v-icon>{{ account.admin ? 'mdi-check' : 'mdi-close' }}</v-icon>
           </v-flex>
           <v-flex xs3>
@@ -25,30 +25,28 @@
             }}</v-icon>
           </v-flex>
           <v-flex xs1>
-            <v-btn @click.stop="dialog = true" icon>
+            <v-btn @click.stop="launchDialog(account)" icon>
               <v-icon>mdi-delete</v-icon>
             </v-btn>
-            <v-dialog v-model="dialog" max-width="600px">
-              <v-card class="px-10 py-4">
-                <v-card-title class="px-0 justify-center">
-                  <p class="subheading">
-                    Êtes vous sûr de vouloir supprimer le compte
-                    {{ account.login }} ?
-                  </p>
-                </v-card-title>
-                <v-card-actions class="justify-center">
-                  <v-btn @click="deleteUser(account.Id)" class="primary"
-                    >Oui</v-btn
-                  >
-                  <v-btn @click="dialog = false" class="primary">Non</v-btn>
-                </v-card-actions>
-                <p v-if="error" class="error--text">{{ error }}</p>
-              </v-card>
-            </v-dialog>
           </v-flex>
         </v-layout>
       </v-card>
     </v-layout>
+    <v-dialog v-model="dialog" max-width="600px">
+      <v-card class="px-10">
+        <v-card-title class="px-0">
+          <p>
+            Êtes vous sûr de vouloir supprimer le compte
+            {{ dialogUser.login }} ?
+          </p>
+        </v-card-title>
+        <v-card-actions class="justify-center">
+          <v-btn @click="deleteUser(dialogUser.Id)" class="primary">Oui</v-btn>
+          <v-btn @click="dialog = false" class="primary">Non</v-btn>
+        </v-card-actions>
+        <p v-if="error" class="error--text">{{ error }}</p>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -61,6 +59,7 @@ export default {
     return {
       accountList: [],
       dialog: false,
+      dialogUser: { login: '', Id: 0 },
       error: null
     }
   },
@@ -79,7 +78,11 @@ export default {
         .then((response) => {
           response.data.forEach((row) => this.accountList.push(row))
         })
-        .catch((err) => console.log(err))
+        .catch((err) => (this.error = err))
+    },
+    launchDialog(account) {
+      this.dialog = true
+      this.dialogUser = account
     },
     deleteUser(id) {
       axios

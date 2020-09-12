@@ -73,6 +73,7 @@ export default {
     submit() {
       if (this.$refs.form.validate()) {
         this.error = null
+        this.success = null
         const fd = new FormData()
         fd.append('password', this.password)
         fd.append('newPassword', this.newPassword)
