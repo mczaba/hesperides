@@ -1,6 +1,14 @@
 <template>
   <v-app>
-    <v-navigation-drawer v-if="user" fixed app class="pt-6">
+    <v-navigation-drawer
+      v-if="user"
+      v-model="drawer"
+      fixed
+      app
+      mobile-breakpoint="800px"
+      bottom
+      class="pt-6"
+    >
       <v-layout column>
         <h2 class="text-center mb-6">{{ user.login }}</h2>
         <v-list>
@@ -44,6 +52,9 @@
       </v-layout>
     </v-navigation-drawer>
     <v-app-bar fixed app>
+      <v-btn v-if="mobileView" @click.stop="drawer = !drawer" icon
+        ><v-icon>mdi-menu</v-icon></v-btn
+      >
       <v-btn @click="switchTheme" icon>
         <v-icon>{{ themeButtonIcon }}</v-icon>
       </v-btn>
@@ -92,7 +103,9 @@ export default {
           to: '/inspire'
         }
       ],
-      showMenu: false
+      showMenu: false,
+      drawer: true,
+      windowWidth: null
     }
   },
   computed: {
@@ -101,6 +114,18 @@ export default {
     },
     user() {
       return this.$store.state.user
+    },
+    mobileView() {
+      return this.windowWidth < 800
+    }
+  },
+  mounted() {
+    // eslint-disable-next-line nuxt/no-env-in-hooks
+    if (process.client) {
+      this.windowWidth = window.innerWidth
+      window.addEventListener('resize', () => {
+        this.windowWidth = window.innerWidth
+      })
     }
   },
   methods: {
@@ -124,6 +149,11 @@ export default {
   width: 75%;
   margin: auto;
   min-width: 400px;
+}
+#mobile-nav-button {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
 }
 @media screen and (max-width: 400px) {
   .component {
