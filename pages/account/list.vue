@@ -1,12 +1,11 @@
 <template>
-  <v-container column justify-center class="mt-6" width="800px">
+  <v-container column justify-center class="mt-6 component" width="800px">
     <h1 class="subheading">Liste des comptes</h1>
     <v-layout class="my-5" column>
       <v-card
         v-for="account in accountList"
         :key="account.Id"
         class="px-10 py-3 mb-2"
-        max-width="800px"
         flat
       >
         <v-layout row wrap align-center>

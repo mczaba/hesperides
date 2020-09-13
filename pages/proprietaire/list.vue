@@ -1,28 +1,40 @@
 <template>
-  <v-container column justify-center class="mt-6" width="800px">
-    <h1 class="subheading">Liste des propriétaires</h1>
-    <v-text-field v-model="nameFilter"></v-text-field>
+  <div class="component">
+    <h1 class="subheading my-5">Liste des propriétaires</h1>
+    <v-text-field
+      v-model="nameFilter"
+      label="Filtrer par nom"
+      outlined
+    ></v-text-field>
     <v-layout class="my-5" column>
       <v-card
         v-for="proprio in proprioListFiltered"
         :key="proprio.Id"
         class="px-10 py-3 mb-2"
-        max-width="800px"
         flat
       >
         <v-layout row wrap align-center>
-          <v-flex xs5>
+          <v-flex xs4>
             <div class="caption grey--text">Nom</div>
             <div>{{ proprio.nom }}</div>
           </v-flex>
-          <v-flex xs5>
+          <v-flex xs4>
             <div class="caption grey--text">Prénom</div>
             <div>{{ proprio.prenom }}</div>
+          </v-flex>
+          <v-flex xs3>
+            <div v-if="proprio.societe" class="caption grey--text">Société</div>
+            <div>{{ proprio.societe }}</div>
+          </v-flex>
+          <v-flex xs1>
+            <v-btn @click="goTo(proprio.Id)" icon>
+              <v-icon>mdi-account-details</v-icon>
+            </v-btn>
           </v-flex>
         </v-layout>
       </v-card>
     </v-layout>
-  </v-container>
+  </div>
 </template>
 
 <script>
@@ -40,7 +52,7 @@ export default {
     proprioListFiltered() {
       return this.proprioList.filter((proprio) => {
         return (
-          proprio.nom.includes(this.nameFilter) ||
+          proprio.nom.toLowerCase().includes(this.nameFilter.toLowerCase()) ||
           !(this.nameFilter.length >= 3)
         )
       })
@@ -65,6 +77,11 @@ export default {
         })
       })
       .catch((err) => (this.error = err))
+  },
+  methods: {
+    goTo(id) {
+      this.$router.push(`/proprietaire/${id}`)
+    }
   }
 }
 </script>

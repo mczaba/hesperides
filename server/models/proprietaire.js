@@ -39,10 +39,6 @@ const Proprietaire = sequelize.define(
       type: Sequelize.TEXT('tiny'),
       allowNull: false
     },
-    tantiemes: {
-      type: Sequelize.INTEGER,
-      allowNull: false
-    },
     resident: {
       type: Sequelize.BOOLEAN,
       allowNull: false

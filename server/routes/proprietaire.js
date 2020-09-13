@@ -5,5 +5,6 @@ const propController = require('../controllers/proprietaire')
 const token = require('../middlewares/token')
 
 router.get('/all', token.isAuth, propController.get_all)
+router.get('/details/:id', propController.get_details)
 
 module.exports = router

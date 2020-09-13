@@ -62,7 +62,7 @@
       </v-menu>
     </v-app-bar>
     <v-main class="secondary">
-      <v-container>
+      <v-container id="content">
         <nuxt />
       </v-container>
     </v-main>
@@ -118,3 +118,17 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.component {
+  width: 75%;
+  margin: auto;
+  min-width: 400px;
+}
+@media screen and (max-width: 400px) {
+  .component {
+    width: 100%;
+    min-width: auto;
+  }
+}
+</style>

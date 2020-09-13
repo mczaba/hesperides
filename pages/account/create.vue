@@ -1,5 +1,5 @@
 <template>
-  <v-card class="px-10">
+  <v-card class="px-10 component mt-10">
     <v-card-title class="px-0">
       <h3>
         Créer un compte
