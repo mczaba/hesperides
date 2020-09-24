@@ -44,7 +44,9 @@ exports.createAdmin = [
   (req, res, next) => {
     const errors = validator.validationResult(req)
     if (!errors.isEmpty()) {
-      res.status(220).json(JSON.stringify(errors))
+      const error = new Error(errors.errors[0].msg)
+      error.statusCode = 220
+      throw error
     } else {
       Membres.findOne({ where: { login: req.body.login } }).then(
         (foundUser) => {
@@ -140,7 +142,9 @@ exports.createAccount = [
   (req, res, next) => {
     const errors = validator.validationResult(req)
     if (!errors.isEmpty()) {
-      res.status(220).json(JSON.stringify(errors))
+      const error = new Error(errors.errors[0].msg)
+      error.statusCode = 220
+      throw error
     } else {
       const randomstring = Math.random()
         .toString(36)

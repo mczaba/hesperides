@@ -11,31 +11,41 @@
     >
       <v-layout column>
         <h2 class="text-center mb-6">{{ user.login }}</h2>
-        <v-list>
-          <v-list-item v-if="user.admin" to="/account/list" router exact>
-            <v-list-item-action>
-              <v-icon>mdi-account-multiple</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>Liste des comptes</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
+        <v-list v-if="user.admin">
           <v-list-item
-            v-if="user.admin"
-            to="/account/create"
+            v-for="(item, i) in adminRoutes"
+            :key="i"
+            :to="item.to"
             router
             exact
-            class="mb-5"
           >
             <v-list-item-action>
-              <v-icon>mdi-account-plus</v-icon>
+              <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-action>
             <v-list-item-content>
-              <v-list-item-title>Créer un compte</v-list-item-title>
+              <v-list-item-title v-text="item.title" />
             </v-list-item-content>
           </v-list-item>
+        </v-list>
+        <v-list v-if="user.gestionnaire">
           <v-list-item
-            v-for="(item, i) in items"
+            v-for="(item, i) in gestionnaireRoutes"
+            :key="i"
+            :to="item.to"
+            router
+            exact
+          >
+            <v-list-item-action>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title v-text="item.title" />
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+        <v-list>
+          <v-list-item
+            v-for="(item, i) in authRoutes"
             :key="i"
             :to="item.to"
             router
@@ -52,7 +62,7 @@
       </v-layout>
     </v-navigation-drawer>
     <v-app-bar fixed app>
-      <v-btn v-if="mobileView" @click.stop="drawer = !drawer" icon
+      <v-btn v-if="mobileView && user" @click.stop="drawer = !drawer" icon
         ><v-icon>mdi-menu</v-icon></v-btn
       >
       <v-btn @click="switchTheme" icon>
@@ -91,16 +101,30 @@ export default {
   },
   data() {
     return {
-      items: [
+      authRoutes: [
         {
           icon: 'mdi-account-multiple',
           title: 'Liste des propriétaires',
           to: '/proprietaire/list'
+        }
+      ],
+      adminRoutes: [
+        {
+          icon: 'mdi-account-multiple',
+          title: 'Liste des comptes',
+          to: '/account/list'
         },
         {
-          icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire'
+          icon: 'mdi-account-plus',
+          title: 'Créer un compte',
+          to: '/account/create'
+        }
+      ],
+      gestionnaireRoutes: [
+        {
+          icon: 'mdi-account-plus',
+          title: 'Ajouter un propriétaire',
+          to: '/proprietaire/create'
         }
       ],
       showMenu: false,
@@ -154,6 +178,10 @@ export default {
   position: absolute;
   bottom: 5px;
   right: 5px;
+}
+.v-card__text,
+.v-card__title {
+  word-break: normal; /* maybe !important  */
 }
 @media screen and (max-width: 400px) {
   .component {

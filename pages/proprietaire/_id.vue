@@ -39,13 +39,23 @@
               <div v-if="proprio.mail" class="caption grey--text">Email :</div>
               <div>{{ proprio.mail }}</div>
             </v-flex>
+            <v-flex xs12>
+              <div class="caption grey--text">Résident :</div>
+              <div>{{ proprio.resident ? 'Oui' : 'Non' }}</div>
+            </v-flex>
+            <v-btn
+              v-if="user.gestionnaire"
+              @click="goToEdit(proprio.Id)"
+              class="primary"
+            >
+              Editer le propriétaire
+            </v-btn>
           </v-layout>
         </v-card>
       </div>
 
       <div>
         <h2>Lots appartenant à {{ proprio.nom }} {{ proprio.prenom }}</h2>
-        <h3>Total des tantièmes : {{ tantieme }}</h3>
         <v-expansion-panels multiple accordion class="mt-4">
           <v-expansion-panel
             v-for="lot in lots"
@@ -98,6 +108,7 @@
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-expansion-panels>
+        <h3 class="mt-3">Total des tantièmes : {{ tantieme }}</h3>
       </div>
     </v-layout>
   </div>
@@ -122,16 +133,27 @@ export default {
         tantieme += lot.tantieme
       })
       return tantieme
+    },
+    user() {
+      return this.$store.state.user
     }
   },
   mounted() {
     axios
       .get(`/API/proprietaire/details/${this.$route.params.id}`)
       .then((response) => {
-        this.proprio = response.data.proprietaire
-        response.data.lots.forEach((lot) => this.lots.push(lot))
+        this.proprio = response.data
+        return axios.get(`/API/proprietaire/lots/${this.$route.params.id}`)
+      })
+      .then((response) => {
+        response.data.forEach((lot) => this.lots.push(lot))
       })
       .catch((error) => (this.error = error))
+  },
+  methods: {
+    goToEdit(id) {
+      this.$router.push(`/proprietaire/edit/${id}`)
+    }
   }
 }
 </script>
