@@ -118,6 +118,13 @@ export default {
       return this.windowWidth < 800
     }
   },
+  watch: {
+    nameFilter(value) {
+      if (value.length >= 3) {
+        this.currentPage = 0
+      }
+    }
+  },
   mounted() {
     this.init()
     // eslint-disable-next-line nuxt/no-env-in-hooks
