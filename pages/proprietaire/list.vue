@@ -8,7 +8,7 @@
     ></v-text-field>
     <v-layout class="my-5" column>
       <v-card
-        v-for="proprio in proprioListFiltered"
+        v-for="proprio in pageList"
         :key="proprio.Id"
         class="px-10 py-3 mb-2"
         flat
@@ -44,6 +44,25 @@
         </v-layout>
       </v-card>
     </v-layout>
+    <v-layout v-if="!mobileView" justify-space-between>
+      <v-btn
+        v-for="page in pages"
+        :key="page"
+        :class="{ active: page === currentPage }"
+        @click="currentPage = page"
+        class="primary pageButton"
+      >
+        {{ page + 1 }}
+      </v-btn>
+    </v-layout>
+    <v-layout v-else justify-space-around>
+      <v-btn @click="previousPage" class="primary">
+        <v-icon>mdi-chevron-left</v-icon>
+      </v-btn>
+      <v-btn @click="nextPage" class="primary">
+        <v-icon>mdi-chevron-right</v-icon>
+      </v-btn>
+    </v-layout>
     <v-dialog v-model="dialog" max-width="600px">
       <v-card class="px-10">
         <v-card-title class="px-0">
@@ -68,16 +87,19 @@
 
 <script>
 import axios from 'axios'
+import { paginationMixin } from '../../assets/mixins'
 
 export default {
   middleware: 'consult',
+  mixins: [paginationMixin('proprioListFiltered', 7)],
   data() {
     return {
       nameFilter: '',
       proprioList: [],
       dialog: false,
       dialogProprietaire: { nom: '', Id: 0 },
-      error: null
+      error: null,
+      windowWidth: null
     }
   },
   computed: {
@@ -91,10 +113,20 @@ export default {
     },
     user() {
       return this.$store.state.user
+    },
+    mobileView() {
+      return this.windowWidth < 800
     }
   },
   mounted() {
     this.init()
+    // eslint-disable-next-line nuxt/no-env-in-hooks
+    if (process.client) {
+      this.windowWidth = window.innerWidth
+      window.addEventListener('resize', () => {
+        this.windowWidth = window.innerWidth
+      })
+    }
   },
   methods: {
     init() {
@@ -141,3 +173,13 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.pageButton {
+  min-width: 30px !important;
+  width: 30px;
+}
+.active {
+  background-color: #1c446a !important;
+}
+</style>

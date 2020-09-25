@@ -54,7 +54,7 @@
         </v-card>
       </div>
 
-      <div>
+      <div id="lots-display">
         <h2>Lots appartenant à {{ proprio.nom }} {{ proprio.prenom }}</h2>
         <v-expansion-panels multiple accordion class="mt-4">
           <v-expansion-panel
@@ -161,6 +161,10 @@ export default {
 <style lang="scss" scoped>
 #lotList {
   margin-top: 20px;
+}
+#lots-display {
+  max-width: 90%;
+  margin: auto;
 }
 .text-right {
   text-align: right;
