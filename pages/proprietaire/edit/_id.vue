@@ -125,17 +125,6 @@ export default {
             if (response.status === 200) {
               this.success = response.data
               this.$refs.form.resetValidation()
-              this.nom = ''
-              this.prenom = ''
-              this.civilite = ''
-              this.adresse = ''
-              this.telephone = ''
-              this.mobile = ''
-              this.mail = ''
-              this.batiment = ''
-              this.resident = false
-              this.observations = ''
-              this.societe = ''
             } else {
               this.error = response.data
             }

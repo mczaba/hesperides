@@ -5,10 +5,19 @@ const nodemailer = require('nodemailer')
 require('dotenv').config()
 const Membres = require('../models/membres')
 
+// const transporter = nodemailer.createTransport({
+//   service: 'gmail',
+//   auth: {
+//     user: 'etude.cuny@gmail.com',
+//     pass: process.env.MAILER_PASS
+//   }
+// })
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: 'smtp.ionos.com',
+  port: 587,
+  secure: true,
   auth: {
-    user: 'etude.cuny@gmail.com',
+    user: process.env.MAILER_USER,
     pass: process.env.MAILER_PASS
   }
 })

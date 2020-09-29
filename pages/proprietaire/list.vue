@@ -44,25 +44,29 @@
         </v-layout>
       </v-card>
     </v-layout>
-    <v-layout v-if="!mobileView" justify-space-between>
-      <v-btn
-        v-for="page in pages"
-        :key="page"
-        :class="{ active: page === currentPage }"
-        @click="currentPage = page"
-        class="primary pageButton"
+    <div class="pageControlWrapper">
+      <v-layout
+        id="pageControl"
+        class="shrink"
+        justify-space-around
+        align-center
       >
-        {{ page + 1 }}
-      </v-btn>
-    </v-layout>
-    <v-layout v-else justify-space-around>
-      <v-btn @click="previousPage" class="primary">
-        <v-icon>mdi-chevron-left</v-icon>
-      </v-btn>
-      <v-btn @click="nextPage" class="primary">
-        <v-icon>mdi-chevron-right</v-icon>
-      </v-btn>
-    </v-layout>
+        <v-btn @click="previousPage" class="primary pageButton">
+          <v-icon>mdi-chevron-left</v-icon>
+        </v-btn>
+        <div class="inputWrapper">
+          <v-text-field
+            v-model="pageInput"
+            label="page"
+            class="pageInput"
+          ></v-text-field>
+          <span> / {{ maxPage + 1 }}</span>
+        </div>
+        <v-btn @click="nextPage" class="primary pageButton">
+          <v-icon>mdi-chevron-right</v-icon>
+        </v-btn>
+      </v-layout>
+    </div>
     <v-dialog v-model="dialog" max-width="600px">
       <v-card class="px-10">
         <v-card-title class="px-0">
@@ -116,11 +120,20 @@ export default {
     },
     mobileView() {
       return this.windowWidth < 800
+    },
+    pageInput: {
+      get() {
+        return this.currentPage + 1
+      },
+      set(value) {
+        this.currentPage = value - 1
+      }
     }
   },
   watch: {
-    nameFilter(value) {
-      if (value.length >= 3) {
+    proprioListFiltered: {
+      deep: true,
+      handler() {
         this.currentPage = 0
       }
     }
@@ -185,6 +198,25 @@ export default {
 .pageButton {
   min-width: 30px !important;
   width: 30px;
+}
+#pageControl {
+  width: 200px;
+  height: 35px;
+}
+.pageInput {
+  width: 27px !important;
+}
+.inputWrapper {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  span {
+    transform: translateY(-4px);
+  }
+}
+.pageControlWrapper {
+  display: flex;
+  justify-content: center;
 }
 .active {
   background-color: #1c446a !important;
