@@ -9,12 +9,18 @@
           </h3>
         </v-card-title>
         <v-form ref="form">
-          <v-text-field :rules="requiredRule" v-model="login" label="login" />
+          <v-text-field
+            :rules="requiredRule"
+            v-model="login"
+            @keydown="inputEnter"
+            label="login"
+          />
           <v-text-field
             :rules="requiredRule"
             v-model="password"
             :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
             :type="show1 ? 'text' : 'password'"
+            @keydown="inputEnter"
             @click:append="show1 = !show1"
             label="mot de passe"
           ></v-text-field>
@@ -43,6 +49,11 @@ export default {
     }
   },
   methods: {
+    inputEnter(event) {
+      if (event.key === 'Enter') {
+        this.submit()
+      }
+    },
     submit() {
       if (this.$refs.form.validate()) {
         this.error = null

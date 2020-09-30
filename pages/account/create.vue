@@ -39,7 +39,8 @@ export default {
           v.length >= 1 || 'Vous devez renseigner les permissions du compte'
       ],
       loginRule: [
-        (v) => v.length >= 5 || 'Le login doit comporter au moins 5 caractères'
+        (v) => v.length >= 5 || 'Le login doit comporter au moins 5 caractères',
+        (v) => !v.includes(' ') || "Le login ne peut comporter d'espaces"
       ],
       mailRule: [
         (v) => v.length >= 1 || 'Veuillez renseigner ce champ',

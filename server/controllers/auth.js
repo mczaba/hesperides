@@ -5,17 +5,11 @@ const nodemailer = require('nodemailer')
 require('dotenv').config()
 const Membres = require('../models/membres')
 
-// const transporter = nodemailer.createTransport({
-//   service: 'gmail',
-//   auth: {
-//     user: 'etude.cuny@gmail.com',
-//     pass: process.env.MAILER_PASS
-//   }
-// })
 const transporter = nodemailer.createTransport({
-  host: 'smtp.ionos.com',
+  name: 'smtp.ionos.fr',
+  host: 'smtp.ionos.fr',
   port: 587,
-  secure: true,
+  secure: false,
   auth: {
     user: process.env.MAILER_USER,
     pass: process.env.MAILER_PASS
@@ -181,13 +175,18 @@ exports.createAccount = [
         })
         .then(() => {
           const message = {
-            from: 'Etude Cuny Morel',
+            from: process.env.MAILER_USER,
             to: req.body.email,
             subject: 'création de compte',
             html: `<p>Votre compte a été créé.</p><p>login : ${req.body.login}</p><p> mot de passe : ${randomstring}</p>`
           }
-          transporter.sendMail(message)
-          res.send('Le nouveau compte a bien été créé')
+          transporter.sendMail(message, (err, info) => {
+            if (err) {
+              res.statusCode(220).send(err)
+            } else {
+              res.send('Le nouveau compte a bien été créé')
+            }
+          })
         })
         .catch((err) => next(err))
     }
@@ -378,7 +377,7 @@ exports.reset_password = (req, res, next) => {
     })
     .then((foundUser) => {
       const message = {
-        from: 'Etude Cuny Morel',
+        from: process.env.MAILER_USER,
         to: foundUser.email,
         subject: 'réinitialisation de mot de passe',
         html: `<p>Le mot de passe de votre compte ${foundUser.login} a été réinitialisé</p><p> nouveau mot de passe : ${randomstring}</p>`
