@@ -108,7 +108,7 @@ export default {
           to: '/proprietaire/list'
         },
         {
-          icon: 'mdi-home',
+          icon: 'mdi-tag',
           title: 'Liste des lots',
           to: '/lots/list'
         }
@@ -130,6 +130,11 @@ export default {
           icon: 'mdi-account-plus',
           title: 'Ajouter un propriétaire',
           to: '/proprietaire/create'
+        },
+        {
+          icon: 'mdi-tag-plus',
+          title: 'Ajouter un lot',
+          to: '/lots/create'
         }
       ],
       showMenu: false,

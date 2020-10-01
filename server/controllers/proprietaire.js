@@ -1,9 +1,22 @@
+const { Op } = require('sequelize')
 const validator = require('express-validator')
 const Proprietaire = require('../models/proprietaire')
 const Lots = require('../models/lot')
 
 exports.get_all = (req, res, next) => {
   Proprietaire.findAll()
+    .then((proprietaireList) => {
+      const propListFiltered = proprietaireList.map((proprio) => {
+        return proprio.dataValues
+      })
+      res.json(propListFiltered)
+    })
+    .catch((error) => next(error))
+}
+
+exports.search = (req, res, next) => {
+  console.log(req.params.nom)
+  Proprietaire.findAll({ where: { nom: { [Op.substring]: req.params.nom } } })
     .then((proprietaireList) => {
       const propListFiltered = proprietaireList.map((proprio) => {
         return proprio.dataValues
