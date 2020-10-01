@@ -14,6 +14,7 @@ const sequelize = require('./util/db')
 // Import routes
 const authRouter = require('./routes/auth')
 const propRouter = require('./routes/proprietaire')
+const lotsRouter = require('./routes/lots')
 
 async function start() {
   // Init Nuxt.js
@@ -45,6 +46,7 @@ async function start() {
   // routers
   app.use('/API/auth', authRouter)
   app.use('/API/proprietaire', propRouter)
+  app.use('/API/lots', lotsRouter)
 
   // error middleware
   app.use((error, req, res, next) => {

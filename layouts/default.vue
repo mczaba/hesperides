@@ -106,6 +106,11 @@ export default {
           icon: 'mdi-account-multiple',
           title: 'Liste des propriétaires',
           to: '/proprietaire/list'
+        },
+        {
+          icon: 'mdi-home',
+          title: 'Liste des lots',
+          to: '/lots/list'
         }
       ],
       adminRoutes: [
@@ -147,6 +152,7 @@ export default {
     // eslint-disable-next-line nuxt/no-env-in-hooks
     if (process.client) {
       this.windowWidth = window.innerWidth
+      this.drawer = window.innerWidth > 800
       window.addEventListener('resize', () => {
         this.windowWidth = window.innerWidth
       })

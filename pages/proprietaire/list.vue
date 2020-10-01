@@ -120,14 +120,6 @@ export default {
     },
     mobileView() {
       return this.windowWidth < 800
-    },
-    pageInput: {
-      get() {
-        return this.currentPage + 1
-      },
-      set(value) {
-        this.currentPage = value - 1
-      }
     }
   },
   watch: {

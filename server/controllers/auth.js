@@ -182,7 +182,7 @@ exports.createAccount = [
           }
           transporter.sendMail(message, (err, info) => {
             if (err) {
-              res.statusCode(220).send(err)
+              throw err
             } else {
               res.send('Le nouveau compte a bien été créé')
             }

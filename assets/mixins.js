@@ -31,6 +31,14 @@ export const paginationMixin = function(list, elementPerPage) {
           this.currentPage * this.elementPerPage,
           this.currentPage * this.elementPerPage + this.elementPerPage
         )
+      },
+      pageInput: {
+        get() {
+          return this.currentPage + 1
+        },
+        set(value) {
+          this.currentPage = value - 1
+        }
       }
     },
     methods: {

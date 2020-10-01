@@ -1,8 +1,4 @@
 const validator = require('express-validator')
-// const bcrypt = require('bcryptjs')
-// const jwt = require('jsonwebtoken')
-// const nodemailer = require('nodemailer')
-// require('dotenv').config()
 const Proprietaire = require('../models/proprietaire')
 const Lots = require('../models/lot')
 
