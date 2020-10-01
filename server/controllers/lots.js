@@ -13,6 +13,20 @@ exports.getAll = (req, res, next) => {
     .catch((error) => next(error))
 }
 
+exports.getById = (req, res, next) => {
+  Lots.findByPk(req.params.id)
+    .then((foundLot) => {
+      if (!foundLot) {
+        const error = new Error("Nous n'avons pas pu trouver ce lot")
+        error.statusCode = 220
+        error.tosend = "Nous n'avons pas pu trouver ce lot"
+        throw error
+      }
+      res.json(foundLot)
+    })
+    .catch((error) => next(error))
+}
+
 exports.create = [
   validator
     .body('numero', 'Vous devez renseigner un numéro')
@@ -35,12 +49,11 @@ exports.create = [
     .isLength({ min: 1 })
     .trim(),
   validator
-    .body('proprietaire', 'Vous devez renseigner un propriétaire')
+    .body('proprietaire', 'Vous devez renseigner un lot')
     .escape()
     .isLength({ min: 1 })
     .trim(),
   (req, res, next) => {
-    console.log('request')
     const errors = validator.validationResult(req)
     if (!errors.isEmpty()) {
       const error = new Error(errors.errors[0].msg)
@@ -50,7 +63,7 @@ exports.create = [
       Proprietaire.findByPk(req.body.proprietaire)
         .then((foundProp) => {
           if (!foundProp) {
-            const error = new Error("Le propriétaire n'a pas pu être trouvé")
+            const error = new Error("Le lot n'a pas pu être trouvé")
             error.statusCode = 220
             throw error
           }
@@ -76,6 +89,68 @@ exports.create = [
         })
         .then(() => {
           res.send('Le lot a bien été créé')
+        })
+        .catch((error) => next(error))
+    }
+  }
+]
+
+exports.edit = [
+  validator
+    .body('etage', 'Vous devez renseigner un étage')
+    .escape()
+    .isLength({ min: 1 })
+    .trim(),
+  validator
+    .body('type', 'Vous devez renseigner un type')
+    .escape()
+    .isLength({ min: 1 })
+    .trim(),
+  validator
+    .body('tantieme', 'Vous devez renseigner un tantième')
+    .escape()
+    .isLength({ min: 1 })
+    .trim(),
+  validator
+    .body('proprietaire', 'Vous devez renseigner un lot')
+    .escape()
+    .isLength({ min: 1 })
+    .trim(),
+  (req, res, next) => {
+    const errors = validator.validationResult(req)
+    if (!errors.isEmpty()) {
+      const error = new Error(errors.errors[0].msg)
+      error.statusCode = 220
+      throw error
+    } else {
+      Proprietaire.findByPk(req.body.proprietaire)
+        .then((foundProp) => {
+          if (!foundProp) {
+            const error = new Error("Le lot n'a pas pu être trouvé")
+            error.statusCode = 220
+            throw error
+          }
+          return Lots.findByPk(req.params.id)
+        })
+        .then((foundLot) => {
+          if (!foundLot) {
+            const error = new Error("Le lot n'a pas pu être trouvé")
+            error.statusCode = 220
+            throw error
+          } else {
+            foundLot.batiment = req.body.batiment
+            foundLot.etage = req.body.etage
+            foundLot.porte = req.body.porte
+            foundLot.orientation = req.body.orientation
+            foundLot.type = req.body.type
+            foundLot.observation = req.body.observation
+            foundLot.tantieme = req.body.tantieme
+            foundLot.proprietaire = req.body.proprietaire
+          }
+          return foundLot.save()
+        })
+        .then(() => {
+          res.send('Le lot a bien été modifié')
         })
         .catch((error) => next(error))
     }

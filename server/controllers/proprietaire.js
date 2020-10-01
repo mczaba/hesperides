@@ -15,7 +15,6 @@ exports.get_all = (req, res, next) => {
 }
 
 exports.search = (req, res, next) => {
-  console.log(req.params.nom)
   Proprietaire.findAll({ where: { nom: { [Op.substring]: req.params.nom } } })
     .then((proprietaireList) => {
       const propListFiltered = proprietaireList.map((proprio) => {

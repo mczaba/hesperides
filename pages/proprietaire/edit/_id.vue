@@ -72,7 +72,9 @@ export default {
   },
   mounted() {
     axios
-      .get(`/API/proprietaire/details/${this.$route.params.id}`)
+      .get(`/API/proprietaire/details/${this.$route.params.id}`, {
+        headers: { authorization: `Bearer: ${this.$store.state.token}` }
+      })
       .then((response) => {
         this.nom = response.data.nom
         this.prenom = response.data.prenom || ''

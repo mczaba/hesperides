@@ -43,9 +43,14 @@
             <div class="caption grey--text">Etage</div>
             <div>{{ lot.etage }}</div>
           </v-flex>
-          <v-flex xs6 md3>
+          <v-flex xs5 md2>
             <div class="caption grey--text">Type</div>
             <div>{{ lot.type }}</div>
+          </v-flex>
+          <v-flex xs1>
+            <v-btn v-if="user.gestionnaire" @click="goToEdit(lot.numero)" icon>
+              <v-icon>mdi-pencil</v-icon>
+            </v-btn>
           </v-flex>
         </v-row></v-card
       >
@@ -129,6 +134,9 @@ export default {
         }
         return true
       })
+    },
+    user() {
+      return this.$store.state.user
     }
   },
   watch: {
@@ -162,6 +170,9 @@ export default {
           })
         })
         .catch((err) => (this.error = err))
+    },
+    goToEdit(id) {
+      this.$router.push(`/lots/edit/${id}`)
     }
   }
 }

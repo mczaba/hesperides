@@ -140,7 +140,9 @@ export default {
   },
   mounted() {
     axios
-      .get(`/API/proprietaire/details/${this.$route.params.id}`)
+      .get(`/API/proprietaire/details/${this.$route.params.id}`, {
+        headers: { authorization: `Bearer: ${this.$store.state.token}` }
+      })
       .then((response) => {
         this.proprio = response.data
         return axios.get(`/API/proprietaire/lots/${this.$route.params.id}`)

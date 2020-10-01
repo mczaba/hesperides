@@ -102,8 +102,7 @@ export default {
       proprioList: [],
       dialog: false,
       dialogProprietaire: { nom: '', Id: 0 },
-      error: null,
-      windowWidth: null
+      error: null
     }
   },
   computed: {
@@ -117,9 +116,6 @@ export default {
     },
     user() {
       return this.$store.state.user
-    },
-    mobileView() {
-      return this.windowWidth < 800
     }
   },
   watch: {
@@ -132,13 +128,6 @@ export default {
   },
   mounted() {
     this.init()
-    // eslint-disable-next-line nuxt/no-env-in-hooks
-    if (process.client) {
-      this.windowWidth = window.innerWidth
-      window.addEventListener('resize', () => {
-        this.windowWidth = window.innerWidth
-      })
-    }
   },
   methods: {
     init() {
