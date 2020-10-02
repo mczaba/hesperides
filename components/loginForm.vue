@@ -2,7 +2,7 @@
   <div>
     <v-btn @click.stop="dialog = true" class="primary">Connexion</v-btn>
     <v-dialog v-model="dialog" max-width="600px">
-      <v-card class="px-10">
+      <v-card class="px-10 py-5">
         <v-card-title class="px-0">
           <h3>
             login
@@ -25,11 +25,11 @@
             label="mot de passe"
           ></v-text-field>
           <p v-if="error" class="error--text">{{ error }}</p>
-          <v-btn @click="submit" class="primary my-6">connexion</v-btn>
-          <NuxtLink to="/password-reset">
-            Mot de passe oublié ?
-          </NuxtLink>
+          <v-btn @click="submit" class="primary my-3">connexion</v-btn>
         </v-form>
+        <NuxtLink to="/password-reset">
+          Mot de passe oublié ?
+        </NuxtLink>
       </v-card>
     </v-dialog>
   </div>

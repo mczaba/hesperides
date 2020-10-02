@@ -68,7 +68,7 @@
         ><v-icon>mdi-menu</v-icon></v-btn
       >
       <v-spacer />
-      <v-menu v-if="user" offset-y>
+      <v-menu v-if="user" v-model="showMenu" offset-y>
         <template v-slot:activator="{ on, attrs }">
           <v-btn v-bind="attrs" v-on="on" text
             >{{ user.login }}<v-icon>mdi-chevron-down</v-icon></v-btn
@@ -138,6 +138,7 @@ export default {
           to: '/lots/create'
         }
       ],
+      showMenu: false,
       drawer: true,
       windowWidth: null
     }
