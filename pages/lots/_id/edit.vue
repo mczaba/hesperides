@@ -103,6 +103,11 @@ export default {
       ]
     }
   },
+  computed: {
+    batimentFull() {
+      return `Batiment ${this.batiment}`
+    }
+  },
   mounted() {
     axios
       .get(`/API/lots/details/${this.$route.params.id}`, {
@@ -125,7 +130,6 @@ export default {
         )
       })
       .then((response) => {
-        console.log(response.data)
         this.proprietaire = response.data
       })
       .catch((error) => {
@@ -151,7 +155,7 @@ export default {
         fd.append('tantieme', this.tantieme)
         fd.append('proprietaire', this.proprietaire.Id)
         if (this.batiment) {
-          fd.append('batiment', this.batiment)
+          fd.append('batiment', this.batimentFull)
         }
         if (this.porte) {
           fd.append('porte', this.porte)

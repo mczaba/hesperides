@@ -71,3 +71,9 @@ export default {
   }
 }
 </style>
+
+<style lang="scss" scoped>
+.row {
+  margin: 0 !important;
+}
+</style>

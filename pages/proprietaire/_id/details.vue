@@ -145,7 +145,9 @@ export default {
       })
       .then((response) => {
         this.proprio = response.data
-        return axios.get(`/API/proprietaire/lots/${this.$route.params.id}`)
+        return axios.get(`/API/proprietaire/lots/${this.$route.params.id}`, {
+          headers: { authorization: `Bearer: ${this.$store.state.token}` }
+        })
       })
       .then((response) => {
         response.data.forEach((lot) => this.lots.push(lot))

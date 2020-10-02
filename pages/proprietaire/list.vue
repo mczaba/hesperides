@@ -7,42 +7,13 @@
       outlined
     ></v-text-field>
     <v-layout class="my-5" column>
-      <v-card
+      <prop-card
         v-for="proprio in pageList"
         :key="proprio.Id"
-        class="px-10 py-3 mb-2"
-        flat
-      >
-        <v-layout row wrap align-center>
-          <v-flex xs4>
-            <div class="caption grey--text">Nom</div>
-            <div>{{ proprio.nom }}</div>
-          </v-flex>
-          <v-flex xs4 md3>
-            <div class="caption grey--text">Prénom</div>
-            <div>{{ proprio.prenom }}</div>
-          </v-flex>
-          <v-flex xs3>
-            <div v-if="proprio.societe" class="caption grey--text">Société</div>
-            <div>{{ proprio.societe }}</div>
-          </v-flex>
-          <v-flex xs1 md2>
-            <v-btn @click="goTo(proprio.Id)" icon>
-              <v-icon>mdi-account-details</v-icon>
-            </v-btn>
-            <v-btn v-if="user.gestionnaire" @click="goToEdit(proprio.Id)" icon>
-              <v-icon>mdi-account-edit</v-icon>
-            </v-btn>
-            <v-btn
-              v-if="user.gestionnaire"
-              @click.stop="launchDialog(proprio)"
-              icon
-            >
-              <v-icon>mdi-delete</v-icon>
-            </v-btn>
-          </v-flex>
-        </v-layout>
-      </v-card>
+        :proprio="proprio"
+        @deleteProp="launchDialog"
+        delete-button
+      ></prop-card>
     </v-layout>
     <div class="pageControlWrapper">
       <v-layout
@@ -92,9 +63,13 @@
 <script>
 import axios from 'axios'
 import { paginationMixin } from '../../assets/mixins'
+import propCard from '../../components/proprioCardList'
 
 export default {
   middleware: 'consult',
+  components: {
+    propCard
+  },
   mixins: [paginationMixin('proprioListFiltered', 7)],
   data() {
     return {
@@ -113,9 +88,6 @@ export default {
           !(this.nameFilter.length >= 3)
         )
       })
-    },
-    user() {
-      return this.$store.state.user
     }
   },
   watch: {
@@ -149,12 +121,6 @@ export default {
           })
         })
         .catch((err) => (this.error = err))
-    },
-    goTo(id) {
-      this.$router.push(`/proprietaire/${id}`)
-    },
-    goToEdit(id) {
-      this.$router.push(`/proprietaire/edit/${id}`)
     },
     launchDialog(account) {
       this.dialog = true

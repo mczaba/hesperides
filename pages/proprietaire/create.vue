@@ -6,15 +6,15 @@
       </h3>
     </v-card-title>
     <v-form ref="form">
-      <v-text-field :rules="requiredRule" v-model="nom" label="Nom" />
+      <v-text-field :rules="requiredRule" v-model="nom" label="Nom (requis)" />
       <v-text-field v-model="prenom" label="Prénom" />
       <v-select
         :items="selectListCivilite"
         :rules="requiredRule"
         v-model="civilite"
-        label="Civilité"
+        label="Civilité (requis)"
       ></v-select>
-      <v-text-field v-model="adresse" label="Adresse" />
+      <v-text-field v-model="adresse" label="Adresse (requis)" />
       <v-text-field v-model="telephone" label="Téléphone" />
       <v-text-field v-model="mobile" label="Mobile" />
       <v-text-field :rules="mailRule" v-model="mail" label="Email" />
@@ -22,9 +22,9 @@
         :items="selectListBatiment"
         :rules="requiredRule"
         v-model="batiment"
-        label="Batiment"
+        label="Batiment (requis)"
       ></v-select>
-      <v-checkbox v-model="resident" label="Résident"></v-checkbox>
+      <v-checkbox v-model="resident" label="Résident (requis)"></v-checkbox>
       <v-textarea v-model="observations" label="Observations"></v-textarea>
       <v-text-field v-model="societe" label="Société" />
       <p v-if="error" class="error--text">{{ error }}</p>

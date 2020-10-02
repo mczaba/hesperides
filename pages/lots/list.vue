@@ -4,18 +4,19 @@
     <v-card>
       <v-card-title>Filtres</v-card-title>
       <v-row justify-space-around>
+        <v-spacer></v-spacer>
         <v-text-field
           v-model.number="filter.numero"
           label="Numéro"
-          class="shrink"
+          class="shrink filterInput"
         >
         </v-text-field>
         <v-spacer></v-spacer>
         <v-select
-          :items="selectBatimentList"
-          v-model="filter.batiment"
-          label="Batiment"
-          class="shrink"
+          :items="selectEtageList"
+          v-model="filter.etage"
+          label="Etage"
+          class="shrink filterInput"
         >
         </v-select>
         <v-spacer></v-spacer>
@@ -23,37 +24,26 @@
           :items="selectTypesList"
           v-model="filter.type"
           label="Type"
-          class="shrink"
+          class="shrink filterInput"
         >
         </v-select>
+        <v-spacer></v-spacer>
+        <v-select
+          :items="selectBatimentList"
+          v-model="filter.batiment"
+          label="Batiment"
+          class="shrink filterInput"
+        >
+        </v-select>
+        <v-spacer></v-spacer>
+        <v-btn @click="resetFilters" class="primary"
+          >Réinitialiser les filtres</v-btn
+        >
+        <v-spacer></v-spacer>
       </v-row>
     </v-card>
     <v-col class="my-5 px-0">
-      <v-card v-for="lot in pageList" :key="lot.numero" class="pa-3 mb-2" flat>
-        <v-row align-center>
-          <v-flex xs6 md3>
-            <div class="caption grey--text">Numéro</div>
-            <div>{{ lot.numero }}</div>
-          </v-flex>
-          <v-flex v-if="lot.batiment" xs6 md3>
-            <div class="caption grey--text">Batiment</div>
-            <div>{{ lot.batiment }}</div>
-          </v-flex>
-          <v-flex xs6 md3>
-            <div class="caption grey--text">Etage</div>
-            <div>{{ lot.etage }}</div>
-          </v-flex>
-          <v-flex xs5 md2>
-            <div class="caption grey--text">Type</div>
-            <div>{{ lot.type }}</div>
-          </v-flex>
-          <v-flex xs1>
-            <v-btn v-if="user.gestionnaire" @click="goToEdit(lot.numero)" icon>
-              <v-icon>mdi-pencil</v-icon>
-            </v-btn>
-          </v-flex>
-        </v-row></v-card
-      >
+      <lot-card v-for="lot in pageList" :key="lot.numero" :lot="lot"></lot-card>
     </v-col>
     <div class="pageControlWrapper">
       <v-layout
@@ -84,9 +74,13 @@
 <script>
 import axios from 'axios'
 import { paginationMixin } from '../../assets/mixins'
+import lotCard from '../../components/lotCardList'
 
 export default {
   middleware: 'consult',
+  components: {
+    lotCard
+  },
   mixins: [paginationMixin('lotsListFiltered', 7)],
   data() {
     return {
@@ -94,10 +88,12 @@ export default {
       filter: {
         numero: null,
         batiment: '',
-        type: ''
+        type: '',
+        etage: ''
       },
-      selectBatimentList: ['A', 'B', 'C', 'D'],
+      selectBatimentList: ['', 'A', 'B', 'C', 'D'],
       selectTypesList: [
+        '',
         'Studio',
         '2 pièces',
         '3 pièces',
@@ -106,6 +102,16 @@ export default {
         'Box',
         'Parking',
         'Chambre'
+      ],
+      selectEtageList: [
+        '',
+        'Rez de chaussée',
+        'Premier étage',
+        'Deuxième étage',
+        'Troisième étage',
+        'Quatrième étage',
+        'Premier sous-sol',
+        'Second sous-sol'
       ],
       error: null
     }
@@ -121,22 +127,22 @@ export default {
         if (this.filter.batiment) {
           if (!lot.batiment) {
             return false
-          } else if (
-            !lot.batiment.split(' ')[1].includes(this.filter.batiment)
-          ) {
+          } else if (lot.batiment !== this.filter.batiment) {
             return false
           }
         }
         if (this.filter.type) {
-          if (!lot.type.slice(3).includes(this.filter.type.toLowerCase())) {
+          if (lot.type !== this.filter.type) {
+            return false
+          }
+        }
+        if (this.filter.etage) {
+          if (lot.etage !== this.filter.etage) {
             return false
           }
         }
         return true
       })
-    },
-    user() {
-      return this.$store.state.user
     }
   },
   watch: {
@@ -171,19 +177,19 @@ export default {
         })
         .catch((err) => (this.error = err))
     },
-    goToEdit(id) {
-      this.$router.push(`/lots/edit/${id}`)
+    resetFilters() {
+      this.filter.numero = null
+      this.filter.batiment = ''
+      this.filter.type = ''
+      this.filter.etage = ''
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.v-card {
-  .row {
-    margin: 0;
-    padding: 0 16px;
-  }
+.filterInput {
+  max-width: 170px !important;
 }
 .pageButton {
   min-width: 30px !important;

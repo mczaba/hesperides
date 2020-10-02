@@ -72,7 +72,8 @@ module.exports = {
           success: colors.green.accent3
         },
         light: {
-          secondary: colors.grey.lighten3
+          secondary: colors.grey.lighten3,
+          primary: '#9652ff'
         }
       }
     }

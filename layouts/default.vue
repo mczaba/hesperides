@@ -5,12 +5,14 @@
       v-model="drawer"
       fixed
       app
-      mobile-breakpoint="800px"
+      mobile-breakpoint="800"
       bottom
-      class="pt-6"
+      class="pt-6 primary white--text"
     >
       <v-layout column>
-        <h2 class="text-center mb-6">{{ user.login }}</h2>
+        <h2 class="text-center mb-6">
+          Connecté en tant que : {{ user.login }}
+        </h2>
         <v-list v-if="user.admin">
           <v-list-item
             v-for="(item, i) in adminRoutes"
@@ -20,9 +22,9 @@
             exact
           >
             <v-list-item-action>
-              <v-icon>{{ item.icon }}</v-icon>
+              <v-icon class="white--text">{{ item.icon }}</v-icon>
             </v-list-item-action>
-            <v-list-item-content>
+            <v-list-item-content class="white--text">
               <v-list-item-title v-text="item.title" />
             </v-list-item-content>
           </v-list-item>
@@ -36,9 +38,9 @@
             exact
           >
             <v-list-item-action>
-              <v-icon>{{ item.icon }}</v-icon>
+              <v-icon class="white--text">{{ item.icon }}</v-icon>
             </v-list-item-action>
-            <v-list-item-content>
+            <v-list-item-content class="white--text">
               <v-list-item-title v-text="item.title" />
             </v-list-item-content>
           </v-list-item>
@@ -52,9 +54,9 @@
             exact
           >
             <v-list-item-action>
-              <v-icon>{{ item.icon }}</v-icon>
+              <v-icon class="white--text">{{ item.icon }}</v-icon>
             </v-list-item-action>
-            <v-list-item-content>
+            <v-list-item-content class="white--text">
               <v-list-item-title v-text="item.title" />
             </v-list-item-content>
           </v-list-item>
@@ -69,10 +71,12 @@
         <v-icon>{{ themeButtonIcon }}</v-icon>
       </v-btn>
       <v-spacer />
-      <v-menu v-if="user" v-model="showMenu" offset-y>
-        <v-btn slot="activator" @click="showMenu = true" text
-          >{{ user.login }}<v-icon>mdi-chevron-down</v-icon></v-btn
-        >
+      <v-menu v-if="user" offset-y>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn v-bind="attrs" v-on="on" text
+            >{{ user.login }}<v-icon>mdi-chevron-down</v-icon></v-btn
+          >
+        </template>
         <v-list>
           <change-mail @clicked="showMenu = false" />
           <change-pass @clicked="showMenu = false" />
@@ -137,7 +141,6 @@ export default {
           to: '/lots/create'
         }
       ],
-      showMenu: false,
       drawer: true,
       windowWidth: null
     }
