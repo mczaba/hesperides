@@ -8,27 +8,27 @@
         class="px-10 py-3 mb-2"
         flat
       >
-        <v-layout row wrap align-center>
-          <v-flex xs5>
+        <v-row wrap align="center">
+          <v-flex class="mb-2" xs12 md5>
             <div class="caption grey--text">Login</div>
             <div>{{ account.login }}</div>
           </v-flex>
-          <v-flex xs3>
+          <v-flex class="mb-2" xs6 md3>
             <div class="caption grey--text">Admin</div>
             <v-icon>{{ account.admin ? 'mdi-check' : 'mdi-close' }}</v-icon>
           </v-flex>
-          <v-flex xs3>
+          <v-flex class="mb-2" xs6 md3>
             <div class="caption grey--text">Gestionnaire</div>
             <v-icon>{{
               account.gestionnaire ? 'mdi-check' : 'mdi-close'
             }}</v-icon>
           </v-flex>
-          <v-flex xs1>
+          <v-flex class="mb-2" xs1 md1>
             <v-btn @click.stop="launchDialog(account)" icon>
-              <v-icon>mdi-delete</v-icon>
+              <v-icon class="primary--text">mdi-delete</v-icon>
             </v-btn>
           </v-flex>
-        </v-layout>
+        </v-row>
       </v-card>
     </v-layout>
     <v-dialog v-model="dialog" max-width="600px">

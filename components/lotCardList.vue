@@ -1,23 +1,23 @@
 <template>
   <v-card class="px-10 py-3 mb-2" flat>
-    <v-row align-center>
-      <v-flex xs6 md3>
+    <v-row wrap justify="center">
+      <v-flex class="mb-2" xs6 md3>
         <div class="caption grey--text">Numéro</div>
         <div>{{ lot.numero }}</div>
       </v-flex>
-      <v-flex xs6 md3>
+      <v-flex class="mb-2" xs6 md3>
         <div class="caption grey--text">Etage</div>
         <div>{{ lot.etage }}</div>
       </v-flex>
-      <v-flex xs5 md2>
+      <v-flex class="mb-2" xs6 md2>
         <div class="caption grey--text">Type</div>
         <div>{{ lot.type }}</div>
       </v-flex>
-      <v-flex v-if="lot.batiment" xs6 md2>
+      <v-flex v-if="lot.batiment" class="mb-2" xs6 md2>
         <div class="caption grey--text">Batiment</div>
         <div>{{ lot.batiment }}</div>
       </v-flex>
-      <v-flex xs1 md2>
+      <v-flex class="mb-2" xs8 md2>
         <v-btn @click="goToView" class="primary--text" icon>
           <v-icon>mdi-clipboard-text</v-icon>
         </v-btn>

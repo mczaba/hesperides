@@ -43,7 +43,7 @@
       ></v-select>
       <v-textarea v-model="observation" label="Observations"></v-textarea>
       <prop-search @propPicked="propPicked" />
-      <v-card v-if="proprietaire" class="success white--text mb-3">
+      <v-card v-if="proprietaire" class="indigo white--text mb-3">
         <v-card-title>Propriétaire actuel :</v-card-title>
         <v-card-text class="white--text"
           >{{ proprietaire.nom }} {{ proprietaire.prenom }}</v-card-text

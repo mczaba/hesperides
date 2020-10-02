@@ -7,7 +7,7 @@
       ></v-text-field>
       <v-btn @click="search" class="primary">Chercher</v-btn>
     </v-row>
-    <v-col v-if="resultList.length > 0">
+    <v-col id="result-list" v-if="resultList.length > 0">
       <v-card
         v-for="prop in resultList"
         :key="prop.Id"
@@ -65,9 +65,10 @@ export default {
 <style lang="scss" scoped>
 .propResult {
   cursor: pointer;
+  background-color: lighten(#3f51b5, 20%);
   &:hover {
     color: white;
-    background-color: #9652ff;
+    background-color: #3f51b5;
   }
 }
 </style>
@@ -75,5 +76,9 @@ export default {
 <style lang="scss" scoped>
 .row {
   margin: 0 !important;
+}
+
+#result-list {
+  padding-left: 0 !important;
 }
 </style>

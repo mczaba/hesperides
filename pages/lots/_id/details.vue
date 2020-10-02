@@ -51,6 +51,7 @@ import axios from 'axios'
 import propCard from '../../../components/proprioCardList'
 
 export default {
+  middleware: 'consult',
   components: {
     propCard
   },

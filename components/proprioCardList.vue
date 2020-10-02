@@ -1,19 +1,19 @@
 <template>
   <v-card class="px-10 py-3 mb-2" flat>
-    <v-layout row wrap align-center>
-      <v-flex xs4>
+    <v-row wrap justify="center">
+      <v-flex class="mb-2" xs6 md3>
         <div class="caption grey--text">Nom</div>
         <div>{{ proprio.nom }}</div>
       </v-flex>
-      <v-flex xs4 md3>
+      <v-flex class="mb-2" xs6 md3>
         <div class="caption grey--text">Prénom</div>
         <div>{{ proprio.prenom }}</div>
       </v-flex>
-      <v-flex xs3>
+      <v-flex class="mb-2" xs12 md4>
         <div v-if="proprio.societe" class="caption grey--text">Société</div>
         <div>{{ proprio.societe }}</div>
       </v-flex>
-      <v-flex xs1 md2>
+      <v-flex class="mb-2" xs6 md2>
         <v-btn @click="goToView" class="primary--text" icon>
           <v-icon>mdi-clipboard-text</v-icon>
         </v-btn>
@@ -34,7 +34,7 @@
           <v-icon>mdi-delete</v-icon>
         </v-btn>
       </v-flex>
-    </v-layout>
+    </v-row>
   </v-card>
 </template>
 
