@@ -1,17 +1,15 @@
 <template>
   <div class="component">
     <h1 class="subheading my-5">Liste des lots</h1>
-    <v-card>
+    <v-card class="pb-3">
       <v-card-title>Filtres</v-card-title>
-      <v-row justify-space-around>
-        <v-spacer></v-spacer>
+      <v-row align="center" justify="space-around">
         <v-text-field
           v-model.number="filter.numero"
           label="Numéro"
           class="shrink filterInput"
         >
         </v-text-field>
-        <v-spacer></v-spacer>
         <v-select
           :items="selectEtageList"
           v-model="filter.etage"
@@ -19,7 +17,6 @@
           class="shrink filterInput"
         >
         </v-select>
-        <v-spacer></v-spacer>
         <v-select
           :items="selectTypesList"
           v-model="filter.type"
@@ -27,7 +24,6 @@
           class="shrink filterInput"
         >
         </v-select>
-        <v-spacer></v-spacer>
         <v-select
           :items="selectBatimentList"
           v-model="filter.batiment"
@@ -35,15 +31,19 @@
           class="shrink filterInput"
         >
         </v-select>
-        <v-spacer></v-spacer>
         <v-btn @click="resetFilters" class="primary"
           >Réinitialiser les filtres</v-btn
         >
-        <v-spacer></v-spacer>
       </v-row>
     </v-card>
     <v-col class="my-5 px-0">
-      <lot-card v-for="lot in pageList" :key="lot.numero" :lot="lot"></lot-card>
+      <lot-card
+        v-for="lot in pageList"
+        :key="lot.numero"
+        :lot="lot"
+        @deleteLot="launchDialog"
+        delete-button
+      ></lot-card>
     </v-col>
     <div class="pageControlWrapper">
       <v-layout
@@ -68,6 +68,23 @@
         </v-btn>
       </v-layout>
     </div>
+    <v-dialog v-model="dialog" max-width="600px">
+      <v-card class="px-10">
+        <v-card-title class="px-0">
+          <p class="text-wrap">
+            Êtes vous sûr de vouloir supprimer le lot
+            {{ dialogLot.numero }} ?
+          </p>
+        </v-card-title>
+        <v-card-actions class="justify-center">
+          <v-btn @click="deleteLot(dialogLot.numero)" class="primary"
+            >Oui</v-btn
+          >
+          <v-btn @click="dialog = false" class="primary">Non</v-btn>
+        </v-card-actions>
+        <p v-if="error" class="error--text">{{ error }}</p>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -113,6 +130,8 @@ export default {
         'Premier sous-sol',
         'Second sous-sol'
       ],
+      dialog: false,
+      dialogLot: { numero: 0 },
       error: null
     }
   },
@@ -182,12 +201,30 @@ export default {
       this.filter.batiment = ''
       this.filter.type = ''
       this.filter.etage = ''
+    },
+    launchDialog(lot) {
+      this.dialog = true
+      this.dialogLot = lot
+    },
+    deleteLot(id) {
+      axios
+        .delete(`/API/lots/${id}`, {
+          headers: { authorization: `Bearer: ${this.$store.state.token}` }
+        })
+        .then((response) => {
+          this.dialog = false
+          this.init()
+        })
+        .catch((err) => (this.error = err))
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.row {
+  margin: 0 !important;
+}
 .filterInput {
   max-width: 170px !important;
 }

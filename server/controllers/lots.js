@@ -156,3 +156,14 @@ exports.edit = [
     }
   }
 ]
+
+exports.delete_by_Id = (req, res, next) => {
+  Lots.findByPk(req.params.id)
+    .then((lot) => {
+      return lot.destroy()
+    })
+    .then((result) => {
+      res.status(200).send('Le lot a bien été supprimé')
+    })
+    .catch((error) => next(error))
+}

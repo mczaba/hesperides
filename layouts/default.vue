@@ -67,9 +67,6 @@
       <v-btn v-if="mobileView && user" @click.stop="drawer = !drawer" icon
         ><v-icon>mdi-menu</v-icon></v-btn
       >
-      <v-btn @click="switchTheme" icon>
-        <v-icon>{{ themeButtonIcon }}</v-icon>
-      </v-btn>
       <v-spacer />
       <v-menu v-if="user" offset-y>
         <template v-slot:activator="{ on, attrs }">
@@ -167,9 +164,6 @@ export default {
     }
   },
   methods: {
-    switchTheme() {
-      this.$vuetify.theme.dark = !this.$vuetify.theme.dark
-    },
     callFunction(functionName) {
       this[functionName]()
     },

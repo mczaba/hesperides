@@ -8,5 +8,6 @@ router.get('/all', token.isAuth, lotsController.getAll)
 router.get('/details/:id', token.isAuth, lotsController.getById)
 router.post('/create', token.isGestionnaire, lotsController.create)
 router.post('/edit/:id', token.isGestionnaire, lotsController.edit)
+router.delete('/:id', token.isGestionnaire, lotsController.delete_by_Id)
 
 module.exports = router

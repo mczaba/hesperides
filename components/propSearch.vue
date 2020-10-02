@@ -67,7 +67,7 @@ export default {
   cursor: pointer;
   &:hover {
     color: white;
-    background-color: #1976d2;
+    background-color: #9652ff;
   }
 }
 </style>
