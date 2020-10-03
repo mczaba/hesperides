@@ -43,11 +43,7 @@
               <div class="caption grey--text">Résident :</div>
               <div>{{ proprio.resident ? 'Oui' : 'Non' }}</div>
             </v-flex>
-            <v-btn
-              v-if="user.gestionnaire"
-              @click="goToEdit(proprio.Id)"
-              class="primary"
-            >
+            <v-btn v-if="user.gestionnaire" @click="goToEdit" class="primary">
               Editer le propriétaire
             </v-btn>
           </v-layout>
@@ -155,8 +151,8 @@ export default {
       .catch((error) => (this.error = error))
   },
   methods: {
-    goToEdit(id) {
-      this.$router.push(`/proprietaire/edit/${id}`)
+    goToEdit() {
+      this.$router.push(`/proprietaire/${this.proprio.Id}/edit`)
     }
   }
 }

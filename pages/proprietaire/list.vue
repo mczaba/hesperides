@@ -6,16 +6,14 @@
       label="Filtrer par nom"
       outlined
     ></v-text-field>
-    <v-layout class="my-5" column>
-      <prop-card
-        v-for="proprio in pageList"
-        :key="proprio.Id"
-        :proprio="proprio"
-        @deleteProp="launchDialog"
-        delete-button
-      ></prop-card>
-    </v-layout>
-    <div class="pageControlWrapper">
+    <prop-card
+      v-for="proprio in pageList"
+      :key="proprio.Id"
+      :proprio="proprio"
+      @deleteProp="launchDialog"
+      delete-button
+    ></prop-card>
+    <div class="pageControlWrapper mt-7">
       <v-layout
         id="pageControl"
         class="shrink"
@@ -63,7 +61,7 @@
 <script>
 import axios from 'axios'
 import { paginationMixin } from '../../assets/mixins'
-import propCard from '../../components/proprioCardList'
+import propCard from '../../components/cards/proprioCardList'
 
 export default {
   middleware: 'consult',

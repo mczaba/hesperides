@@ -10,8 +10,8 @@
       class="pt-6 primary white--text"
     >
       <v-layout column>
-        <h2 class="text-center mb-6">
-          Connecté en tant que : {{ user.login }}
+        <h2 class="text-center mb-6 px-3">
+          Connecté en tant que {{ user.login }}
         </h2>
         <v-list v-if="user.admin">
           <v-list-item

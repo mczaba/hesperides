@@ -1,9 +1,9 @@
 <template>
   <div class="component">
     <h1 class="subheading my-5">Liste des lots</h1>
-    <v-card class="pb-3">
+    <v-card class="pb-3 mb-5">
       <v-card-title>Filtres</v-card-title>
-      <v-row align="center" justify="space-around">
+      <v-row no-gutters align="center" justify="space-around">
         <v-text-field
           v-model.number="filter.numero"
           label="Numéro"
@@ -36,16 +36,14 @@
         >
       </v-row>
     </v-card>
-    <v-col class="my-5 px-0">
-      <lot-card
-        v-for="lot in pageList"
-        :key="lot.numero"
-        :lot="lot"
-        @deleteLot="launchDialog"
-        delete-button
-      ></lot-card>
-    </v-col>
-    <div class="pageControlWrapper">
+    <lot-card
+      v-for="lot in pageList"
+      :key="lot.numero"
+      :lot="lot"
+      @deleteLot="launchDialog"
+      delete-button
+    ></lot-card>
+    <div class="pageControlWrapper mt-7">
       <v-layout
         id="pageControl"
         class="shrink"
@@ -91,7 +89,7 @@
 <script>
 import axios from 'axios'
 import { paginationMixin } from '../../assets/mixins'
-import lotCard from '../../components/lotCardList'
+import lotCard from '../../components/cards/lotCardList'
 
 export default {
   middleware: 'consult',
@@ -222,9 +220,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.row {
-  margin: 0 !important;
-}
 .filterInput {
   max-width: 170px !important;
 }
