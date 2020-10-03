@@ -112,6 +112,11 @@ export default {
           icon: 'mdi-tag',
           title: 'Liste des lots',
           to: '/lots/list'
+        },
+        {
+          icon: 'mdi-account-multiple',
+          title: 'Liste des locataires',
+          to: '/locataire/list'
         }
       ],
       adminRoutes: [
@@ -136,6 +141,11 @@ export default {
           icon: 'mdi-tag-plus',
           title: 'Ajouter un lot',
           to: '/lots/create'
+        },
+        {
+          icon: 'mdi-account-plus',
+          title: 'Ajouter un locataire',
+          to: '/locataire/create'
         }
       ],
       showMenu: false,
