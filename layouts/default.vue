@@ -189,7 +189,6 @@ export default {
 
 <style lang="scss">
 .component {
-  width: 75%;
   margin: auto;
   min-width: 400px;
 }

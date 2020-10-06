@@ -31,7 +31,18 @@ exports.getById = (req, res, next) => {
 }
 
 exports.getByProprio = (req, res, next) => {
-  Locataire.findOne({ where: { idproprio: req.params.id } })
+  Locataire.findAll({ where: { idproprio: req.params.id } })
+    .then((locataireList) => {
+      const locListFiltered = locataireList.map((locataire) => {
+        return locataire.dataValues
+      })
+      res.json(locListFiltered)
+    })
+    .catch((error) => next(error))
+}
+
+exports.getByLot = (req, res, next) => {
+  Locataire.findOne({ where: { lot: req.params.id } })
     .then((foundLocataire) => {
       if (!foundLocataire) {
         const error = new Error("Nous n'avons pas pu trouver ce locataire")

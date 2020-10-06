@@ -1,64 +1,57 @@
 <template>
-  <v-col wrap space-around>
+  <div>
     <div id="lot-details" v-if="lot">
       <h2>Détails du lot</h2>
       <v-card class="px-2 mb-16 py-3 mb-2">
-        <v-col wrap class="px-4">
-          <v-flex xs6>
-            <div class="caption grey--text">Numéro :</div>
-            <div>{{ lot.numero }}</div>
-          </v-flex>
-          <v-flex xs6>
-            <div class="caption grey--text">Tantième :</div>
-            <div>{{ lot.tantieme }}</div>
-          </v-flex>
-          <v-flex v-if="lot.batiment" xs6>
-            <div class="caption grey--text">Batiment :</div>
-            <div>{{ lot.batiment }}</div>
-          </v-flex>
-          <v-flex xs6>
-            <div class="caption grey--text">Etage :</div>
-            <div>{{ lot.etage }}</div>
-          </v-flex>
-          <v-flex v-if="lot.porte" xs6>
-            <div class="caption grey--text">Porte :</div>
-            <div>{{ lot.porte }}</div>
-          </v-flex>
-          <v-flex v-if="lot.orientation" xs6>
-            <div class="caption grey--text">Orientation :</div>
-            <div>{{ lot.orientation }}</div>
-          </v-flex>
-          <v-flex xs12>
-            <div class="caption grey--text">Type :</div>
-            <div>{{ lot.type }}</div>
-          </v-flex>
-          <v-flex v-if="lot.observation" xs12>
-            <div class="caption grey--text">Observation :</div>
-            <div>{{ lot.observation }}</div>
-          </v-flex>
-        </v-col>
+        <div class="caption grey--text">Numéro :</div>
+        <div>{{ lot.numero }}</div>
+        <div class="caption grey--text">Tantième :</div>
+        <div>{{ lot.tantieme }}</div>
+        <div v-if="lot.batiment" class="caption grey--text">Batiment :</div>
+        <div v-if="lot.batiment">{{ lot.batiment }}</div>
+        <div class="caption grey--text">Etage :</div>
+        <div>{{ lot.etage }}</div>
+        <div v-if="lot.porte" class="caption grey--text">Porte :</div>
+        <div v-if="lot.porte">{{ lot.porte }}</div>
+        <div v-if="lot.orientation" class="caption grey--text">
+          Orientation :
+        </div>
+        <div v-if="lot.orientation">{{ lot.orientation }}</div>
+        <div class="caption grey--text">Type :</div>
+        <div>{{ lot.type }}</div>
+        <div v-if="lot.observation" class="caption grey--text">
+          Observation :
+        </div>
+        <div v-if="lot.observation">{{ lot.observation }}</div>
       </v-card>
     </div>
     <div id="prop-details" v-if="proprietaire">
       <h2>Propriétaire du lot</h2>
       <prop-card :proprio="proprietaire"></prop-card>
     </div>
-  </v-col>
+    <div v-if="locataire">
+      <h2>Locataire du lot</h2>
+      <locataire-card :locataire="locataire"></locataire-card>
+    </div>
+  </div>
 </template>
 
 <script>
 import axios from 'axios'
 import propCard from '../../../components/cards/proprioCardList'
+import locataireCard from '../../../components/cards/locataireCardList'
 
 export default {
   middleware: 'consult',
   components: {
-    propCard
+    propCard,
+    locataireCard
   },
   data() {
     return {
       lot: null,
-      proprietaire: null
+      proprietaire: null,
+      locataire: null
     }
   },
   mounted() {
@@ -68,15 +61,18 @@ export default {
       })
       .then((response) => {
         this.lot = response.data
-        return axios.get(
-          `/API/proprietaire/details/${response.data.proprietaire}`,
-          {
-            headers: { authorization: `Bearer: ${this.$store.state.token}` }
-          }
-        )
+        return axios.get(`/API/proprietaire/details/${this.lot.proprietaire}`, {
+          headers: { authorization: `Bearer: ${this.$store.state.token}` }
+        })
       })
       .then((response) => {
         this.proprietaire = response.data
+        return axios.get(`/API/locataire/lot/${this.lot.numero}`, {
+          headers: { authorization: `Bearer: ${this.$store.state.token}` }
+        })
+      })
+      .then((response) => {
+        this.locataire = response.data
       })
       .catch((error) => {
         this.error = error

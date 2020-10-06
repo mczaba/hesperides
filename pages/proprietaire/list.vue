@@ -1,11 +1,29 @@
 <template>
   <div class="component">
     <h1 class="subheading my-5">Liste des propriétaires</h1>
-    <v-text-field
-      v-model="nameFilter"
-      label="Filtrer par nom"
-      outlined
-    ></v-text-field>
+    <v-card class="pb-3 mb-5">
+      <v-card-title>Filtres</v-card-title>
+      <v-row no-gutters align="center" justify="space-around">
+        <v-text-field
+          v-model="filter.nom"
+          label="Nom"
+          class="shrink filterInput"
+        />
+        <v-text-field
+          v-model="filter.prenom"
+          label="Prénom"
+          class="shrink filterInput"
+        />
+        <v-text-field
+          v-model="filter.societe"
+          label="Société"
+          class="shrink filterInput"
+        />
+        <v-btn @click="resetFilters" class="primary"
+          >Réinitialiser les filtres</v-btn
+        >
+      </v-row>
+    </v-card>
     <prop-card
       v-for="proprio in pageList"
       :key="proprio.Id"
@@ -71,7 +89,11 @@ export default {
   mixins: [paginationMixin('proprioListFiltered', 7)],
   data() {
     return {
-      nameFilter: '',
+      filter: {
+        nom: '',
+        prenom: '',
+        societe: ''
+      },
       proprioList: [],
       dialog: false,
       dialogProprietaire: { nom: '', Id: 0 },
@@ -81,10 +103,35 @@ export default {
   computed: {
     proprioListFiltered() {
       return this.proprioList.filter((proprio) => {
-        return (
-          proprio.nom.toLowerCase().includes(this.nameFilter.toLowerCase()) ||
-          !(this.nameFilter.length >= 3)
-        )
+        if (this.filter.nom.length >= 3) {
+          if (
+            !proprio.nom.toLowerCase().includes(this.filter.nom.toLowerCase())
+          ) {
+            return false
+          }
+        }
+        if (this.filter.prenom.length >= 3) {
+          if (
+            !proprio.prenom
+              .toLowerCase()
+              .includes(this.filter.prenom.toLowerCase())
+          ) {
+            return false
+          }
+        }
+        if (this.filter.societe.length >= 3) {
+          if (!proprio.societe) {
+            return false
+          } else if (
+            !proprio.societe
+              .toLowerCase()
+              .includes(this.filter.societe.toLowerCase())
+          ) {
+            return false
+          }
+        }
+
+        return true
       })
     }
   },
@@ -119,6 +166,11 @@ export default {
           })
         })
         .catch((err) => (this.error = err))
+    },
+    resetFilters() {
+      this.filter.nom = ''
+      this.filter.prenom = ''
+      this.filter.societe = ''
     },
     launchDialog(account) {
       this.dialog = true
