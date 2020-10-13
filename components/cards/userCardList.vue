@@ -45,6 +45,9 @@ export default {
   },
   computed: {
     lastSeenFormatted() {
+      if (!this.account.lastSeen) {
+        return "Ne s'est pas encore connecté"
+      }
       return moment
         .utc(this.account.lastSeen.replace('-', ''), 'YYYYMMDD h:mm:ss')
         .fromNow()
