@@ -17,7 +17,7 @@
             :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
             :type="show1 ? 'text' : 'password'"
             @click:append="show1 = !show1"
-            label="mot de passe"
+            label="mot de passe actuel"
           ></v-text-field>
           <v-text-field
             :rules="passRule"
@@ -25,7 +25,7 @@
             :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
             :type="show1 ? 'text' : 'password'"
             @click:append="show1 = !show1"
-            label="mot de passe"
+            label="nouveau mot de passe"
           ></v-text-field>
           <v-text-field
             :rules="passRule"
@@ -33,7 +33,7 @@
             :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
             :type="show1 ? 'text' : 'password'"
             @click:append="show1 = !show1"
-            label="mot de passe"
+            label="confirmer le mot de passe"
           ></v-text-field>
           <p v-if="error" class="error--text">{{ error }}</p>
           <p v-if="success" class="success--text">{{ success }}</p>

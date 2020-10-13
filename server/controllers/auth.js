@@ -96,9 +96,9 @@ exports.login = (req, res, next) => {
     })
     .then((isEqual) => {
       if (!isEqual) {
-        const error = new Error('Mauvais mot de passe')
+        const error = new Error('Mot de passe incorrect')
         error.statusCode = 220
-        error.tosend = 'Mauvais mot de passe'
+        error.tosend = 'Mot de passe incorrect'
         throw error
       }
       const userInfo = {
@@ -115,6 +115,8 @@ exports.login = (req, res, next) => {
         '11051990',
         { expiresIn: '24h' }
       )
+      user.lastSeen = Date.now()
+      user.save()
       res.status(200).json({
         token,
         user: userInfo
@@ -328,13 +330,7 @@ exports.get_all = (req, res, next) => {
   Membres.findAll()
     .then((memberList) => {
       const memberListFiltered = memberList.map((membre) => {
-        return {
-          Id: membre.dataValues.Id,
-          login: membre.dataValues.login,
-          email: membre.dataValues.email,
-          admin: membre.dataValues.admin,
-          gestionnaire: membre.dataValues.gestionnaire
-        }
+        return membre.dataValues
       })
       res.json(memberListFiltered)
     })

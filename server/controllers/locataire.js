@@ -1,7 +1,6 @@
 // const { Op } = require('sequelize')
 const validator = require('express-validator')
-// const Locataire = require('../models/Locataire')
-// const Lots = require('../models/lot')
+const Lots = require('../models/lot')
 const Locataire = require('../models/locataire')
 
 exports.getAll = (req, res, next) => {
@@ -91,6 +90,22 @@ exports.create = [
               error.statusCode = 220
               throw error
             }
+          }
+          return Lots.findByPk(req.body.lot)
+        })
+        .then((foundLot) => {
+          if (!foundLot) {
+            const error = new Error("Ce lot n'existe pas")
+            error.statusCode = 220
+            throw error
+          }
+          return Locataire.findOne({ where: { lot: req.body.lot } })
+        })
+        .then((foundLoc) => {
+          if (foundLoc) {
+            const error = new Error('Un locataire avec ce lot existe déjà')
+            error.statusCode = 220
+            throw error
           }
           return Locataire.create({
             nom: req.body.nom,

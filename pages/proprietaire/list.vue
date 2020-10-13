@@ -31,7 +31,10 @@
       @deleteProp="launchDialog"
       delete-button
     ></prop-card>
-    <div class="pageControlWrapper mt-7">
+    <v-card v-if="pageList.length === 0" class="pa-3 mb-2">
+      Aucun propriétaire ne correspond à vos critères
+    </v-card>
+    <div v-if="pageList.length > 0" class="pageControlWrapper mt-7">
       <v-layout
         id="pageControl"
         class="shrink"

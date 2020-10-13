@@ -17,6 +17,10 @@
               account.gestionnaire ? 'mdi-check' : 'mdi-close'
             }}</v-icon>
           </v-col>
+          <v-col class="my-1" cols="12">
+            <div class="caption grey--text">Vu pour la dernière fois :</div>
+            <div>{{ lastSeenFormatted }}</div>
+          </v-col>
         </v-row>
       </v-col>
       <v-col cols="2">
@@ -29,11 +33,21 @@
 </template>
 
 <script>
+import moment from 'moment'
+moment.locale('fr')
+
 export default {
   props: {
     account: {
       type: Object,
       default: null
+    }
+  },
+  computed: {
+    lastSeenFormatted() {
+      return moment
+        .utc(this.account.lastSeen.replace('-', ''), 'YYYYMMDD h:mm:ss')
+        .fromNow()
     }
   },
   methods: {

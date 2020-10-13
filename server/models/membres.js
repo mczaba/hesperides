@@ -30,6 +30,9 @@ const Membres = sequelize.define(
     gestionnaire: {
       type: Sequelize.BOOLEAN,
       allowNull: false
+    },
+    lastSeen: {
+      type: Sequelize.DATE
     }
   },
   { timestamps: false }
