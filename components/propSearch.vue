@@ -39,7 +39,7 @@ export default {
     search() {
       this.clearResults()
       axios
-        .get(`/API/proprietaire/search/${this.input}`, {
+        .get(`${process.env.API_URL}/API/proprietaire/search/${this.input}`, {
           headers: { authorization: `Bearer: ${this.$store.state.token}` }
         })
         .then((response) => {

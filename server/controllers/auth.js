@@ -16,69 +16,69 @@ const transporter = nodemailer.createTransport({
   }
 })
 
-exports.createAdmin = [
-  validator
-    .body('login', 'Le login doit faire au moins 5 caractères')
-    .escape()
-    .isLength({ min: 5 })
-    .trim(),
-  validator
-    .body('email', 'un Email valide est requis')
-    .isLength({ min: 1 })
-    .normalizeEmail()
-    .isEmail()
-    .trim(),
-  validator
-    .body('password', 'Le mot de passe doit contenir au moins 5 caractères')
-    .escape()
-    .isLength({ min: 5 })
-    .trim(),
-  validator
-    .body('passwordConf', 'Les mots de passe ne correspondent pas')
-    .escape()
-    .custom((value, { req, loc, path }) => {
-      if (value !== req.body.password) {
-        throw new Error('Les mots de passe ne correspondent pas')
-      } else {
-        return value
-      }
-    })
-    .trim(),
-  (req, res, next) => {
-    const errors = validator.validationResult(req)
-    if (!errors.isEmpty()) {
-      const error = new Error(errors.errors[0].msg)
-      error.statusCode = 220
-      throw error
-    } else {
-      Membres.findOne({ where: { login: req.body.login } }).then(
-        (foundUser) => {
-          if (foundUser) {
-            res.status(220).json({
-              message: 'Un utilisateur avec ce login existe déjà'
-            })
-          } else {
-            bcrypt.hash(req.body.password, 10, (err, hashedpassword) => {
-              if (err) {
-                res.send(err)
-              } else {
-                Membres.create({
-                  login: req.body.login,
-                  email: req.body.email,
-                  password: hashedpassword,
-                  admin: true,
-                  gestionnaire: true
-                })
-                  .then(() => res.send('le compte admin a bien été créé'))
-                  .catch((err) => next(err))
-              }
-            })
-          }
-        }
-      )
-    }
-  }
-]
+// exports.createAdmin = [
+//   validator
+//     .body('login', 'Le login doit faire au moins 5 caractères')
+//     .escape()
+//     .isLength({ min: 5 })
+//     .trim(),
+//   validator
+//     .body('email', 'un Email valide est requis')
+//     .isLength({ min: 1 })
+//     .normalizeEmail()
+//     .isEmail()
+//     .trim(),
+//   validator
+//     .body('password', 'Le mot de passe doit contenir au moins 5 caractères')
+//     .escape()
+//     .isLength({ min: 5 })
+//     .trim(),
+//   validator
+//     .body('passwordConf', 'Les mots de passe ne correspondent pas')
+//     .escape()
+//     .custom((value, { req, loc, path }) => {
+//       if (value !== req.body.password) {
+//         throw new Error('Les mots de passe ne correspondent pas')
+//       } else {
+//         return value
+//       }
+//     })
+//     .trim(),
+//   (req, res, next) => {
+//     const errors = validator.validationResult(req)
+//     if (!errors.isEmpty()) {
+//       const error = new Error(errors.errors[0].msg)
+//       error.statusCode = 220
+//       throw error
+//     } else {
+//       Membres.findOne({ where: { login: req.body.login } }).then(
+//         (foundUser) => {
+//           if (foundUser) {
+//             res.status(220).json({
+//               message: 'Un utilisateur avec ce login existe déjà'
+//             })
+//           } else {
+//             bcrypt.hash(req.body.password, 10, (err, hashedpassword) => {
+//               if (err) {
+//                 res.send(err)
+//               } else {
+//                 Membres.create({
+//                   login: req.body.login,
+//                   email: req.body.email,
+//                   password: hashedpassword,
+//                   admin: true,
+//                   gestionnaire: true
+//                 })
+//                   .then(() => res.send('le compte admin a bien été créé'))
+//                   .catch((err) => next(err))
+//               }
+//             })
+//           }
+//         }
+//       )
+//     }
+//   }
+// ]
 
 exports.login = (req, res, next) => {
   let user = null
@@ -340,6 +340,13 @@ exports.get_all = (req, res, next) => {
 exports.deleter_user = (req, res, next) => {
   Membres.findByPk(req.params.id)
     .then((membre) => {
+      if (membre.admin) {
+        const error = new Error(
+          'Il est impossible de supprimer un compte admin'
+        )
+        error.statusCode = 220
+        throw error
+      }
       return membre.destroy()
     })
     .then((result) => {
@@ -385,3 +392,55 @@ exports.reset_password = (req, res, next) => {
     })
     .catch((error) => next(error))
 }
+
+exports.get_by_pk = (req, res, next) => {
+  Membres.findByPk(req.params.id)
+    .then((foundUser) => {
+      if (!foundUser) {
+        const error = new Error("N'a pas pu trouver le compte à modifier")
+        throw error
+      } else {
+        res.json(foundUser)
+      }
+    })
+    .catch((error) => next(error))
+}
+
+exports.edit_permissions = [
+  validator
+    .body('permissions', 'Vous devez renseigner les permissions du compte')
+    .escape()
+    .isLength({ min: 1 })
+    .trim(),
+  (req, res, next) => {
+    const errors = validator.validationResult(req)
+    if (!errors.isEmpty()) {
+      const error = new Error(errors.errors[0].msg)
+      error.statusCode = 220
+      throw error
+    } else {
+      Membres.findByPk(req.params.id)
+        .then((foundUser) => {
+          if (!foundUser) {
+            const error = new Error("N'a pas pu trouver le compte à modifier")
+            throw error
+          } else if (foundUser.admin) {
+            const error = new Error(
+              'Vous ne pouvez pas modifier un compte admin'
+            )
+            throw error
+          } else {
+            foundUser.admin = req.body.permissions === 'Admin'
+            foundUser.gestionnaire =
+              req.body.permissions === 'Admin' ||
+              req.body.permissions === 'Gestionnaire'
+            return foundUser.save()
+          }
+        })
+        .then((user) => {
+          res.send(`L'utilisateur ${user.login} a bien été modifié`)
+        })
+        .catch((error) => next(error))
+    }
+  }
+]

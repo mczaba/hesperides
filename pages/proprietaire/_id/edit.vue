@@ -40,7 +40,7 @@
 import axios from 'axios'
 
 export default {
-  middleware: 'admin',
+  middleware: 'gestonnaire',
   data() {
     return {
       nom: '',
@@ -72,9 +72,12 @@ export default {
   },
   mounted() {
     axios
-      .get(`/API/proprietaire/details/${this.$route.params.id}`, {
-        headers: { authorization: `Bearer: ${this.$store.state.token}` }
-      })
+      .get(
+        `${process.env.API_URL}/API/proprietaire/details/${this.$route.params.id}`,
+        {
+          headers: { authorization: `Bearer: ${this.$store.state.token}` }
+        }
+      )
       .then((response) => {
         this.nom = response.data.nom
         this.prenom = response.data.prenom || ''
@@ -120,9 +123,13 @@ export default {
           fd.append('societe', this.societe)
         }
         axios
-          .post(`/API/proprietaire/edit/${this.$route.params.id}`, fd, {
-            headers: { authorization: `Bearer: ${this.$store.state.token}` }
-          })
+          .post(
+            `${process.env.API_URL}/API/proprietaire/edit/${this.$route.params.id}`,
+            fd,
+            {
+              headers: { authorization: `Bearer: ${this.$store.state.token}` }
+            }
+          )
           .then((response) => {
             if (response.status === 200) {
               this.success = response.data

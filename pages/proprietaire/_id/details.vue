@@ -129,20 +129,29 @@ export default {
   },
   mounted() {
     axios
-      .get(`/API/proprietaire/details/${this.$route.params.id}`, {
-        headers: { authorization: `Bearer: ${this.$store.state.token}` }
-      })
+      .get(
+        `${process.env.API_URL}/API/proprietaire/details/${this.$route.params.id}`,
+        {
+          headers: { authorization: `Bearer: ${this.$store.state.token}` }
+        }
+      )
       .then((response) => {
         this.proprio = response.data
-        return axios.get(`/API/proprietaire/lots/${this.$route.params.id}`, {
-          headers: { authorization: `Bearer: ${this.$store.state.token}` }
-        })
+        return axios.get(
+          `${process.env.API_URL}/API/proprietaire/lots/${this.$route.params.id}`,
+          {
+            headers: { authorization: `Bearer: ${this.$store.state.token}` }
+          }
+        )
       })
       .then((response) => {
         response.data.forEach((lot) => this.lots.push(lot))
-        return axios.get(`/API/locataire/proprio/${this.$route.params.id}`, {
-          headers: { authorization: `Bearer: ${this.$store.state.token}` }
-        })
+        return axios.get(
+          `${process.env.API_URL}/API/locataire/proprio/${this.$route.params.id}`,
+          {
+            headers: { authorization: `Bearer: ${this.$store.state.token}` }
+          }
+        )
       })
       .then((response) => {
         response.data.forEach((locataire) => this.locataires.push(locataire))

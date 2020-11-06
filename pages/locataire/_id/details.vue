@@ -59,13 +59,16 @@ export default {
   },
   mounted() {
     axios
-      .get(`/API/locataire/details/${this.$route.params.id}`, {
-        headers: { authorization: `Bearer: ${this.$store.state.token}` }
-      })
+      .get(
+        `${process.env.API_URL}/API/locataire/details/${this.$route.params.id}`,
+        {
+          headers: { authorization: `Bearer: ${this.$store.state.token}` }
+        }
+      )
       .then((response) => {
         this.locataire = response.data
         return axios.get(
-          `/API/proprietaire/details/${this.locataire.idproprio}`,
+          `${process.env.API_URL}/API/proprietaire/details/${this.locataire.idproprio}`,
           {
             headers: { authorization: `Bearer: ${this.$store.state.token}` }
           }
@@ -73,9 +76,12 @@ export default {
       })
       .then((response) => {
         this.proprietaire = response.data
-        return axios.get(`/API/lots/details/${this.locataire.lot}`, {
-          headers: { authorization: `Bearer: ${this.$store.state.token}` }
-        })
+        return axios.get(
+          `${process.env.API_URL}/API/lots/details/${this.locataire.lot}`,
+          {
+            headers: { authorization: `Bearer: ${this.$store.state.token}` }
+          }
+        )
       })
       .then((response) => {
         this.lot = response.data

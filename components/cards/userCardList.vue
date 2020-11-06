@@ -18,13 +18,21 @@
             }}</v-icon>
           </v-col>
           <v-col class="my-1" cols="12">
-            <div class="caption grey--text">Vu pour la dernière fois :</div>
+            <div class="caption grey--text">Dernière connexion</div>
             <div>{{ lastSeenFormatted }}</div>
           </v-col>
         </v-row>
       </v-col>
       <v-col cols="2">
-        <v-btn @click="deleteAccount" icon>
+        <v-btn
+          v-if="user.admin && !account.admin"
+          @click="goToEdit"
+          class="primary--text"
+          icon
+        >
+          <v-icon>mdi-pencil</v-icon>
+        </v-btn>
+        <v-btn v-if="!account.admin" @click="deleteAccount" icon>
           <v-icon class="primary--text">mdi-delete</v-icon>
         </v-btn>
       </v-col>
@@ -51,11 +59,17 @@ export default {
       return moment
         .utc(this.account.lastSeen.replace('-', ''), 'YYYYMMDD h:mm:ss')
         .fromNow()
+    },
+    user() {
+      return this.$store.state.user
     }
   },
   methods: {
     deleteAccount() {
       this.$emit('deleteAccount', this.account)
+    },
+    goToEdit() {
+      this.$router.push(`/account/${this.account.Id}/edit`)
     }
   }
 }

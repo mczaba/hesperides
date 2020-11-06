@@ -38,7 +38,7 @@
 import axios from 'axios'
 
 export default {
-  middleware: 'admin',
+  middleware: 'gestonnaire',
   data() {
     return {
       nom: '',
@@ -98,7 +98,7 @@ export default {
           fd.append('societe', this.societe)
         }
         axios
-          .post('/API/proprietaire/create', fd, {
+          .post(`${process.env.API_URL}/API/proprietaire/create`, fd, {
             headers: { authorization: `Bearer: ${this.$store.state.token}` }
           })
           .then((response) => {

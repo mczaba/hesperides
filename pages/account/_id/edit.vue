@@ -1,13 +1,9 @@
 <template>
   <v-card class="px-10 component mt-10">
     <v-card-title class="px-0">
-      <h3>
-        Créer un compte
-      </h3>
+      <h3>Changer les permissions du compte {{ login }}</h3>
     </v-card-title>
     <v-form ref="form">
-      <v-text-field :rules="loginRule" v-model="login" label="login" />
-      <v-text-field :rules="mailRule" v-model="mail" label="Email" />
       <v-select
         :items="selectList"
         :rules="requiredRule"
@@ -16,7 +12,9 @@
       ></v-select>
       <p v-if="error" class="error--text">{{ error }}</p>
       <p v-if="success" class="success--text">{{ success }}</p>
-      <v-btn @click="submit" class="primary my-6">Créer le compte</v-btn>
+      <v-btn @click="submit" class="primary my-6"
+        >Changer les permissions</v-btn
+      >
     </v-form>
   </v-card>
 </template>
@@ -29,7 +27,6 @@ export default {
   data() {
     return {
       login: '',
-      mail: '',
       permissions: '',
       selectList: ['Admin', 'Gestionnaire', 'Consultant'],
       error: null,
@@ -37,18 +34,25 @@ export default {
       requiredRule: [
         (v) =>
           v.length >= 1 || 'Vous devez renseigner les permissions du compte'
-      ],
-      loginRule: [
-        (v) => v.length >= 5 || 'Le login doit comporter au moins 5 caractères',
-        (v) => !v.includes(' ') || "Le login ne peut comporter d'espaces"
-      ],
-      mailRule: [
-        (v) => v.length >= 1 || 'Veuillez renseigner ce champ',
-        (v) =>
-          /^[a-z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$/.test(v) ||
-          'Veuillez renseigner une adresse valide'
       ]
     }
+  },
+  mounted() {
+    axios
+      .get(`${process.env.API_URL}/API/auth/details/${this.$route.params.id}`, {
+        headers: { authorization: `Bearer: ${this.$store.state.token}` }
+      })
+      .then((response) => {
+        this.login = response.data.login
+        if (response.data.admin) {
+          this.permissions = 'Admin'
+        } else if (response.data.gestionnaire) {
+          this.permissions = 'Gestionnaire'
+        } else {
+          this.permissions = 'Consultant'
+        }
+      })
+      .catch((error) => (this.error = error))
   },
   methods: {
     submit() {
@@ -56,20 +60,19 @@ export default {
         this.error = null
         this.success = null
         const fd = new FormData()
-        fd.append('login', this.login)
-        fd.append('email', this.mail)
         fd.append('permissions', this.permissions)
         axios
-          .post(`${process.env.API_URL}/API/auth/createaccount`, fd, {
-            headers: { authorization: `Bearer: ${this.$store.state.token}` }
-          })
+          .post(
+            `${process.env.API_URL}/API/auth/changepermissions/${this.$route.params.id}`,
+            fd,
+            {
+              headers: { authorization: `Bearer: ${this.$store.state.token}` }
+            }
+          )
           .then((response) => {
             if (response.status === 200) {
               this.success = response.data
               this.$refs.form.resetValidation()
-              this.permissions = ''
-              this.mail = ''
-              this.login = ''
             } else {
               this.error = response.data
             }

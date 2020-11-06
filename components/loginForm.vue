@@ -61,7 +61,7 @@ export default {
         fd.append('login', this.login)
         fd.append('password', this.password)
         axios
-          .post('/API/auth/login', fd)
+          .post(`${process.env.API_URL}/API/auth/login`, fd)
           .then((response) => {
             if (response.status === 200) {
               const payload = {

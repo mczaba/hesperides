@@ -2,7 +2,7 @@
   <v-card class="px-10 component mt-10">
     <v-card-title class="px-0">
       <h3>
-        Créer un locataire
+        Editer un locataire
       </h3>
     </v-card-title>
     <v-form ref="form">
@@ -37,7 +37,7 @@ import axios from 'axios'
 import propSearch from '../../../components/propSearch'
 
 export default {
-  middleware: 'admin',
+  middleware: 'gestionnaire',
   components: {
     propSearch
   },
@@ -65,9 +65,12 @@ export default {
   },
   mounted() {
     axios
-      .get(`/API/locataire/details/${this.$route.params.id}`, {
-        headers: { authorization: `Bearer: ${this.$store.state.token}` }
-      })
+      .get(
+        `${process.env.API_URL}/API/locataire/details/${this.$route.params.id}`,
+        {
+          headers: { authorization: `Bearer: ${this.$store.state.token}` }
+        }
+      )
       .then((response) => {
         this.nom = response.data.nom
         this.prenom = response.data.prenom || ''
@@ -77,7 +80,7 @@ export default {
         this.lot = response.data.lot
         this.observation = response.data.observation || ''
         return axios.get(
-          `/API/proprietaire/details/${response.data.idproprio}`,
+          `${process.env.API_URL}/API/proprietaire/details/${response.data.idproprio}`,
           {
             headers: { authorization: `Bearer: ${this.$store.state.token}` }
           }
@@ -121,9 +124,13 @@ export default {
           fd.append('observation', this.observation)
         }
         axios
-          .post(`/API/locataire/edit/${this.$route.params.id}`, fd, {
-            headers: { authorization: `Bearer: ${this.$store.state.token}` }
-          })
+          .post(
+            `${process.env.API_URL}/API/locataire/edit/${this.$route.params.id}`,
+            fd,
+            {
+              headers: { authorization: `Bearer: ${this.$store.state.token}` }
+            }
+          )
           .then((response) => {
             if (response.status === 200) {
               this.success = response.data

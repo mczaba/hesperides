@@ -37,7 +37,7 @@ import axios from 'axios'
 import propSearch from '../../components/propSearch'
 
 export default {
-  middleware: 'admin',
+  middleware: 'gestonnaire',
   components: {
     propSearch
   },
@@ -94,7 +94,7 @@ export default {
           fd.append('observation', this.observation)
         }
         axios
-          .post('/API/locataire/create', fd, {
+          .post(`${process.env.API_URL}/API/locataire/create`, fd, {
             headers: { authorization: `Bearer: ${this.$store.state.token}` }
           })
           .then((response) => {
