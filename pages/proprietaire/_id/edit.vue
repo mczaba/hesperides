@@ -40,7 +40,7 @@
 import axios from 'axios'
 
 export default {
-  middleware: 'gestonnaire',
+  middleware: 'gestionnaire',
   data() {
     return {
       nom: '',

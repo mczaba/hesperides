@@ -37,7 +37,7 @@ import axios from 'axios'
 import propSearch from '../../components/propSearch'
 
 export default {
-  middleware: 'gestonnaire',
+  middleware: 'gestionnaire',
   components: {
     propSearch
   },
