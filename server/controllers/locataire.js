@@ -57,17 +57,14 @@ exports.getByLot = (req, res, next) => {
 exports.create = [
   validator
     .body('nom', 'Vous devez renseigner un nom')
-    .escape()
     .isLength({ min: 1 })
     .trim(),
   validator
     .body('lot', 'Vous devez renseigner un lot')
-    .escape()
     .isLength({ min: 1 })
     .trim(),
   validator
     .body('idproprio', 'Vous devez renseigner un locataire')
-    .escape()
     .isLength({ min: 1 })
     .trim(),
   (req, res, next) => {
@@ -130,17 +127,14 @@ exports.create = [
 exports.edit = [
   validator
     .body('nom', 'Vous devez renseigner un nom')
-    .escape()
     .isLength({ min: 1 })
     .trim(),
   validator
     .body('lot', 'Vous devez renseigner un lot')
-    .escape()
     .isLength({ min: 1 })
     .trim(),
   validator
     .body('idproprio', 'Vous devez renseigner un locataire')
-    .escape()
     .isLength({ min: 1 })
     .trim(),
   (req, res, next) => {

@@ -14,7 +14,11 @@
         v-model="civilite"
         label="Civilité (requis)"
       ></v-select>
-      <v-text-field v-model="adresse" label="Adresse (requis)" />
+      <v-text-field
+        v-model="adresse"
+        :rules="requiredRule"
+        label="Adresse (requis)"
+      />
       <v-text-field v-model="telephone" label="Téléphone" />
       <v-text-field v-model="mobile" label="Mobile" />
       <v-text-field :rules="mailRule" v-model="mail" label="Email" />
@@ -24,7 +28,7 @@
         v-model="batiment"
         label="Batiment (requis)"
       ></v-select>
-      <v-checkbox v-model="resident" label="Résident (requis)"></v-checkbox>
+      <v-checkbox v-model="resident" label="Résident"></v-checkbox>
       <v-textarea v-model="observations" label="Observations"></v-textarea>
       <v-text-field v-model="societe" label="Société" />
       <p v-if="error" class="error--text">{{ error }}</p>

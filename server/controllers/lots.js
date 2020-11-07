@@ -30,27 +30,22 @@ exports.getById = (req, res, next) => {
 exports.create = [
   validator
     .body('numero', 'Vous devez renseigner un numéro')
-    .escape()
     .isLength({ min: 1 })
     .trim(),
   validator
     .body('etage', 'Vous devez renseigner un étage')
-    .escape()
     .isLength({ min: 1 })
     .trim(),
   validator
     .body('type', 'Vous devez renseigner un type')
-    .escape()
     .isLength({ min: 1 })
     .trim(),
   validator
     .body('tantieme', 'Vous devez renseigner un tantième')
-    .escape()
     .isLength({ min: 1 })
     .trim(),
   validator
     .body('proprietaire', 'Vous devez renseigner un lot')
-    .escape()
     .isLength({ min: 1 })
     .trim(),
   (req, res, next) => {
@@ -98,22 +93,18 @@ exports.create = [
 exports.edit = [
   validator
     .body('etage', 'Vous devez renseigner un étage')
-    .escape()
     .isLength({ min: 1 })
     .trim(),
   validator
     .body('type', 'Vous devez renseigner un type')
-    .escape()
     .isLength({ min: 1 })
     .trim(),
   validator
     .body('tantieme', 'Vous devez renseigner un tantième')
-    .escape()
     .isLength({ min: 1 })
     .trim(),
   validator
     .body('proprietaire', 'Vous devez renseigner un lot')
-    .escape()
     .isLength({ min: 1 })
     .trim(),
   (req, res, next) => {

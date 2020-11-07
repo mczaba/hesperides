@@ -55,22 +55,18 @@ exports.get_lots = (req, res, next) => {
 exports.create = [
   validator
     .body('nom', 'Vous devez renseigner un nom')
-    .escape()
     .isLength({ min: 1 })
     .trim(),
   validator
     .body('civilite', 'Vous devez renseigner une civilité')
-    .escape()
     .isLength({ min: 1 })
     .trim(),
   validator
     .body('adresse', 'Vous devez renseigner une adresse')
-    .escape()
     .isLength({ min: 1 })
     .trim(),
   validator
     .body('batiment', 'Vous devez renseigner un batiment')
-    .escape()
     .isLength({ min: 1 })
     .trim(),
   validator
@@ -78,7 +74,6 @@ exports.create = [
       'resident',
       'Vous devez préciser si le propriétaire réside dans son lot'
     )
-    .escape()
     .isLength({ min: 1 })
     .trim(),
   (req, res, next) => {
@@ -88,6 +83,7 @@ exports.create = [
       error.statusCode = 220
       throw error
     } else {
+      console.log(req.body)
       Proprietaire.findOne({ where: { nom: req.body.nom } })
         .then((foundProp) => {
           if (foundProp) {
@@ -128,22 +124,18 @@ exports.create = [
 exports.edit = [
   validator
     .body('nom', 'Vous devez renseigner un nom')
-    .escape()
     .isLength({ min: 1 })
     .trim(),
   validator
     .body('civilite', 'Vous devez renseigner une civilité')
-    .escape()
     .isLength({ min: 1 })
     .trim(),
   validator
     .body('adresse', 'Vous devez renseigner une adresse')
-    .escape()
     .isLength({ min: 1 })
     .trim(),
   validator
     .body('batiment', 'Vous devez renseigner un batiment')
-    .escape()
     .isLength({ min: 1 })
     .trim(),
   validator
@@ -151,7 +143,6 @@ exports.edit = [
       'resident',
       'Vous devez préciser si le propriétaire réside dans son lot'
     )
-    .escape()
     .isLength({ min: 1 })
     .trim(),
   (req, res, next) => {

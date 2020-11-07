@@ -130,7 +130,6 @@ exports.login = (req, res, next) => {
 exports.createAccount = [
   validator
     .body('login', 'Le login doit faire au moins 5 caractères')
-    .escape()
     .isLength({ min: 5 })
     .trim(),
   validator
@@ -141,7 +140,6 @@ exports.createAccount = [
     .trim(),
   validator
     .body('permissions', 'Vous devez renseigner les permissions du compte')
-    .escape()
     .isLength({ min: 1 })
     .trim(),
   (req, res, next) => {
@@ -198,7 +196,6 @@ exports.createAccount = [
 exports.changePassword = [
   validator
     .body('password', 'Veuillez renseigner votre mot de passe actuel')
-    .escape()
     .isLength({ min: 1 })
     .trim(),
   validator
@@ -262,7 +259,6 @@ exports.changePassword = [
 exports.changeEmail = [
   validator
     .body('password', 'Veuillez renseigner votre mot de passe actuel')
-    .escape()
     .isLength({ min: 1 })
     .trim(),
   validator
@@ -409,7 +405,6 @@ exports.get_by_pk = (req, res, next) => {
 exports.edit_permissions = [
   validator
     .body('permissions', 'Vous devez renseigner les permissions du compte')
-    .escape()
     .isLength({ min: 1 })
     .trim(),
   (req, res, next) => {
