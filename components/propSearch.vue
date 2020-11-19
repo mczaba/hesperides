@@ -3,6 +3,7 @@
     <v-row align-center>
       <v-text-field
         v-model="input"
+        @keydown="keydown"
         label="Rechercher un propriétaire (3 lettres minimum)"
       ></v-text-field>
       <v-btn @click="search" class="primary">Chercher</v-btn>
@@ -31,6 +32,11 @@ export default {
     }
   },
   methods: {
+    keydown(event) {
+      if (event.key === 'Enter') {
+        this.search()
+      }
+    },
     clearResults() {
       while (this.resultList.length > 0) {
         this.resultList.pop()

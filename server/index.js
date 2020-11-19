@@ -1,8 +1,10 @@
+const path = require('path')
 const express = require('express')
 const consola = require('consola')
 const { Nuxt, Builder } = require('nuxt')
 const app = express()
 const multer = require('multer')
+const mkdirp = require('mkdirp')
 
 // Import and Set Nuxt.js options
 const config = require('../nuxt.config.js')
@@ -16,6 +18,28 @@ const authRouter = require('./routes/auth')
 const propRouter = require('./routes/proprietaire')
 const lotsRouter = require('./routes/lots')
 const locataireRouter = require('./routes/locataire')
+const documentRouter = require('./routes/document')
+
+// multer config
+const fileStorage = multer.diskStorage({
+  destination(req, file, cb) {
+    const dir = path.join(__dirname, `/../static/document`)
+    mkdirp(dir).then((made) => {
+      cb(null, dir)
+    })
+  },
+  filename(req, file, cb) {
+    cb(null, `${Date.now()}-${file.originalname.replace(/\s+/g, '-')}`)
+  }
+})
+
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype === 'application/pdf') {
+    cb(null, true)
+  } else {
+    cb(new Error('Merci de fournir un fichier au format pdf'), false) // if validation failed then generate error
+  }
+}
 
 async function start() {
   // Init Nuxt.js
@@ -32,7 +56,14 @@ async function start() {
   }
 
   // body parser
-  app.use('/', multer().none())
+  app.use(
+    '/API/document',
+    multer({ storage: fileStorage, fileFilter }).single('document')
+  )
+  app.use('/API/auth', multer().none())
+  app.use('/API/proprietaire', multer().none())
+  app.use('/API/lots', multer().none())
+  app.use('/API/locataire', multer().none())
 
   // headers
   app.use((req, res, next) => {
@@ -49,6 +80,7 @@ async function start() {
   app.use('/API/proprietaire', propRouter)
   app.use('/API/lots', lotsRouter)
   app.use('/API/locataire', locataireRouter)
+  app.use('/API/document', documentRouter)
 
   // error middleware
   app.use((error, req, res, next) => {

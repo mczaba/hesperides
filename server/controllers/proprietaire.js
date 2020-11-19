@@ -83,7 +83,6 @@ exports.create = [
       error.statusCode = 220
       throw error
     } else {
-      console.log(req.body)
       Proprietaire.findOne({ where: { nom: req.body.nom } })
         .then((foundProp) => {
           if (foundProp) {

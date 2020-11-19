@@ -119,7 +119,9 @@ exports.create = [
         .then(() => {
           res.send('Le locataire a bien été créé')
         })
-        .catch((error) => next(error))
+        .catch((error) => {
+          next(error)
+        })
     }
   }
 ]

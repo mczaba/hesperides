@@ -27,7 +27,7 @@
       </v-card>
       <p v-if="error" class="error--text">{{ error }}</p>
       <p v-if="success" class="success--text">{{ success }}</p>
-      <v-btn @click="submit" class="primary my-6">Créer le locataire</v-btn>
+      <v-btn @click="submit" class="primary my-6">Editer le locataire</v-btn>
     </v-form>
   </v-card>
 </template>
