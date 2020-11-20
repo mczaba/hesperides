@@ -9,9 +9,7 @@
       bottom
       class="pt-6 primary white--text"
     >
-      <h2 class="text-center mb-3 px-6">
-        Connecté en tant que :
-      </h2>
+      <h2 class="text-center mb-3 px-6">Connecté en tant que :</h2>
       <h2 class="text-center mb-6 px-6">{{ user.login }}</h2>
       <v-list v-if="user.admin">
         <v-list-item
@@ -48,6 +46,22 @@
       <v-list>
         <v-list-item
           v-for="(item, i) in authRoutes"
+          :key="i"
+          :to="item.to"
+          router
+          exact
+        >
+          <v-list-item-action>
+            <v-icon class="white--text">{{ item.icon }}</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title v-text="item.title" class="white--text" />
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+      <v-list v-if="user.gestionnaire">
+        <v-list-item
+          v-for="(item, i) in documentRoutes"
           :key="i"
           :to="item.to"
           router
@@ -145,6 +159,18 @@ export default {
           icon: 'mdi-account-plus',
           title: 'Ajouter un locataire',
           to: '/locataire/create'
+        }
+      ],
+      documentRoutes: [
+        {
+          icon: 'mdi-file-upload',
+          title: 'Ajouter un document',
+          to: '/document/create'
+        },
+        {
+          icon: 'mdi-file-document-multiple',
+          title: 'Liste des documents',
+          to: '/document/list'
         }
       ],
       showMenu: false,

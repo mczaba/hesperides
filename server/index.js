@@ -72,7 +72,7 @@ async function start() {
       'Access-Control-Allow-Headers',
       'Origin, X-Requested-With, Content-Type, Accept, authorization'
     )
-    res.header('Access-Control-Allow-Methods', 'GET, POST, DELETE')
+    res.header('Access-Control-Allow-Methods', 'GET, POST, DELETE', 'PUT')
     next()
   })
   // routers
@@ -84,6 +84,8 @@ async function start() {
 
   // error middleware
   app.use((error, req, res, next) => {
+    console.log('error')
+    console.log(error)
     res.status(error.statusCode).send(error.message)
   })
 

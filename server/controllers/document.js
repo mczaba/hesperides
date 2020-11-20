@@ -11,17 +11,13 @@ exports.create = [
     .body('type', 'Vous devez renseigner un type')
     .isLength({ min: 1 })
     .trim(),
-  validator
-    .body('status', 'Vous devez renseigner un statut')
-    .isLength({ min: 1 })
-    .trim(),
   (req, res, next) => {
     const errors = validator.validationResult(req)
     if (!errors.isEmpty()) {
-      fs.unlink(req.file.path)
-      const error = new Error(errors.errors[0].msg)
-      error.statusCode = 220
-      next(error)
+      const err = new Error(errors.errors[0].msg)
+      err.statusCode = 220
+      fs.unlink(req.file.path, () => {})
+      next(err)
     } else {
       Document.findOne({ where: { title: req.body.title } })
         .then((foundDocument) => {
@@ -49,3 +45,45 @@ exports.create = [
     }
   }
 ]
+
+exports.getAll = (req, res, next) => {
+  Document.findAll({ order: [['postedat', 'DESC']] })
+    .then((documentList) => {
+      const documentListFiltered = documentList.map((document) => {
+        return document.dataValues
+      })
+      res.json(documentListFiltered)
+    })
+    .catch((err) => next(err))
+}
+
+exports.statusSwitch = (req, res, next) => {
+  Document.findByPk(req.params.id)
+    .then((foundDocument) => {
+      if (!foundDocument) {
+        const error = new Error(
+          "Nous n'avons pas trouvé le document à modifier"
+        )
+        error.statusCode = 220
+        throw error
+      } else {
+        foundDocument.status = !foundDocument.status
+        return foundDocument.save()
+      }
+    })
+    .then(() => {
+      res.send('Le document a bien été modifié')
+    })
+    .catch((error) => next(error))
+}
+
+exports.delete = (req, res, next) => {
+  Document.findByPk(req.params.id)
+    .then((document) => {
+      return document.destroy()
+    })
+    .then((result) => {
+      res.status(200).send('Le document a bien été supprimé')
+    })
+    .catch((error) => next(error))
+}
