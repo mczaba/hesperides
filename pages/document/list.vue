@@ -35,29 +35,14 @@
     <v-card v-if="pageList.length === 0" class="pa-3 mb-2">
       Aucun document ne correspond à vos critères
     </v-card>
-    <div v-if="pageList.length > 0" class="pageControlWrapper mt-7">
-      <v-layout
-        id="pageControl"
-        class="shrink"
-        justify-space-around
-        align-center
-      >
-        <v-btn @click="previousPage" class="primary pageButton">
-          <v-icon>mdi-chevron-left</v-icon>
-        </v-btn>
-        <div class="inputWrapper">
-          <v-text-field
-            v-model="pageInput"
-            label="page"
-            class="pageInput"
-          ></v-text-field>
-          <span> / {{ maxPage + 1 }}</span>
-        </div>
-        <v-btn @click="nextPage" class="primary pageButton">
-          <v-icon>mdi-chevron-right</v-icon>
-        </v-btn>
-      </v-layout>
-    </div>
+    <page-controls
+      :list="documentListFiltered"
+      :maxPage="maxPage"
+      :pageInput.sync="pageInput"
+      @next="nextPage"
+      @previous="previousPage"
+      @update="pageInput = $event"
+    />
     <v-dialog v-model="dialog" max-width="600px">
       <v-card class="px-10">
         <v-card-title class="px-0">
@@ -83,11 +68,13 @@ import axios from 'axios'
 import { paginationMixin } from '../../assets/mixins'
 
 import documentCard from '../../components/cards/documentCard'
+import pageControls from '../../components/pageControls'
 
 export default {
   middleware: 'gestionnaire',
   components: {
-    documentCard
+    documentCard,
+    pageControls
   },
   mixins: [paginationMixin('documentListFiltered', 7)],
   data() {
@@ -155,7 +142,6 @@ export default {
       this.filter.type = ''
     },
     launchDialog(doc) {
-      console.log('delete')
       this.dialog = true
       this.dialogDocument = doc
     },
@@ -173,32 +159,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.pageButton {
-  min-width: 30px !important;
-  width: 30px;
-}
-#pageControl {
-  width: 200px;
-  height: 35px;
-}
-.pageInput {
-  width: 27px !important;
-}
-.inputWrapper {
-  display: flex;
-  align-items: center;
-  height: 100%;
-  span {
-    transform: translateY(-4px);
-  }
-}
-.pageControlWrapper {
-  display: flex;
-  justify-content: center;
-}
-.active {
-  background-color: #1c446a !important;
-}
-</style>

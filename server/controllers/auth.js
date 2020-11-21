@@ -1,20 +1,9 @@
 const validator = require('express-validator')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
-const nodemailer = require('nodemailer')
 require('dotenv').config()
 const Membres = require('../models/membres')
-
-const transporter = nodemailer.createTransport({
-  name: 'smtp.ionos.fr',
-  host: 'smtp.ionos.fr',
-  port: 587,
-  secure: false,
-  auth: {
-    user: process.env.MAILER_USER,
-    pass: process.env.MAILER_PASS
-  }
-})
+const transporter = require('../util/mailer')
 
 // exports.createAdmin = [
 //   validator

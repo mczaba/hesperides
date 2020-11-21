@@ -16,29 +16,14 @@
     <v-card v-if="pageList.length === 0" class="pa-3 mb-2">
       Aucun locataire ne correspond à vos critères
     </v-card>
-    <div v-if="pageList.length > 0" class="pageControlWrapper mt-7">
-      <v-layout
-        id="pageControl"
-        class="shrink"
-        justify-space-around
-        align-center
-      >
-        <v-btn @click="previousPage" class="primary pageButton">
-          <v-icon>mdi-chevron-left</v-icon>
-        </v-btn>
-        <div class="inputWrapper">
-          <v-text-field
-            v-model="pageInput"
-            label="page"
-            class="pageInput"
-          ></v-text-field>
-          <span> / {{ maxPage + 1 }}</span>
-        </div>
-        <v-btn @click="nextPage" class="primary pageButton">
-          <v-icon>mdi-chevron-right</v-icon>
-        </v-btn>
-      </v-layout>
-    </div>
+    <page-controls
+      :list="locataireListFiltered"
+      :maxPage="maxPage"
+      :pageInput.sync="pageInput"
+      @next="nextPage"
+      @previous="previousPage"
+      @update="pageInput = $event"
+    />
     <v-dialog v-model="dialog" max-width="600px">
       <v-card class="px-10">
         <v-card-title class="px-0">
@@ -63,11 +48,13 @@
 import axios from 'axios'
 import { paginationMixin } from '../../assets/mixins'
 import locCard from '../../components/cards/locataireCardList'
+import pageControls from '../../components/pageControls'
 
 export default {
   middleware: 'consult',
   components: {
-    locCard
+    locCard,
+    pageControls
   },
   mixins: [paginationMixin('locataireListFiltered', 7)],
   data() {

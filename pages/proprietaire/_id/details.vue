@@ -8,25 +8,33 @@
           <div>{{ proprio.nom }}</div>
           <div v-if="proprio.prenom" class="caption grey--text">Prénom :</div>
           <div v-if="proprio.prenom">{{ proprio.prenom }}</div>
+          <div class="caption grey--text">Civilité :</div>
+          <div>{{ proprio.civilite }}</div>
           <div v-if="proprio.societe" class="caption grey--text">Société :</div>
           <div v-if="proprio.societe">{{ proprio.societe }}</div>
-          <div v-if="proprio.adresse" class="caption grey--text">
-            Adresse :
-          </div>
+          <div v-if="proprio.adresse" class="caption grey--text">Adresse :</div>
           <div>{{ proprio.adresse }}</div>
           <div v-if="proprio.telephone" class="caption grey--text">
             Téléphone :
           </div>
           <div v-if="proprio.telephone">{{ proprio.telephone }}</div>
-          <div v-if="proprio.mobile" class="caption grey--text">
-            Mobile :
-          </div>
+          <div v-if="proprio.mobile" class="caption grey--text">Mobile :</div>
           <div v-if="proprio.mobile">{{ proprio.mobile }}</div>
           <div v-if="proprio.mail" class="caption grey--text">Email :</div>
           <div v-if="proprio.mail">{{ proprio.mail }}</div>
           <div class="caption grey--text">Résident :</div>
           <div>{{ proprio.resident ? 'Oui' : 'Non' }}</div>
-          <v-btn v-if="user.gestionnaire" @click="goToEdit" class="primary">
+          <div class="caption grey--text">Batiment :</div>
+          <div>{{ proprio.batiment }}</div>
+          <template v-if="proprio.observations">
+            <div class="caption grey--text">Observations :</div>
+            <div id="observations">{{ proprio.observations }}</div>
+          </template>
+          <v-btn
+            v-if="user.gestionnaire"
+            @click="goToEdit"
+            class="primary mt-3"
+          >
             Editer le propriétaire
           </v-btn>
         </v-card>
@@ -137,6 +145,7 @@ export default {
       )
       .then((response) => {
         this.proprio = response.data
+        this.proprio.observations.replace(/\\n/g, '<br/>')
         return axios.get(
           `${process.env.API_URL}/API/proprietaire/lots/${this.$route.params.id}`,
           {
@@ -167,6 +176,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+#observations {
+  white-space: pre-wrap;
+}
+
 #lotList {
   margin-top: 20px;
 }

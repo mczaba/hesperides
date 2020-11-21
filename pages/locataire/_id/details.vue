@@ -11,13 +11,15 @@
           Téléphone :
         </div>
         <div v-if="locataire.telephone">{{ locataire.telephone }}</div>
-        <div v-if="locataire.mobile" class="caption grey--text">
-          Mobile :
-        </div>
+        <div v-if="locataire.mobile" class="caption grey--text">Mobile :</div>
         <div v-if="locataire.mobile">{{ locataire.mobile }}</div>
         <div v-if="locataire.mail" class="caption grey--text">Email :</div>
         <div v-if="locataire.mail">{{ locataire.mail }}</div>
-        <v-btn v-if="user.gestionnaire" @click="goToEdit" class="primary">
+        <template v-if="locataire.observation">
+          <div class="caption grey--text">Observations :</div>
+          <div id="observations">{{ locataire.observation }}</div>
+        </template>
+        <v-btn v-if="user.gestionnaire" @click="goToEdit" class="primary mt-3">
           Editer le locataire
         </v-btn>
       </v-card>
@@ -97,6 +99,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+#observations {
+  white-space: pre-wrap;
+}
+
 .text-center,
 h2,
 h3 {
