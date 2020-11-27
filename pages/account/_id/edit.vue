@@ -4,12 +4,23 @@
       <h3>Changer les permissions du compte {{ login }}</h3>
     </v-card-title>
     <v-form ref="form">
-      <v-select
-        :items="selectList"
-        :rules="requiredRule"
-        v-model="permissions"
-        label="Permissions"
-      ></v-select>
+      Permissions :
+      <v-checkbox
+        v-model="admin"
+        label="Créer et modifier des comptes"
+      ></v-checkbox>
+      <v-checkbox
+        v-model="gestionnaire"
+        label="Modifier la base de données"
+      ></v-checkbox>
+      <v-checkbox
+        v-model="documentPost"
+        label="Poster des Documents"
+      ></v-checkbox>
+      <v-checkbox
+        v-model="documentModif"
+        label="Modifier le statut des documents"
+      ></v-checkbox>
       <p v-if="error" class="error--text">{{ error }}</p>
       <p v-if="success" class="success--text">{{ success }}</p>
       <v-btn @click="submit" class="primary my-6"
@@ -27,8 +38,10 @@ export default {
   data() {
     return {
       login: '',
-      permissions: '',
-      selectList: ['Admin', 'Gestionnaire', 'Consultant'],
+      admin: false,
+      gestionnaire: false,
+      documentPost: false,
+      documentModif: false,
       error: null,
       success: null,
       requiredRule: [
@@ -44,13 +57,10 @@ export default {
       })
       .then((response) => {
         this.login = response.data.login
-        if (response.data.admin) {
-          this.permissions = 'Admin'
-        } else if (response.data.gestionnaire) {
-          this.permissions = 'Gestionnaire'
-        } else {
-          this.permissions = 'Consultant'
-        }
+        this.admin = response.data.admin
+        this.gestionnaire = response.data.gestionnaire
+        this.documentPost = response.data.documentPost
+        this.documentModif = response.data.documentModif
       })
       .catch((error) => (this.error = error))
   },
@@ -60,7 +70,10 @@ export default {
         this.error = null
         this.success = null
         const fd = new FormData()
-        fd.append('permissions', this.permissions)
+        fd.append('admin', this.admin)
+        fd.append('gestionnaire', this.gestionnaire)
+        fd.append('documentPost', this.documentPost)
+        fd.append('documentModif', this.documentModif)
         axios
           .post(
             `${process.env.API_URL}/API/auth/changepermissions/${this.$route.params.id}`,

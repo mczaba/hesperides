@@ -95,7 +95,9 @@ exports.login = (req, res, next) => {
         login: user.login,
         email: user.email,
         admin: user.admin,
-        gestionnaire: user.gestionnaire
+        gestionnaire: user.gestionnaire,
+        documentPost: user.documentPost,
+        documentModif: user.documentModif
       }
       const token = jwt.sign(
         {
@@ -128,7 +130,19 @@ exports.createAccount = [
     .isEmail()
     .trim(),
   validator
-    .body('permissions', 'Vous devez renseigner les permissions du compte')
+    .body('admin', 'Vous devez renseigner les permissions du compte')
+    .isLength({ min: 1 })
+    .trim(),
+  validator
+    .body('gestionnaire', 'Vous devez renseigner les permissions du compte')
+    .isLength({ min: 1 })
+    .trim(),
+  validator
+    .body('documentPost', 'Vous devez renseigner les permissions du compte')
+    .isLength({ min: 1 })
+    .trim(),
+  validator
+    .body('documentModif', 'Vous devez renseigner les permissions du compte')
     .isLength({ min: 1 })
     .trim(),
   (req, res, next) => {
@@ -156,10 +170,10 @@ exports.createAccount = [
             login: req.body.login,
             email: req.body.email,
             password: hashedpassword,
-            admin: req.body.permissions === 'Admin',
-            gestionnaire:
-              req.body.permissions === 'Admin' ||
-              req.body.permissions === 'Gestionnaire'
+            admin: req.body.admin === 'true',
+            gestionnaire: req.body.gestionnaire === 'true',
+            documentPost: req.body.documentPost === 'true',
+            documentModif: req.body.documentModif === 'true'
           })
         })
         .then(() => {
@@ -393,7 +407,19 @@ exports.get_by_pk = (req, res, next) => {
 
 exports.edit_permissions = [
   validator
-    .body('permissions', 'Vous devez renseigner les permissions du compte')
+    .body('admin', 'Vous devez renseigner les permissions du compte')
+    .isLength({ min: 1 })
+    .trim(),
+  validator
+    .body('gestionnaire', 'Vous devez renseigner les permissions du compte')
+    .isLength({ min: 1 })
+    .trim(),
+  validator
+    .body('documentPost', 'Vous devez renseigner les permissions du compte')
+    .isLength({ min: 1 })
+    .trim(),
+  validator
+    .body('documentModif', 'Vous devez renseigner les permissions du compte')
     .isLength({ min: 1 })
     .trim(),
   (req, res, next) => {
@@ -414,10 +440,10 @@ exports.edit_permissions = [
             )
             throw error
           } else {
-            foundUser.admin = req.body.permissions === 'Admin'
-            foundUser.gestionnaire =
-              req.body.permissions === 'Admin' ||
-              req.body.permissions === 'Gestionnaire'
+            foundUser.admin = req.body.admin === 'true'
+            foundUser.gestionnaire = req.body.gestionnaire === 'true'
+            foundUser.documentPost = req.body.documentPost === 'true'
+            foundUser.documentModif = req.body.documentModif === 'true'
             return foundUser.save()
           }
         })

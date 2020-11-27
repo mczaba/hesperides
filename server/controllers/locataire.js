@@ -177,8 +177,8 @@ exports.edit = [
 
 exports.deleteLoc = (req, res, next) => {
   Locataire.findByPk(req.params.id)
-    .then((proprio) => {
-      return proprio.destroy()
+    .then((locataire) => {
+      return locataire.destroy()
     })
     .then((result) => {
       res.status(200).send('Le locataire a bien été supprimé')

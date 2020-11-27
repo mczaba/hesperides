@@ -82,6 +82,11 @@ export default {
           }
         })
         .catch((error) => {
+          if (
+            error.toString() === 'Error: Request failed with status code 401'
+          ) {
+            error = "Vous n'avez pas l'autorisation nécessaire"
+          }
           this.$emit('error', error)
         })
     },

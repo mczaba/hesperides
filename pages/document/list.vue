@@ -1,7 +1,6 @@
 <template>
   <div class="component">
     <h1 class="subheading my-5">Liste des documents</h1>
-    <p v-if="error" class="error--text">{{ error }}</p>
     <v-card class="pb-3 mb-5">
       <v-card-title>Filtres</v-card-title>
       <v-row no-gutters align="center" justify="space-around">
@@ -24,6 +23,7 @@
         >
       </v-row>
     </v-card>
+    <h3 v-if="error" class="error--text mb-2">{{ error }}</h3>
     <document-card
       @error="errorHandle"
       @reload="init"
@@ -71,7 +71,7 @@ import documentCard from '../../components/cards/documentCard'
 import pageControls from '../../components/pageControls'
 
 export default {
-  middleware: 'gestionnaire',
+  middleware: 'docConsult',
   components: {
     documentCard,
     pageControls

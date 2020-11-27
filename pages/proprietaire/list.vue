@@ -24,24 +24,27 @@
         >
       </v-row>
     </v-card>
-    <prop-card
-      v-for="proprio in pageList"
-      :key="proprio.Id"
-      :proprio="proprio"
-      @deleteProp="launchDialog"
-      delete-button
-    ></prop-card>
-    <v-card v-if="pageList.length === 0" class="pa-3 mb-2">
-      Aucun propriétaire ne correspond à vos critères
-    </v-card>
-    <page-controls
-      :list="proprioListFiltered"
-      :maxPage="maxPage"
-      :pageInput.sync="pageInput"
-      @next="nextPage"
-      @previous="previousPage"
-      @update="pageInput = $event"
-    />
+    <h2 v-if="getError" class="error--text">{{ getError }}</h2>
+    <template v-else>
+      <prop-card
+        v-for="proprio in pageList"
+        :key="proprio.Id"
+        :proprio="proprio"
+        @deleteProp="launchDialog"
+        delete-button
+      ></prop-card>
+      <v-card v-if="pageList.length === 0" class="pa-3 mb-2">
+        Aucun propriétaire ne correspond à vos critères
+      </v-card>
+      <page-controls
+        :list="proprioListFiltered"
+        :maxPage="maxPage"
+        :pageInput.sync="pageInput"
+        @next="nextPage"
+        @previous="previousPage"
+        @update="pageInput = $event"
+      />
+    </template>
     <v-dialog v-model="dialog" max-width="600px">
       <v-card class="px-10">
         <v-card-title class="px-0">
@@ -58,7 +61,7 @@
           >
           <v-btn @click="dialog = false" class="primary">Non</v-btn>
         </v-card-actions>
-        <p v-if="error" class="error--text">{{ error }}</p>
+        <p v-if="deleteError" class="error--text">{{ deleteError }}</p>
       </v-card>
     </v-dialog>
   </div>
@@ -87,7 +90,8 @@ export default {
       proprioList: [],
       dialog: false,
       dialogProprietaire: { nom: '', Id: 0 },
-      error: null
+      getError: null,
+      deleteError: null
     }
   },
   computed: {
@@ -136,6 +140,9 @@ export default {
   mounted() {
     this.init()
   },
+  beforeDestroy() {
+    this.$store.commit('pages/setProp', this.currentPage)
+  },
   methods: {
     init() {
       while (this.proprioList.length > 0) {
@@ -146,16 +153,23 @@ export default {
           headers: { authorization: `Bearer: ${this.$store.state.token}` }
         })
         .then((response) => {
-          response.data.forEach((row) => this.proprioList.push(row))
-          this.proprioList.sort((proprio1, proprio2) => {
-            if (proprio1.nom > proprio2.nom) {
-              return 1
-            } else {
-              return -1
-            }
-          })
+          if (response.status === 200) {
+            response.data.forEach((row) => this.proprioList.push(row))
+            this.proprioList.sort((proprio1, proprio2) => {
+              if (proprio1.nom > proprio2.nom) {
+                return 1
+              } else {
+                return -1
+              }
+            })
+            setTimeout(() => {
+              this.currentPage = this.$store.state.pages.proprietaire
+            }, 1)
+          } else {
+            this.getError = response.data
+          }
         })
-        .catch((err) => (this.error = err))
+        .catch((err) => (this.getError = err))
     },
     resetFilters() {
       this.filter.nom = ''
@@ -175,7 +189,7 @@ export default {
           this.dialog = false
           this.init()
         })
-        .catch((err) => (this.error = err))
+        .catch((err) => (this.deleteError = err))
     }
   }
 }

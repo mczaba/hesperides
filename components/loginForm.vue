@@ -68,7 +68,7 @@ export default {
                 token: response.data.token,
                 user: response.data.user
               }
-              this.$store.commit('logIn', payload)
+              this.$store.dispatch('logIn', payload)
             } else {
               this.error = response.data
             }

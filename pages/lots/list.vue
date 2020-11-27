@@ -163,6 +163,9 @@ export default {
   mounted() {
     this.init()
   },
+  beforeDestroy() {
+    this.$store.commit('pages/setLot', this.currentPage)
+  },
   methods: {
     init() {
       while (this.lotsList.length > 0) {
@@ -181,6 +184,9 @@ export default {
               return -1
             }
           })
+          setTimeout(() => {
+            this.currentPage = this.$store.state.pages.lot
+          }, 1)
         })
         .catch((err) => (this.error = err))
     },

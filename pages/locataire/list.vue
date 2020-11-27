@@ -87,6 +87,9 @@ export default {
   mounted() {
     this.init()
   },
+  beforeDestroy() {
+    this.$store.commit('pages/setLoc', this.currentPage)
+  },
   methods: {
     init() {
       while (this.locataireList.length > 0) {
@@ -105,6 +108,9 @@ export default {
               return -1
             }
           })
+          setTimeout(() => {
+            this.currentPage = this.$store.state.pages.locataire
+          }, 1)
         })
         .catch((err) => (this.error = err))
     },

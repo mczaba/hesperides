@@ -19,6 +19,7 @@ const propRouter = require('./routes/proprietaire')
 const lotsRouter = require('./routes/lots')
 const locataireRouter = require('./routes/locataire')
 const documentRouter = require('./routes/document')
+const favouriteRouter = require('./routes/favourite')
 
 // multer config
 const fileStorage = multer.diskStorage({
@@ -64,6 +65,7 @@ async function start() {
   app.use('/API/proprietaire', multer().none())
   app.use('/API/lots', multer().none())
   app.use('/API/locataire', multer().none())
+  app.use('/API/favourite', multer().none())
 
   // headers
   app.use((req, res, next) => {
@@ -81,11 +83,10 @@ async function start() {
   app.use('/API/lots', lotsRouter)
   app.use('/API/locataire', locataireRouter)
   app.use('/API/document', documentRouter)
+  app.use('/API/favourite', favouriteRouter)
 
   // error middleware
   app.use((error, req, res, next) => {
-    console.log('error')
-    console.log(error)
     res.status(error.statusCode).send(error.message)
   })
 

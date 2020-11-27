@@ -31,6 +31,14 @@ const Membres = sequelize.define(
       type: Sequelize.BOOLEAN,
       allowNull: false
     },
+    documentPost: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false
+    },
+    documentModif: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false
+    },
     lastSeen: {
       type: Sequelize.DATE
     }

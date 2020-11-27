@@ -4,22 +4,42 @@
       <v-col cols="10">
         <v-row no-gutters>
           <v-col class="my-1" cols="12" md="6">
-            <div class="caption grey--text">Login</div>
-            <div>{{ account.login }}</div>
+            <v-row no-gutters>
+              <v-col cols="12">
+                <div class="caption grey--text">Login</div>
+                <div>{{ account.login }}</div>
+              </v-col>
+              <v-col class="my-1" cols="12">
+                <div class="caption grey--text">Dernière connexion</div>
+                <div>{{ lastSeenFormatted }}</div>
+              </v-col>
+            </v-row>
           </v-col>
-          <v-col class="my-1" cols="6" md="3">
-            <div class="caption grey--text">Admin</div>
-            <v-icon>{{ account.admin ? 'mdi-check' : 'mdi-close' }}</v-icon>
-          </v-col>
-          <v-col class="my-1" cols="6" md="3">
-            <div class="caption grey--text">Gestionnaire</div>
-            <v-icon>{{
-              account.gestionnaire ? 'mdi-check' : 'mdi-close'
-            }}</v-icon>
-          </v-col>
-          <v-col class="my-1" cols="12">
-            <div class="caption grey--text">Dernière connexion</div>
-            <div>{{ lastSeenFormatted }}</div>
+          <v-col class="my-1" cols="12" md="6">
+            <v-row no-gutters>
+              <v-col class="my-1" cols="6">
+                <div class="caption grey--text">Admin</div>
+                <v-icon>{{ account.admin ? 'mdi-check' : 'mdi-close' }}</v-icon>
+              </v-col>
+              <v-col class="my-1" cols="6">
+                <div class="caption grey--text">Gestionnaire</div>
+                <v-icon>{{
+                  account.gestionnaire ? 'mdi-check' : 'mdi-close'
+                }}</v-icon>
+              </v-col>
+              <v-col class="my-1" cols="6">
+                <div class="caption grey--text">Doc Post</div>
+                <v-icon>{{
+                  account.documentPost ? 'mdi-check' : 'mdi-close'
+                }}</v-icon>
+              </v-col>
+              <v-col class="my-1" cols="6">
+                <div class="caption grey--text">Doc Modif</div>
+                <v-icon>{{
+                  account.documentModif ? 'mdi-check' : 'mdi-close'
+                }}</v-icon>
+              </v-col>
+            </v-row>
           </v-col>
         </v-row>
       </v-col>

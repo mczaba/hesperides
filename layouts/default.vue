@@ -59,19 +59,30 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
-      <v-list v-if="user.gestionnaire">
+      <v-list v-if="user.documentPost || user.documentModif">
         <v-list-item
-          v-for="(item, i) in documentRoutes"
-          :key="i"
-          :to="item.to"
+          v-if="user.documentPost"
+          to="/document/create"
           router
           exact
         >
           <v-list-item-action>
-            <v-icon class="white--text">{{ item.icon }}</v-icon>
+            <v-icon class="white--text">mdi-file-upload</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title v-text="item.title" class="white--text" />
+            <v-list-item-title class="white--text"
+              >Ajouter un document</v-list-item-title
+            >
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item to="/document/list" router exact>
+          <v-list-item-action>
+            <v-icon class="white--text">mdi-file-document-multiple</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title class="white--text"
+              >Liste des documents</v-list-item-title
+            >
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -142,6 +153,11 @@ export default {
           icon: 'mdi-account-plus',
           title: 'Créer un compte',
           to: '/account/create'
+        },
+        {
+          icon: 'mdi-heart',
+          title: 'Gérer les destinataires favoris',
+          to: '/favourites'
         }
       ],
       gestionnaireRoutes: [
