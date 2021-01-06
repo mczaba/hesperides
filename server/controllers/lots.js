@@ -74,7 +74,7 @@ exports.create = [
             numero: req.body.numero,
             batiment: req.body.batiment,
             etage: req.body.etage,
-            porte: req.body.porte,
+            porte: req.body.porte || null,
             orientation: req.body.orientation,
             type: req.body.type,
             observation: req.body.observation,
@@ -117,7 +117,7 @@ exports.edit = [
       Proprietaire.findByPk(req.body.proprietaire)
         .then((foundProp) => {
           if (!foundProp) {
-            const error = new Error("Le lot n'a pas pu être trouvé")
+            const error = new Error("Le propriétaire n'a pas pu être trouvé")
             error.statusCode = 220
             throw error
           }
@@ -131,7 +131,7 @@ exports.edit = [
           } else {
             foundLot.batiment = req.body.batiment
             foundLot.etage = req.body.etage
-            foundLot.porte = req.body.porte
+            foundLot.porte = req.body.porte || null
             foundLot.orientation = req.body.orientation
             foundLot.type = req.body.type
             foundLot.observation = req.body.observation
@@ -143,7 +143,9 @@ exports.edit = [
         .then(() => {
           res.send('Le lot a bien été modifié')
         })
-        .catch((error) => next(error))
+        .catch((error) => {
+          next(error)
+        })
     }
   }
 ]

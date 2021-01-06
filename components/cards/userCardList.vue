@@ -45,14 +45,14 @@
       </v-col>
       <v-col cols="2">
         <v-btn
-          v-if="user.admin && !account.admin"
+          v-if="user.admin && account.login !== 'admin'"
           @click="goToEdit"
           class="primary--text"
           icon
         >
           <v-icon>mdi-pencil</v-icon>
         </v-btn>
-        <v-btn v-if="!account.admin" @click="deleteAccount" icon>
+        <v-btn v-if="account.login !== 'admin'" @click="deleteAccount" icon>
           <v-icon class="primary--text">mdi-delete</v-icon>
         </v-btn>
       </v-col>

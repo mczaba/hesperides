@@ -146,6 +146,7 @@ exports.edit = [
       error.statusCode = 220
       throw error
     } else {
+      console.log(req.body)
       Locataire.findByPk(req.params.id)
         .then((foundLoc) => {
           if (!foundLoc) {

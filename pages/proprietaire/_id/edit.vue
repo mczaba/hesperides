@@ -1,9 +1,7 @@
 <template>
   <v-card class="px-10 component mt-10">
     <v-card-title class="px-0">
-      <h3>
-        Modifier le propriétaire
-      </h3>
+      <h3>Modifier le propriétaire</h3>
     </v-card-title>
     <v-form ref="form">
       <v-text-field :rules="requiredRule" v-model="nom" label="Nom (requis)" />
@@ -104,28 +102,16 @@ export default {
         this.success = null
         const fd = new FormData()
         fd.append('nom', this.nom)
-        if (this.prenom) {
-          fd.append('prenom', this.prenom)
-        }
+        fd.append('prenom', this.prenom)
         fd.append('civilite', this.civilite)
         fd.append('adresse', this.adresse)
-        if (this.telephone) {
-          fd.append('telephone', this.telephone)
-        }
-        if (this.mobile) {
-          fd.append('mobile', this.mobile)
-        }
-        if (this.mail) {
-          fd.append('mail', this.mail)
-        }
+        fd.append('telephone', this.telephone)
+        fd.append('mobile', this.mobile)
+        fd.append('mail', this.mail)
         fd.append('batiment', this.batiment)
         fd.append('resident', this.resident)
-        if (this.observations) {
-          fd.append('observations', this.observations)
-        }
-        if (this.societe) {
-          fd.append('societe', this.societe)
-        }
+        fd.append('observations', this.observations)
+        fd.append('societe', this.societe)
         axios
           .post(
             `${process.env.API_URL}/API/proprietaire/edit/${this.$route.params.id}`,

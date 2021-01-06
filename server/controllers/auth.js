@@ -339,9 +339,9 @@ exports.get_all = (req, res, next) => {
 exports.deleter_user = (req, res, next) => {
   Membres.findByPk(req.params.id)
     .then((membre) => {
-      if (membre.admin) {
+      if (membre.login === 'admin') {
         const error = new Error(
-          'Il est impossible de supprimer un compte admin'
+          'Il est impossible de supprimer le compte admin'
         )
         error.statusCode = 220
         throw error
@@ -434,9 +434,9 @@ exports.edit_permissions = [
           if (!foundUser) {
             const error = new Error("N'a pas pu trouver le compte à modifier")
             throw error
-          } else if (foundUser.admin) {
+          } else if (foundUser.login === 'admin') {
             const error = new Error(
-              'Vous ne pouvez pas modifier un compte admin'
+              'Vous ne pouvez pas modifier le compte admin'
             )
             throw error
           } else {

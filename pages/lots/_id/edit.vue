@@ -103,11 +103,6 @@ export default {
       ]
     }
   },
-  computed: {
-    batimentFull() {
-      return `Batiment ${this.batiment}`
-    }
-  },
   mounted() {
     axios
       .get(`${process.env.API_URL}/API/lots/details/${this.$route.params.id}`, {
@@ -154,18 +149,10 @@ export default {
         fd.append('type', this.type)
         fd.append('tantieme', this.tantieme)
         fd.append('proprietaire', this.proprietaire.Id)
-        if (this.batiment) {
-          fd.append('batiment', this.batimentFull)
-        }
-        if (this.porte) {
-          fd.append('porte', this.porte)
-        }
-        if (this.orientation) {
-          fd.append('orientation', this.orientation)
-        }
-        if (this.observation) {
-          fd.append('observation', this.observation)
-        }
+        fd.append('batiment', this.batiment)
+        fd.append('porte', this.porte)
+        fd.append('orientation', this.orientation)
+        fd.append('observation', this.observation)
         axios
           .post(
             `${process.env.API_URL}/API/lots/edit/${this.$route.params.id}`,

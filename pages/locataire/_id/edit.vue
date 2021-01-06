@@ -1,9 +1,7 @@
 <template>
   <v-card class="px-10 component mt-10">
     <v-card-title class="px-0">
-      <h3>
-        Editer un locataire
-      </h3>
+      <h3>Editer un locataire</h3>
     </v-card-title>
     <v-form ref="form">
       <v-text-field :rules="requiredRule" v-model="nom" label="Nom (requis)" />
@@ -108,21 +106,11 @@ export default {
         fd.append('nom', this.nom)
         fd.append('idproprio', this.proprietaire.Id)
         fd.append('lot', this.lot)
-        if (this.prenom) {
-          fd.append('prenom', this.prenom)
-        }
-        if (this.telephone) {
-          fd.append('telephone', this.telephone)
-        }
-        if (this.mobile) {
-          fd.append('mobile', this.mobile)
-        }
-        if (this.mail) {
-          fd.append('mail', this.mail)
-        }
-        if (this.observation) {
-          fd.append('observation', this.observation)
-        }
+        fd.append('prenom', this.prenom)
+        fd.append('telephone', this.telephone)
+        fd.append('mobile', this.mobile)
+        fd.append('mail', this.mail)
+        fd.append('observation', this.observation)
         axios
           .post(
             `${process.env.API_URL}/API/locataire/edit/${this.$route.params.id}`,
