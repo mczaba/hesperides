@@ -147,7 +147,9 @@ export default {
       )
       .then((response) => {
         this.proprio = response.data
-        this.proprio.observations.replace(/\\n/g, '<br/>')
+        if (this.proprio.observations) {
+          this.proprio.observations.replace(/\\n/g, '<br/>')
+        }
         return axios.get(
           `${process.env.API_URL || ''}/API/proprietaire/lots/${
             this.$route.params.id
