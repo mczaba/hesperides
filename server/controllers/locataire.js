@@ -74,15 +74,25 @@ exports.create = [
       Locataire.findOne({ where: { nom: req.body.nom } })
         .then((foundLoc) => {
           if (foundLoc) {
-            if (
-              foundLoc.prenom.toLowerCase() === req.body.prenom.toLowerCase() &&
-              foundLoc.nom.toLowerCase() === req.body.nom.toLowerCase()
-            ) {
-              const error = new Error(
-                'Un locataire avec ce nom et prénom existe déjà'
-              )
-              error.statusCode = 220
-              throw error
+            if (foundLoc.nom.toLowerCase() === req.body.nom.toLowerCase()) {
+              if (req.body.prenom && foundLoc.prenom) {
+                if (
+                  req.body.prenom.toLowerCase() ===
+                  foundLoc.prenom.toLowerCase()
+                ) {
+                  const error = new Error(
+                    'Un locataire avec ce nom et prénom existe déjà'
+                  )
+                  error.statusCode = 220
+                  throw error
+                }
+              } else if (!req.body.prenom && !foundLoc.prenom) {
+                const error = new Error(
+                  'Un locataire avec ce nom et prénom existe déjà'
+                )
+                error.statusCode = 220
+                throw error
+              }
             }
           }
           return Lots.findByPk(req.body.lot)
