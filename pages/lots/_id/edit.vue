@@ -105,7 +105,7 @@ export default {
   },
   mounted() {
     axios
-      .get(`${process.env.API_URL}/API/lots/details/${this.$route.params.id}`, {
+      .get(`${process.env.API_URL || ''}/API/lots/details/${this.$route.params.id}`, {
         headers: { authorization: `Bearer: ${this.$store.state.token}` }
       })
       .then((response) => {
@@ -118,7 +118,7 @@ export default {
         this.tantieme = response.data.tantieme.toString()
         this.observation = response.data.observation || ''
         return axios.get(
-          `${process.env.API_URL}/API/proprietaire/details/${response.data.proprietaire}`,
+          `${process.env.API_URL || ''}/API/proprietaire/details/${response.data.proprietaire}`,
           {
             headers: { authorization: `Bearer: ${this.$store.state.token}` }
           }
@@ -155,7 +155,7 @@ export default {
         fd.append('observation', this.observation)
         axios
           .post(
-            `${process.env.API_URL}/API/lots/edit/${this.$route.params.id}`,
+            `${process.env.API_URL || ''}/API/lots/edit/${this.$route.params.id}`,
             fd,
             {
               headers: { authorization: `Bearer: ${this.$store.state.token}` }

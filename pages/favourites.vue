@@ -62,7 +62,7 @@ export default {
         this.favList.pop()
       }
       axios
-        .get(`${process.env.API_URL}/API/favourite/all`, {
+        .get(`${process.env.API_URL || ''}/API/favourite/all`, {
           headers: { authorization: `Bearer: ${this.$store.state.token}` }
         })
         .then((response) => {
@@ -80,7 +80,7 @@ export default {
     },
     deleteFav() {
       axios
-        .delete(`${process.env.API_URL}/API/favourite/${this.dialogFav.Id}`, {
+        .delete(`${process.env.API_URL || ''}/API/favourite/${this.dialogFav.Id}`, {
           headers: { authorization: `Bearer: ${this.$store.state.token}` }
         })
         .then((response) => {

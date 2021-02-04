@@ -51,7 +51,7 @@ export default {
         this.accountList.pop()
       }
       axios
-        .get(`${process.env.API_URL}/API/auth/all`, {
+        .get(`${process.env.API_URL || ''}/API/auth/all`, {
           headers: { authorization: `Bearer: ${this.$store.state.token}` }
         })
         .then((response) => {

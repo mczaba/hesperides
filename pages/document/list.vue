@@ -126,7 +126,7 @@ export default {
         this.documentList.pop()
       }
       axios
-        .get(`${process.env.API_URL}/API/document/all`, {
+        .get(`${process.env.API_URL || ''}/API/document/all`, {
           headers: { authorization: `Bearer: ${this.$store.state.token}` }
         })
         .then((response) => {
@@ -147,7 +147,7 @@ export default {
     },
     deleteDocument(id) {
       axios
-        .delete(`${process.env.API_URL}/API/document/${id}/delete`, {
+        .delete(`${process.env.API_URL || ''}/API/document/${id}/delete`, {
           headers: { authorization: `Bearer: ${this.$store.state.token}` }
         })
         .then((response) => {

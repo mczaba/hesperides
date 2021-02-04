@@ -172,7 +172,7 @@ export default {
         this.lotsList.pop()
       }
       axios
-        .get(`${process.env.API_URL}/API/lots/all`, {
+        .get(`${process.env.API_URL || ''}/API/lots/all`, {
           headers: { authorization: `Bearer: ${this.$store.state.token}` }
         })
         .then((response) => {
@@ -202,7 +202,7 @@ export default {
     },
     deleteLot(id) {
       axios
-        .delete(`${process.env.API_URL}/API/lots/${id}`, {
+        .delete(`${process.env.API_URL || ''}/API/lots/${id}`, {
           headers: { authorization: `Bearer: ${this.$store.state.token}` }
         })
         .then((response) => {

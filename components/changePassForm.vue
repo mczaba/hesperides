@@ -79,7 +79,7 @@ export default {
         fd.append('newPassword', this.newPassword)
         fd.append('passwordConf', this.passwordConf)
         axios
-          .post(`${process.env.API_URL}/API/auth/changepassword`, fd, {
+          .post(`${process.env.API_URL || ''}/API/auth/changepassword`, fd, {
             headers: { authorization: `Bearer: ${this.$store.state.token}` }
           })
           .then((response) => {

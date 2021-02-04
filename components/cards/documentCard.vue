@@ -65,13 +65,13 @@ export default {
       return moment(this.document.postedat).format('Do MMMM YYYY')
     },
     url() {
-      return `${process.env.API_URL}/${this.document.filepath}`
+      return `${process.env.API_URL || ''}/${this.document.filepath}`
     }
   },
   methods: {
     statusSwitch() {
       axios
-        .get(`${process.env.API_URL}/API/document/${this.document.Id}/status`, {
+        .get(`${process.env.API_URL || ''}/API/document/${this.document.Id}/status`, {
           headers: { authorization: `Bearer: ${this.$store.state.token}` }
         })
         .then((response) => {

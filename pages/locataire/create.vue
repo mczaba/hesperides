@@ -94,7 +94,7 @@ export default {
           fd.append('observation', this.observation)
         }
         axios
-          .post(`${process.env.API_URL}/API/locataire/create`, fd, {
+          .post(`${process.env.API_URL || ''}/API/locataire/create`, fd, {
             headers: { authorization: `Bearer: ${this.$store.state.token}` }
           })
           .then((response) => {

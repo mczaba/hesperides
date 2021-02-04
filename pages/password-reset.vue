@@ -43,7 +43,7 @@ export default {
         const fd = new FormData()
         fd.append('login', this.login)
         axios
-          .post(`${process.env.API_URL}/API/auth/resetpass`, fd)
+          .post(`${process.env.API_URL || ''}/API/auth/resetpass`, fd)
           .then((response) => {
             if (response.status === 200) {
               this.success = response.data

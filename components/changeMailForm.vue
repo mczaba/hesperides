@@ -73,7 +73,7 @@ export default {
         fd.append('newEmail', this.mail)
         fd.append('emailConf', this.mailConf)
         axios
-          .post(`${process.env.API_URL}/API/auth/changemail`, fd, {
+          .post(`${process.env.API_URL || ''}/API/auth/changemail`, fd, {
             headers: { authorization: `Bearer: ${this.$store.state.token}` }
           })
           .then((response) => {

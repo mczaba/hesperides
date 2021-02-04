@@ -47,7 +47,7 @@ export default {
         fd.append('nom', this.nom)
         fd.append('email', this.email)
         axios
-          .post(`${process.env.API_URL}/API/favourite/create`, fd, {
+          .post(`${process.env.API_URL || ''}/API/favourite/create`, fd, {
             headers: { authorization: `Bearer: ${this.$store.state.token}` }
           })
           .then((response) => {

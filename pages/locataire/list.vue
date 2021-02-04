@@ -96,7 +96,7 @@ export default {
         this.locataireList.pop()
       }
       axios
-        .get(`${process.env.API_URL}/API/locataire/all`, {
+        .get(`${process.env.API_URL || ''}/API/locataire/all`, {
           headers: { authorization: `Bearer: ${this.$store.state.token}` }
         })
         .then((response) => {
@@ -120,7 +120,7 @@ export default {
     },
     deleteLocataire(id) {
       axios
-        .delete(`${process.env.API_URL}/API/locataire/${id}`, {
+        .delete(`${process.env.API_URL || ''}/API/locataire/${id}`, {
           headers: { authorization: `Bearer: ${this.$store.state.token}` }
         })
         .then((response) => {

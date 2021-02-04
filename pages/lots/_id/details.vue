@@ -56,13 +56,13 @@ export default {
   },
   mounted() {
     axios
-      .get(`${process.env.API_URL}/API/lots/details/${this.$route.params.id}`, {
+      .get(`${process.env.API_URL || ''}/API/lots/details/${this.$route.params.id}`, {
         headers: { authorization: `Bearer: ${this.$store.state.token}` }
       })
       .then((response) => {
         this.lot = response.data
         return axios.get(
-          `${process.env.API_URL}/API/proprietaire/details/${this.lot.proprietaire}`,
+          `${process.env.API_URL || ''}/API/proprietaire/details/${this.lot.proprietaire}`,
           {
             headers: { authorization: `Bearer: ${this.$store.state.token}` }
           }
@@ -71,7 +71,7 @@ export default {
       .then((response) => {
         this.proprietaire = response.data
         return axios.get(
-          `${process.env.API_URL}/API/locataire/lot/${this.lot.numero}`,
+          `${process.env.API_URL || ''}/API/locataire/lot/${this.lot.numero}`,
           {
             headers: { authorization: `Bearer: ${this.$store.state.token}` }
           }

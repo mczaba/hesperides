@@ -149,7 +149,7 @@ export default {
         this.proprioList.pop()
       }
       axios
-        .get(`${process.env.API_URL}/API/proprietaire/all`, {
+        .get(`${process.env.API_URL || ''}/API/proprietaire/all`, {
           headers: { authorization: `Bearer: ${this.$store.state.token}` }
         })
         .then((response) => {
@@ -182,7 +182,7 @@ export default {
     },
     deleteProprietaire(id) {
       axios
-        .delete(`${process.env.API_URL}/API/proprietaire/${id}`, {
+        .delete(`${process.env.API_URL || ''}/API/proprietaire/${id}`, {
           headers: { authorization: `Bearer: ${this.$store.state.token}` }
         })
         .then((response) => {

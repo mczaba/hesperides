@@ -74,7 +74,7 @@ export default {
         fd.append('documentPost', this.documentPost)
         fd.append('documentModif', this.documentModif)
         axios
-          .post(`${process.env.API_URL}/API/auth/createaccount`, fd, {
+          .post(`${process.env.API_URL || ''}/API/auth/createaccount`, fd, {
             headers: { authorization: `Bearer: ${this.$store.state.token}` }
           })
           .then((response) => {

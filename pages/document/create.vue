@@ -68,7 +68,7 @@ export default {
   },
   mounted() {
     axios
-      .get(`${process.env.API_URL}/API/favourite/all`, {
+      .get(`${process.env.API_URL || ''}/API/favourite/all`, {
         headers: { authorization: `Bearer: ${this.$store.state.token}` }
       })
       .then((response) => {
@@ -106,7 +106,7 @@ export default {
         fd.append('document', this.currentFile, this.currentFile.name)
         fd.append('mail', destinatairesString)
         axios
-          .post(`${process.env.API_URL}/API/document/create`, fd, {
+          .post(`${process.env.API_URL || ''}/API/document/create`, fd, {
             headers: { authorization: `Bearer: ${this.$store.state.token}` }
           })
           .then((response) => {
