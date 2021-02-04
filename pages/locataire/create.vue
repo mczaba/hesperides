@@ -18,7 +18,6 @@
         label="Numéro de lot (requis)"
         type="number"
       />
-      <prop-search @propPicked="propPicked" />
       <v-card v-if="proprietaire" class="indigo white--text mb-3">
         <v-card-title>Propriétaire actuel :</v-card-title>
         <v-card-text class="white--text"
@@ -34,13 +33,9 @@
 
 <script>
 import axios from 'axios'
-import propSearch from '../../components/propSearch'
 
 export default {
   middleware: 'gestionnaire',
-  components: {
-    propSearch
-  },
   data() {
     return {
       nom: '',
@@ -50,7 +45,6 @@ export default {
       mail: '',
       observation: '',
       lot: 0,
-      proprietaire: null,
       error: null,
       success: null,
       requiredRule: [(v) => v.length >= 1 || 'Vous devez renseigner ce champ'],
@@ -64,19 +58,12 @@ export default {
     }
   },
   methods: {
-    propPicked(value) {
-      this.proprietaire = value
-      if (this.error === 'Vous devez choisir un propriétaire') {
-        this.error = null
-      }
-    },
     submit() {
       if (this.$refs.form.validate()) {
         this.error = null
         this.success = null
         const fd = new FormData()
         fd.append('nom', this.nom)
-        fd.append('idproprio', this.proprietaire.Id)
         fd.append('lot', this.lot)
         if (this.prenom) {
           fd.append('prenom', this.prenom)

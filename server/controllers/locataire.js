@@ -63,10 +63,6 @@ exports.create = [
     .body('lot', 'Vous devez renseigner un lot')
     .isLength({ min: 1 })
     .trim(),
-  validator
-    .body('idproprio', 'Vous devez renseigner un locataire')
-    .isLength({ min: 1 })
-    .trim(),
   (req, res, next) => {
     const errors = validator.validationResult(req)
     if (!errors.isEmpty()) {
@@ -74,6 +70,7 @@ exports.create = [
       error.statusCode = 220
       throw error
     } else {
+      let propId = null
       Locataire.findOne({ where: { nom: req.body.nom } })
         .then((foundLoc) => {
           if (foundLoc) {
@@ -96,6 +93,7 @@ exports.create = [
             error.statusCode = 220
             throw error
           }
+          propId = foundLot.proprietaire
           return Locataire.findOne({ where: { lot: req.body.lot } })
         })
         .then((foundLoc) => {
@@ -112,7 +110,7 @@ exports.create = [
             telephone: req.body.telephone,
             mobile: req.body.mobile,
             mail: req.body.mail,
-            idproprio: req.body.idproprio,
+            idproprio: propId,
             observation: req.body.observation
           })
         })

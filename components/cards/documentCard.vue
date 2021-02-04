@@ -11,8 +11,7 @@
             <div class="caption grey--text">Type</div>
             <div>{{ document.type }}</div>
           </v-col>
-          <v-col class="my-1" cols="3"
-            >I
+          <v-col class="my-1" cols="3">
             <div class="caption grey--text">Ajouté le</div>
             <div>{{ date }}</div>
           </v-col>

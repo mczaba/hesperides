@@ -3,11 +3,11 @@
     <v-row no-gutters>
       <v-col cols="10">
         <v-row no-gutters wrap align="center">
-          <v-col :sm="smCols" cols="6" class="my-1">
+          <v-col cols="4" class="my-1">
             <div class="caption grey--text">Nom</div>
             <div>{{ proprio.nom }}</div>
           </v-col>
-          <v-col :sm="smCols" cols="6" class="my-1">
+          <v-col cols="4" class="my-1">
             <div class="caption grey--text">Prénom</div>
             <div>{{ proprio.prenom }}</div>
           </v-col>

@@ -111,11 +111,6 @@ export default {
       ]
     }
   },
-  computed: {
-    batimentFull() {
-      return `Batiment ${this.batiment}`
-    }
-  },
   methods: {
     propPicked(value) {
       this.proprietaire = value
@@ -136,7 +131,7 @@ export default {
         fd.append('tantieme', this.tantieme)
         fd.append('proprietaire', this.proprietaire.Id)
         if (this.batiment) {
-          fd.append('batiment', this.batimentFull)
+          fd.append('batiment', this.batiment)
         }
         if (this.porte) {
           fd.append('porte', this.porte)
