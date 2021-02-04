@@ -80,9 +80,12 @@ export default {
     },
     deleteFav() {
       axios
-        .delete(`${process.env.API_URL || ''}/API/favourite/${this.dialogFav.Id}`, {
-          headers: { authorization: `Bearer: ${this.$store.state.token}` }
-        })
+        .delete(
+          `${process.env.API_URL || ''}/API/favourite/${this.dialogFav.Id}`,
+          {
+            headers: { authorization: `Bearer: ${this.$store.state.token}` }
+          }
+        )
         .then((response) => {
           if (response.status === 200) {
             this.dialog = false

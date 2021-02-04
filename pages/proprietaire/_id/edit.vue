@@ -75,7 +75,9 @@ export default {
   mounted() {
     axios
       .get(
-        `${process.env.API_URL || ''}/API/proprietaire/details/${this.$route.params.id}`,
+        `${process.env.API_URL || ''}/API/proprietaire/details/${
+          this.$route.params.id
+        }`,
         {
           headers: { authorization: `Bearer: ${this.$store.state.token}` }
         }
@@ -114,7 +116,9 @@ export default {
         fd.append('societe', this.societe)
         axios
           .post(
-            `${process.env.API_URL || ''}/API/proprietaire/edit/${this.$route.params.id}`,
+            `${process.env.API_URL || ''}/API/proprietaire/edit/${
+              this.$route.params.id
+            }`,
             fd,
             {
               headers: { authorization: `Bearer: ${this.$store.state.token}` }

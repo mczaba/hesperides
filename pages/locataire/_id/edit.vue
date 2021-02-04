@@ -64,7 +64,9 @@ export default {
   mounted() {
     axios
       .get(
-        `${process.env.API_URL || ''}/API/locataire/details/${this.$route.params.id}`,
+        `${process.env.API_URL || ''}/API/locataire/details/${
+          this.$route.params.id
+        }`,
         {
           headers: { authorization: `Bearer: ${this.$store.state.token}` }
         }
@@ -78,7 +80,9 @@ export default {
         this.lot = response.data.lot
         this.observation = response.data.observation || ''
         return axios.get(
-          `${process.env.API_URL || ''}/API/proprietaire/details/${response.data.idproprio}`,
+          `${process.env.API_URL || ''}/API/proprietaire/details/${
+            response.data.idproprio
+          }`,
           {
             headers: { authorization: `Bearer: ${this.$store.state.token}` }
           }
@@ -113,7 +117,9 @@ export default {
         fd.append('observation', this.observation)
         axios
           .post(
-            `${process.env.API_URL || ''}/API/locataire/edit/${this.$route.params.id}`,
+            `${process.env.API_URL || ''}/API/locataire/edit/${
+              this.$route.params.id
+            }`,
             fd,
             {
               headers: { authorization: `Bearer: ${this.$store.state.token}` }

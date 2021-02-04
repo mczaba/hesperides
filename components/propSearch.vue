@@ -4,7 +4,7 @@
       <v-text-field
         v-model="input"
         @keydown="keydown"
-        label="Rechercher un propriétaire (3 lettres minimum)"
+        label="Rechercher un propriétaire (3 lettres minimum) (requis)"
       ></v-text-field>
       <v-btn @click="search" class="primary">Chercher</v-btn>
     </v-row>
@@ -45,9 +45,12 @@ export default {
     search() {
       this.clearResults()
       axios
-        .get(`${process.env.API_URL || ''}/API/proprietaire/search/${this.input}`, {
-          headers: { authorization: `Bearer: ${this.$store.state.token}` }
-        })
+        .get(
+          `${process.env.API_URL || ''}/API/proprietaire/search/${this.input}`,
+          {
+            headers: { authorization: `Bearer: ${this.$store.state.token}` }
+          }
+        )
         .then((response) => {
           response.data.forEach((row) => this.resultList.push(row))
           this.resultList.sort((proprio1, proprio2) => {

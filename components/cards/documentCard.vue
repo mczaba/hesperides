@@ -11,7 +11,8 @@
             <div class="caption grey--text">Type</div>
             <div>{{ document.type }}</div>
           </v-col>
-          <v-col class="my-1" cols="3">
+          <v-col class="my-1" cols="3"
+            >I
             <div class="caption grey--text">Ajouté le</div>
             <div>{{ date }}</div>
           </v-col>
@@ -71,9 +72,14 @@ export default {
   methods: {
     statusSwitch() {
       axios
-        .get(`${process.env.API_URL || ''}/API/document/${this.document.Id}/status`, {
-          headers: { authorization: `Bearer: ${this.$store.state.token}` }
-        })
+        .get(
+          `${process.env.API_URL || ''}/API/document/${
+            this.document.Id
+          }/status`,
+          {
+            headers: { authorization: `Bearer: ${this.$store.state.token}` }
+          }
+        )
         .then((response) => {
           if (response.status === 200) {
             this.$emit('reload')

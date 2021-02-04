@@ -52,9 +52,14 @@ export default {
   },
   mounted() {
     axios
-      .get(`${process.env.API_URL || ''}/API/auth/details/${this.$route.params.id}`, {
-        headers: { authorization: `Bearer: ${this.$store.state.token}` }
-      })
+      .get(
+        `${process.env.API_URL || ''}/API/auth/details/${
+          this.$route.params.id
+        }`,
+        {
+          headers: { authorization: `Bearer: ${this.$store.state.token}` }
+        }
+      )
       .then((response) => {
         this.login = response.data.login
         this.admin = response.data.admin
@@ -76,7 +81,9 @@ export default {
         fd.append('documentModif', this.documentModif)
         axios
           .post(
-            `${process.env.API_URL || ''}/API/auth/changepermissions/${this.$route.params.id}`,
+            `${process.env.API_URL || ''}/API/auth/changepermissions/${
+              this.$route.params.id
+            }`,
             fd,
             {
               headers: { authorization: `Bearer: ${this.$store.state.token}` }

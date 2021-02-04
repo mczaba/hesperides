@@ -138,7 +138,9 @@ export default {
   mounted() {
     axios
       .get(
-        `${process.env.API_URL || ''}/API/proprietaire/details/${this.$route.params.id}`,
+        `${process.env.API_URL || ''}/API/proprietaire/details/${
+          this.$route.params.id
+        }`,
         {
           headers: { authorization: `Bearer: ${this.$store.state.token}` }
         }
@@ -147,7 +149,9 @@ export default {
         this.proprio = response.data
         this.proprio.observations.replace(/\\n/g, '<br/>')
         return axios.get(
-          `${process.env.API_URL || ''}/API/proprietaire/lots/${this.$route.params.id}`,
+          `${process.env.API_URL || ''}/API/proprietaire/lots/${
+            this.$route.params.id
+          }`,
           {
             headers: { authorization: `Bearer: ${this.$store.state.token}` }
           }
@@ -156,7 +160,9 @@ export default {
       .then((response) => {
         response.data.forEach((lot) => this.lots.push(lot))
         return axios.get(
-          `${process.env.API_URL || ''}/API/locataire/proprio/${this.$route.params.id}`,
+          `${process.env.API_URL || ''}/API/locataire/proprio/${
+            this.$route.params.id
+          }`,
           {
             headers: { authorization: `Bearer: ${this.$store.state.token}` }
           }
