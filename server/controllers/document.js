@@ -37,20 +37,24 @@ exports.create = [
           return Document.create(infos)
         })
         .then(() => {
-          const dest = req.body.mail.split(';')
-          const message = {
-            from: process.env.MAILER_USER,
-            to: dest,
-            subject: 'Nouveau document posté sur les hesperides',
-            html: `<h2>Le document ${req.body.title} a été posté sur le <a href="https://jadabac.fr">site</a> des hespérides</h2>`
-          }
-          transporter.sendMail(message, (err, info) => {
-            if (err) {
-              throw err
-            } else {
-              res.send('Le document a bien été enregistré')
+          if (req.body.mail) {
+            const dest = req.body.mail.split(';')
+            const message = {
+              from: process.env.MAILER_USER,
+              to: dest,
+              subject: 'Nouveau document posté sur les hesperides',
+              html: `<h2>Le document ${req.body.title} a été posté sur le <a href="https://jadabac.fr">site</a> des hespérides</h2>`
             }
-          })
+            transporter.sendMail(message, (err, info) => {
+              if (err) {
+                throw err
+              } else {
+                res.send('Le document a bien été enregistré')
+              }
+            })
+          } else {
+            res.send('Le document a bien été enregistré')
+          }
         })
         .catch((error) => {
           fs.unlink(req.file.path, () => {})

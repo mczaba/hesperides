@@ -18,7 +18,7 @@
       <v-file-input
         ref="fileInput"
         @change="upload"
-        prepend-icon="mdi-file-pdf"
+        prepend-icon="mdi-folder-multiple"
         accept="application/pdf"
       ></v-file-input>
       Prévenir par mail :
