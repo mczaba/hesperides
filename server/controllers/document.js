@@ -43,7 +43,7 @@ exports.create = [
               from: process.env.MAILER_USER,
               to: dest,
               subject: 'Nouveau document posté sur les hesperides',
-              html: `<h2>Le document ${req.body.title} a été posté sur le <a href="https://jadabac.fr">site</a> des hespérides</h2>`
+              html: `<h2>Le document ${req.body.title} a été posté sur le <a href="${process.env.DOMAIN_ADRESS}">site</a> des hespérides</h2>`
             }
             transporter.sendMail(message, (err, info) => {
               if (err) {
