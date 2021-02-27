@@ -3,13 +3,13 @@
     <v-row no-gutters>
       <v-col cols="10">
         <v-row no-gutters wrap align="center">
-          <v-col class="my-1" cols="4">
+          <v-col class="my-1" cols="6">
             <div class="caption grey--text">Nom</div>
-            <div>{{ locataire.nom }}</div>
+            <div>{{ entreprise.nom }}</div>
           </v-col>
-          <v-col class="my-1" cols="4">
-            <div class="caption grey--text">Prénom</div>
-            <div>{{ locataire.prenom }}</div>
+          <v-col class="my-1" cols="6">
+            <div class="caption grey--text">Type</div>
+            <div>{{ entreprise.nom }}</div>
           </v-col>
         </v-row>
       </v-col>
@@ -29,7 +29,7 @@
             </v-btn>
             <v-btn
               v-if="user.gestionnaire && deleteButton"
-              @click="deleteLoc"
+              @click="deleteEntreprise"
               class="primary--text"
               icon
             >
@@ -45,7 +45,7 @@
 <script>
 export default {
   props: {
-    locataire: {
+    entreprise: {
       type: Object,
       default: null
     },
@@ -61,13 +61,13 @@ export default {
   },
   methods: {
     goToView() {
-      this.$router.push(`/locataire/${this.locataire.Id}/details`)
+      this.$router.push(`/entreprise/${this.entreprise.Id}/details`)
     },
     goToEdit() {
-      this.$router.push(`/locataire/${this.locataire.Id}/edit`)
+      this.$router.push(`/entreprise/${this.entreprise.Id}/edit`)
     },
-    deleteLoc() {
-      this.$emit('deleteLoc', this.locataire)
+    deleteEntreprise() {
+      this.$emit('deleteEntreprise', this.entreprise)
     }
   }
 }

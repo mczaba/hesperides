@@ -23,8 +23,7 @@ const Proprietaire = sequelize.define(
       allowNull: false
     },
     adresse: {
-      type: Sequelize.TEXT,
-      allowNull: false
+      type: Sequelize.TEXT
     },
     telephone: {
       type: Sequelize.TEXT

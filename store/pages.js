@@ -1,7 +1,8 @@
 export const state = () => ({
   proprietaire: 0,
   locataire: 0,
-  lot: 0
+  lot: 0,
+  entreprise: 0
 })
 
 export const mutations = {
@@ -13,5 +14,8 @@ export const mutations = {
   },
   setLoc: (state, payload) => {
     state.locataire = payload
+  },
+  setEnt: (state, payload) => {
+    state.entreprise = payload
   }
 }

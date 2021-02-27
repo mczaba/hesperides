@@ -9,7 +9,6 @@
       bottom
       class="pt-6 primary white--text"
     >
-      <h2 class="text-center mb-3 px-6">Connecté en tant que :</h2>
       <h2 class="text-center mb-6 px-6">{{ user.login }}</h2>
       <v-list v-if="user.admin">
         <v-list-item
@@ -126,23 +125,6 @@ export default {
   },
   data() {
     return {
-      authRoutes: [
-        {
-          icon: 'mdi-account-multiple',
-          title: 'Liste des propriétaires',
-          to: '/proprietaire/list'
-        },
-        {
-          icon: 'mdi-tag',
-          title: 'Liste des lots',
-          to: '/lots/list'
-        },
-        {
-          icon: 'mdi-account-multiple',
-          title: 'Liste des locataires',
-          to: '/locataire/list'
-        }
-      ],
       adminRoutes: [
         {
           icon: 'mdi-account-multiple',
@@ -175,6 +157,33 @@ export default {
           icon: 'mdi-account-plus',
           title: 'Ajouter un locataire',
           to: '/locataire/create'
+        },
+        {
+          icon: 'mdi-bank-plus',
+          title: 'Ajouter une entreprise',
+          to: '/entreprise/create'
+        }
+      ],
+      authRoutes: [
+        {
+          icon: 'mdi-account-multiple',
+          title: 'Liste des propriétaires',
+          to: '/proprietaire/list'
+        },
+        {
+          icon: 'mdi-tag',
+          title: 'Liste des lots',
+          to: '/lots/list'
+        },
+        {
+          icon: 'mdi-account-multiple',
+          title: 'Liste des locataires',
+          to: '/locataire/list'
+        },
+        {
+          icon: 'mdi-bank',
+          title: 'Liste des entreprises',
+          to: '/entreprise/list'
         }
       ],
       documentRoutes: [
