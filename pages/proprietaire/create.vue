@@ -1,9 +1,7 @@
 <template>
   <v-card class="px-10 component mt-10">
     <v-card-title class="px-0">
-      <h3>
-        Créer un propriétaire
-      </h3>
+      <h3>Créer un propriétaire</h3>
     </v-card-title>
     <v-form ref="form">
       <v-text-field :rules="requiredRule" v-model="nom" label="Nom (requis)" />
@@ -14,11 +12,7 @@
         v-model="civilite"
         label="Civilité (requis)"
       ></v-select>
-      <v-text-field
-        v-model="adresse"
-        :rules="requiredRule"
-        label="Adresse (requis)"
-      />
+      <v-text-field v-model="adresse" label="Adresse" />
       <v-text-field v-model="telephone" label="Téléphone" />
       <v-text-field v-model="mobile" label="Mobile" />
       <v-text-field :rules="mailRule" v-model="mail" label="Email" />
@@ -83,7 +77,9 @@ export default {
           fd.append('prenom', this.prenom)
         }
         fd.append('civilite', this.civilite)
-        fd.append('adresse', this.adresse)
+        if (this.adresse) {
+          fd.append('adresse', this.adresse)
+        }
         if (this.telephone) {
           fd.append('telephone', this.telephone)
         }

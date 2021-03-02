@@ -36,6 +36,7 @@
       <v-row no-gutters align-center>
         <v-text-field
           v-model="destinataireInput"
+          :rules="mailRule"
           label="Nouveau destinataire"
         />
         <v-btn @click="addDest" class="primary">Ajouter le destinataire</v-btn>
@@ -63,7 +64,13 @@ export default {
       currentFile: null,
       error: null,
       success: null,
-      requiredRule: [(v) => v.length >= 1 || 'Vous devez renseigner ce champ']
+      requiredRule: [(v) => v.length >= 1 || 'Vous devez renseigner ce champ'],
+      mailRule: [
+        (v) =>
+          v.length < 1 ||
+          /^[a-z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$/.test(v) ||
+          'Veuillez renseigner une adresse valide'
+      ]
     }
   },
   mounted() {
