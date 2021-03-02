@@ -21,6 +21,11 @@
         prepend-icon="mdi-folder-multiple"
         accept="application/pdf"
       ></v-file-input>
+      <entreprise-search @entreprisePicked="setEntreprise" />
+      <v-card v-if="entreprise" class="indigo white--text mb-3">
+        <v-card-title>Entreprise actuelle :</v-card-title>
+        <v-card-text class="white--text">{{ entreprise.nom }}</v-card-text>
+      </v-card>
       Prévenir par mail :
       <v-checkbox
         v-for="fav in favourites"
@@ -50,8 +55,13 @@
 
 <script>
 import axios from 'axios'
+import entrepriseSearch from '../../components/entrepriseSearch'
+
 export default {
   middleware: 'docPost',
+  components: {
+    entrepriseSearch
+  },
   data() {
     return {
       selectListType: ['Facture', 'Devis'],
@@ -61,6 +71,7 @@ export default {
       destinatairesFav: [],
       favourites: [],
       destinataireInput: '',
+      entreprise: null,
       currentFile: null,
       error: null,
       success: null,
@@ -85,6 +96,9 @@ export default {
       })
   },
   methods: {
+    setEntreprise(event) {
+      this.entreprise = event
+    },
     addDest() {
       this.destinataires.push(this.destinataireInput)
       this.destinataireInput = ''
@@ -101,7 +115,9 @@ export default {
       this.currentFile = event
     },
     submit() {
-      if (this.$refs.form.validate()) {
+      if (!this.entreprise) {
+        this.error = 'Vous devez sélectionner une entreprise'
+      } else if (this.$refs.form.validate()) {
         this.error = null
         this.success = null
         const destinatairesString = this.destinataires
@@ -109,6 +125,7 @@ export default {
           .join(';')
         const fd = new FormData()
         fd.append('title', this.title)
+        fd.append('entreprise', this.entreprise.Id)
         fd.append('type', this.type)
         fd.append('document', this.currentFile, this.currentFile.name)
         fd.append('mail', destinatairesString)

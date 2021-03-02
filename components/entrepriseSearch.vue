@@ -4,18 +4,18 @@
       <v-text-field
         v-model="input"
         @keydown="keydown"
-        label="Rechercher un propriétaire (3 lettres minimum) (requis)"
+        label="Rechercher une entreprise (3 lettres minimum) (requis)"
       ></v-text-field>
       <v-btn @click="search" class="primary">Chercher</v-btn>
     </v-row>
     <v-col id="result-list" v-if="resultList.length > 0">
       <v-card
-        v-for="prop in resultList"
-        :key="prop.Id"
-        @click="pick(prop)"
-        class="pa-3 mb-2 propResult"
+        v-for="entreprise in resultList"
+        :key="entreprise.Id"
+        @click="pick(entreprise)"
+        class="pa-3 mb-2 entrepriseResult"
       >
-        <span>{{ prop.nom }} {{ prop.prenom }}</span>
+        <span>{{ entreprise.nom }}</span>
       </v-card>
     </v-col>
   </div>
@@ -46,7 +46,7 @@ export default {
       this.clearResults()
       axios
         .get(
-          `${process.env.API_URL || ''}/API/proprietaire/search/${this.input}`,
+          `${process.env.API_URL || ''}/API/entreprise/search/${this.input}`,
           {
             headers: { authorization: `Bearer: ${this.$store.state.token}` }
           }
@@ -63,8 +63,8 @@ export default {
         })
         .catch((err) => (this.error = err))
     },
-    pick(prop) {
-      this.$emit('propPicked', prop)
+    pick(entreprise) {
+      this.$emit('entreprisePicked', entreprise)
       this.clearResults()
     }
   }
@@ -72,7 +72,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.propResult {
+.entrepriseResult {
   cursor: pointer;
   background-color: lighten(#3f51b5, 20%);
   &:hover {

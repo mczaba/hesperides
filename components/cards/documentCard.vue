@@ -11,9 +11,15 @@
             <div class="caption grey--text">Type</div>
             <div>{{ document.type }}</div>
           </v-col>
-          <v-col class="my-1" cols="3">
+          <v-col class="my-1" cols="12" md="3">
             <div class="caption grey--text">Ajouté le</div>
             <div>{{ date }}</div>
+          </v-col>
+          <v-col v-if="entreprise" class="my-1" cols="12">
+            <div class="caption grey--text">Entreprise</div>
+            <div @click="goToEntreprise" class="link primary--text">
+              {{ entreprise.nom }}
+            </div>
           </v-col>
           <v-col class="my-1" cols="3">
             <div
@@ -60,6 +66,11 @@ export default {
       default: null
     }
   },
+  data() {
+    return {
+      entreprise: null
+    }
+  },
   computed: {
     date() {
       return moment(this.document.postedat).format('Do MMMM YYYY')
@@ -68,7 +79,25 @@ export default {
       return `${process.env.API_URL || ''}/${this.document.filepath}`
     }
   },
+  mounted() {
+    axios
+      .get(
+        `${process.env.API_URL || ''}/API/entreprise/details/${
+          this.document.entrepriseId
+        }`,
+        {
+          headers: { authorization: `Bearer: ${this.$store.state.token}` }
+        }
+      )
+      .then((response) => {
+        this.entreprise = response.data
+      })
+      .catch()
+  },
   methods: {
+    goToEntreprise() {
+      this.$router.push(`/entreprise/${this.entreprise.Id}/details`)
+    },
     statusSwitch() {
       axios
         .get(
@@ -101,3 +130,10 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.link {
+  text-decoration: underline;
+  cursor: pointer;
+}
+</style>

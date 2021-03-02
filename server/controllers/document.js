@@ -12,6 +12,10 @@ exports.create = [
     .body('type', 'Vous devez renseigner un type')
     .isLength({ min: 1 })
     .trim(),
+  validator
+    .body('entreprise', 'Vous devez renseigner une entreprise')
+    .isLength({ min: 1 })
+    .trim(),
   (req, res, next) => {
     const errors = validator.validationResult(req)
     if (!errors.isEmpty()) {
@@ -31,6 +35,7 @@ exports.create = [
             title: req.body.title,
             filepath: req.file.path.split('static/')[1],
             type: req.body.type,
+            entrepriseId: req.body.entreprise,
             status: false,
             postedat: Date.now()
           }

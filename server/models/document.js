@@ -27,6 +27,10 @@ const Document = sequelize.define(
       type: Sequelize.BOOLEAN,
       allowNull: false
     },
+    entrepriseId: {
+      type: Sequelize.INTEGER,
+      allowNull: false
+    },
     postedat: {
       type: Sequelize.DATE,
       allowNull: false

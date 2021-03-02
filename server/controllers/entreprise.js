@@ -1,4 +1,5 @@
 const validator = require('express-validator')
+const { Op } = require('sequelize')
 const Entreprise = require('../models/entreprise')
 
 exports.create = [
@@ -116,3 +117,14 @@ exports.edit = [
       .catch((error) => next(error))
   }
 ]
+
+exports.search = (req, res, next) => {
+  Entreprise.findAll({ where: { nom: { [Op.substring]: req.params.nom } } })
+    .then((entrepriseList) => {
+      const listFiltered = entrepriseList.map((entreprise) => {
+        return entreprise.dataValues
+      })
+      res.json(listFiltered)
+    })
+    .catch((error) => next(error))
+}

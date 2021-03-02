@@ -28,6 +28,7 @@ import axios from 'axios'
 
 export default {
   middleware: 'gestionnaire',
+
   data() {
     return {
       nom: '',
@@ -46,6 +47,9 @@ export default {
     }
   },
   methods: {
+    setEntreprise(event) {
+      this.entreprise = event.Id
+    },
     submit() {
       if (this.$refs.form.validate()) {
         this.error = null

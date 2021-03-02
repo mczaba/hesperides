@@ -11,6 +11,17 @@
           class="shrink filterInput"
         >
         </v-select>
+        <v-text-field
+          v-model="filter.year"
+          label="Année"
+          class="shrink filterInput"
+        />
+        <v-text-field
+          v-model="entrepriseInput"
+          @change="getEnteprisesId"
+          label="Nom"
+          class="shrink filterInput"
+        />
         <v-select
           :items="selectStatusList"
           v-model="filter.status"
@@ -81,9 +92,12 @@ export default {
     return {
       documentList: [],
       error: null,
+      entrepriseInput: '',
+      entrepriseFilter: [],
       filter: {
         type: '',
-        status: ''
+        status: '',
+        year: ''
       },
       selectTypeList: ['', 'Facture', 'Devis'],
       selectStatusList: ['', 'A Traiter', 'Traité'],
@@ -99,9 +113,19 @@ export default {
             return false
           }
         }
+        if (this.entrepriseFilter.length > 0) {
+          if (!this.entrepriseFilter.includes(document.entrepriseId)) {
+            return false
+          }
+        }
         if (this.filter.status) {
           const filter = this.filter.status === 'Traité'
           if (document.status !== filter) {
+            return false
+          }
+        }
+        if (this.filter.year) {
+          if (this.filter.year !== document.postedat.substring(0, 4)) {
             return false
           }
         }
@@ -121,6 +145,24 @@ export default {
     this.init()
   },
   methods: {
+    getEnteprisesId() {
+      this.entrepriseFilter = []
+      if (this.entrepriseInput) {
+        this.entrepriseFilter.push(-1)
+        axios
+          .get(
+            `${process.env.API_URL || ''}/API/entreprise/search/${
+              this.entrepriseInput
+            }`,
+            {
+              headers: { authorization: `Bearer: ${this.$store.state.token}` }
+            }
+          )
+          .then((response) => {
+            response.data.forEach((row) => this.entrepriseFilter.push(row.Id))
+          })
+      }
+    },
     init() {
       while (this.documentList.length > 0) {
         this.documentList.pop()
@@ -138,8 +180,10 @@ export default {
       this.error = event
     },
     resetFilters() {
-      this.fitler.status = ''
+      this.filter.status = ''
       this.filter.type = ''
+      this.entrepriseFilter.length = 0
+      this.entrepriseInput = ''
     },
     launchDialog(doc) {
       this.dialog = true
