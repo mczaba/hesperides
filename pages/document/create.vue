@@ -64,7 +64,7 @@ export default {
   },
   data() {
     return {
-      selectListType: ['Facture', 'Devis'],
+      selectListType: ['Facture', 'Devis', 'Contrat', 'Autre'],
       title: '',
       type: '',
       destinataires: [],

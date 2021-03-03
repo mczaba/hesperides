@@ -9,7 +9,7 @@
           </v-col>
           <v-col class="my-1" cols="6">
             <div class="caption grey--text">Type</div>
-            <div>{{ entreprise.nom }}</div>
+            <div>{{ entreprise.type }}</div>
           </v-col>
         </v-row>
       </v-col>
