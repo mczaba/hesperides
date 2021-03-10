@@ -19,7 +19,7 @@
         <v-text-field
           v-model="entrepriseInput"
           @change="getEnteprisesId"
-          label="Nom"
+          label="Entreprise"
           class="shrink filterInput"
         />
         <v-select

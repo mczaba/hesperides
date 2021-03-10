@@ -34,6 +34,9 @@ const Document = sequelize.define(
     postedat: {
       type: Sequelize.DATE,
       allowNull: false
+    },
+    observation: {
+      type: Sequelize.TEXT
     }
   },
   { timestamps: false }

@@ -31,6 +31,12 @@
               {{ document.status ? 'Traité' : 'A traiter' }}
             </div>
           </v-col>
+          <v-col v-if="document.observation" class="my-1" cols="12">
+            <div class="caption grey--text">Observation</div>
+            <div>
+              {{ document.observation }}
+            </div>
+          </v-col>
         </v-row>
       </v-col>
       <v-col cols="2">
@@ -46,6 +52,9 @@
             </v-btn>
             <v-btn @click="deleteDoc" class="primary--text" icon>
               <v-icon>mdi-delete</v-icon>
+            </v-btn>
+            <v-btn @click="goToEdit" class="primary--text" icon>
+              <v-icon>mdi-pencil</v-icon>
             </v-btn>
           </v-row>
         </v-container>
@@ -126,6 +135,9 @@ export default {
     },
     deleteDoc() {
       this.$emit('deleteDoc', this.document)
+    },
+    goToEdit() {
+      this.$router.push(`/document/${this.document.Id}/edit`)
     }
   }
 }

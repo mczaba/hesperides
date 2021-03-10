@@ -35,6 +35,7 @@ exports.create = [
             title: req.body.title,
             filepath: req.file.path.split('static/')[1],
             type: req.body.type,
+            observation: req.body.observation,
             entrepriseId: req.body.entreprise,
             status: false,
             postedat: Date.now()
@@ -69,6 +70,44 @@ exports.create = [
   }
 ]
 
+exports.edit = [
+  validator
+    .body('title', 'Vous devez renseigner un titre')
+    .isLength({ min: 1 })
+    .trim(),
+  validator
+    .body('type', 'Vous devez renseigner un type')
+    .isLength({ min: 1 })
+    .trim(),
+  validator
+    .body('entreprise', 'Vous devez renseigner une entreprise')
+    .isLength({ min: 1 })
+    .trim(),
+  (req, res, next) => {
+    const errors = validator.validationResult(req)
+    if (!errors.isEmpty()) {
+      const err = new Error(errors.errors[0].msg)
+      err.statusCode = 220
+      next(err)
+    } else {
+      Document.findByPk(req.params.id)
+        .then((foundDocument) => {
+          foundDocument.title = req.body.title
+          foundDocument.type = req.body.type
+          foundDocument.entreprise = req.body.entreprise
+          foundDocument.observation = req.body.observation
+          return foundDocument.save()
+        })
+        .then(() => {
+          res.send('Le document a bien été édité')
+        })
+        .catch((error) => {
+          next(error)
+        })
+    }
+  }
+]
+
 exports.getAll = (req, res, next) => {
   Document.findAll({ order: [['postedat', 'DESC']] })
     .then((documentList) => {
@@ -78,6 +117,20 @@ exports.getAll = (req, res, next) => {
       res.json(documentListFiltered)
     })
     .catch((err) => next(err))
+}
+
+exports.getById = (req, res, next) => {
+  Document.findByPk(req.params.id)
+    .then((document) => {
+      if (!document) {
+        const error = new Error("Nous n'avons pas pu trouver ce document")
+        error.statusCode = 220
+        error.tosend = "Nous n'avons pas pu trouver ce document"
+        throw error
+      }
+      res.json(document)
+    })
+    .catch((error) => next(error))
 }
 
 exports.statusSwitch = (req, res, next) => {
