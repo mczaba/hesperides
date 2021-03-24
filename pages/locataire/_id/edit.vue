@@ -10,19 +10,11 @@
       <v-text-field v-model="mobile" label="Mobile" />
       <v-text-field :rules="mailRule" v-model="mail" label="Email" />
       <v-textarea v-model="observation" label="Observations"></v-textarea>
-      <v-text-field
-        :rules="lotRule"
-        v-model.number="lot"
-        label="Numéro de lot (requis)"
-        type="number"
+      <prop-search
+        @propPicked="propPicked"
+        :type="'proprietaire'"
+        :resultPicked="proprietaire"
       />
-      <prop-search @propPicked="propPicked" />
-      <v-card v-if="proprietaire" class="indigo white--text mb-3">
-        <v-card-title>Propriétaire actuel :</v-card-title>
-        <v-card-text class="white--text"
-          >{{ proprietaire.nom }} {{ proprietaire.prenom }}</v-card-text
-        >
-      </v-card>
       <p v-if="error" class="error--text">{{ error }}</p>
       <p v-if="success" class="success--text">{{ success }}</p>
       <v-btn @click="submit" class="primary my-6">Modifier le locataire</v-btn>
@@ -47,7 +39,6 @@ export default {
       mobile: '',
       mail: '',
       observation: '',
-      lot: 0,
       proprietaire: null,
       error: null,
       success: null,
@@ -74,10 +65,9 @@ export default {
       .then((response) => {
         this.nom = response.data.nom
         this.prenom = response.data.prenom || ''
-        this.telephone = response.data.telephone
+        this.telephone = response.data.telephone || ''
         this.mobile = response.data.mobile || ''
         this.mail = response.data.mail || ''
-        this.lot = response.data.lot
         this.observation = response.data.observation || ''
         return axios.get(
           `${process.env.API_URL || ''}/API/proprietaire/details/${
@@ -109,7 +99,6 @@ export default {
         const fd = new FormData()
         fd.append('nom', this.nom)
         fd.append('idproprio', this.proprietaire.Id)
-        fd.append('lot', this.lot)
         fd.append('prenom', this.prenom)
         fd.append('telephone', this.telephone)
         fd.append('mobile', this.mobile)

@@ -83,7 +83,9 @@ export default {
       .then((response) => {
         this.proprietaire = response.data
         return axios.get(
-          `${process.env.API_URL || ''}/API/lots/details/${this.locataire.lot}`,
+          `${process.env.API_URL || ''}/API/lots/locataire/${
+            this.locataire.Id
+          }`,
           {
             headers: { authorization: `Bearer: ${this.$store.state.token}` }
           }

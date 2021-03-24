@@ -34,13 +34,20 @@
         label="Orientation"
       ></v-select>
       <v-textarea v-model="observation" label="Observations"></v-textarea>
-      <prop-search @propPicked="propPicked" />
-      <v-card v-if="proprietaire" class="primary white--text mb-3">
-        <v-card-title>Propriétaire actuel :</v-card-title>
-        <v-card-text class="white--text"
-          >{{ proprietaire.nom }} {{ proprietaire.prenom }}</v-card-text
-        >
-      </v-card>
+      <prop-search
+        @propPicked="propPicked"
+        :type="'proprietaire'"
+        :resultPicked="proprietaire"
+      />
+      <prop-search
+        @propPicked="locPicked"
+        :type="'locataire'"
+        :resultPicked="locataire"
+      />
+      <v-btn @click="locataire = null" v-if="locataire" class="primary my-6"
+        >Supprimer le locataire</v-btn
+      >
+      <br />
       <p v-if="error" class="error--text">{{ error }}</p>
       <p v-if="success" class="success--text">{{ success }}</p>
       <v-btn @click="submit" class="primary my-6">Modifier le lot</v-btn>
@@ -68,6 +75,7 @@ export default {
       observation: '',
       tantieme: '',
       proprietaire: null,
+      locataire: null,
       selectListBatiment: ['A', 'B', 'C', 'D'],
       selectListEtage: [
         'Rez de chaussée',
@@ -104,6 +112,7 @@ export default {
     }
   },
   mounted() {
+    let locataireId = null
     axios
       .get(
         `${process.env.API_URL || ''}/API/lots/details/${
@@ -122,6 +131,7 @@ export default {
         this.type = response.data.type
         this.tantieme = response.data.tantieme.toString()
         this.observation = response.data.observation || ''
+        locataireId = response.data.locataire
         return axios.get(
           `${process.env.API_URL || ''}/API/proprietaire/details/${
             response.data.proprietaire
@@ -133,6 +143,16 @@ export default {
       })
       .then((response) => {
         this.proprietaire = response.data
+        return axios.get(
+          `${process.env.API_URL || ''}/API/locataire/details/${locataireId}`,
+          {
+            headers: { authorization: `Bearer: ${this.$store.state.token}` }
+          }
+        )
+      })
+      .then((response) => {
+        if (response.data !== "Nous n'avons pas pu trouver ce locataire")
+          this.locataire = response.data
       })
       .catch((error) => {
         this.error = error
@@ -145,6 +165,9 @@ export default {
         this.error = null
       }
     },
+    locPicked(value) {
+      this.locataire = value
+    },
     submit() {
       this.error = null
       this.success = null
@@ -156,10 +179,11 @@ export default {
         fd.append('type', this.type)
         fd.append('tantieme', this.tantieme)
         fd.append('proprietaire', this.proprietaire.Id)
-        fd.append('batiment', this.batiment)
-        fd.append('porte', this.porte)
-        fd.append('orientation', this.orientation)
-        fd.append('observation', this.observation)
+        if (this.batiment) fd.append('batiment', this.batiment)
+        if (this.porte) fd.append('porte', this.porte)
+        if (this.orientation) fd.append('orientation', this.orientation)
+        if (this.observation) fd.append('observation', this.observation)
+        if (this.locataire) fd.append('locataire', this.locataire.Id)
         axios
           .post(
             `${process.env.API_URL || ''}/API/lots/edit/${

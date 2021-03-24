@@ -38,6 +38,9 @@ const Lots = sequelize.define(
     proprietaire: {
       type: Sequelize.INTEGER,
       allowNull: false
+    },
+    locataire: {
+      type: Sequelize.INTEGER
     }
   },
   { timestamps: false }

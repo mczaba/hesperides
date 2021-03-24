@@ -50,11 +50,11 @@
                 document.status ? 'mdi-close-thick' : 'mdi-check-bold'
               }}</v-icon>
             </v-btn>
-            <v-btn @click="deleteDoc" class="primary--text" icon>
-              <v-icon>mdi-delete</v-icon>
-            </v-btn>
             <v-btn @click="goToEdit" class="primary--text" icon>
               <v-icon>mdi-pencil</v-icon>
+            </v-btn>
+            <v-btn @click="deleteDoc" class="primary--text" icon>
+              <v-icon>mdi-delete</v-icon>
             </v-btn>
           </v-row>
         </v-container>

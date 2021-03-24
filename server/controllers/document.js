@@ -95,7 +95,7 @@ exports.edit = [
           foundDocument.title = req.body.title
           foundDocument.type = req.body.type
           foundDocument.entreprise = req.body.entreprise
-          foundDocument.observation = req.body.observation
+          foundDocument.observation = req.body.observation || null
           return foundDocument.save()
         })
         .then(() => {

@@ -4,7 +4,11 @@
       <v-text-field
         v-model="input"
         @keydown="keydown"
-        label="Rechercher un propriétaire (3 lettres minimum) (requis)"
+        :label="
+          `Rechercher un ${type} (3 lettres minimum) ${
+            type === 'proprietaire' ? '(requis)' : ''
+          }`
+        "
       ></v-text-field>
       <v-btn @click="search" class="primary">Chercher</v-btn>
     </v-row>
@@ -18,6 +22,12 @@
         <span>{{ prop.nom }} {{ prop.prenom }}</span>
       </v-card>
     </v-col>
+    <v-card v-if="resultPicked" class="indigo white--text mb-3">
+      <v-card-title>{{ type }} actuel :</v-card-title>
+      <v-card-text class="white--text"
+        >{{ resultPicked.nom }} {{ resultPicked.prenom }}</v-card-text
+      >
+    </v-card>
   </div>
 </template>
 
@@ -25,6 +35,16 @@
 import axios from 'axios'
 
 export default {
+  props: {
+    resultPicked: {
+      type: Object,
+      default: null
+    },
+    type: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
       input: null,
@@ -46,7 +66,7 @@ export default {
       this.clearResults()
       axios
         .get(
-          `${process.env.API_URL || ''}/API/proprietaire/search/${this.input}`,
+          `${process.env.API_URL || ''}/API/${this.type}/search/${this.input}`,
           {
             headers: { authorization: `Bearer: ${this.$store.state.token}` }
           }

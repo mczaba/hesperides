@@ -18,10 +18,6 @@ const Locataire = sequelize.define(
     prenom: {
       type: Sequelize.TEXT
     },
-    lot: {
-      type: Sequelize.INTEGER,
-      allowNull: false
-    },
     telephone: {
       type: Sequelize.TEXT
     },

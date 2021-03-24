@@ -29,10 +29,11 @@
       <h2>Propriétaire du lot</h2>
       <prop-card :proprio="proprietaire"></prop-card>
     </div>
-    <div v-if="locataire">
-      <h2>Locataire du lot</h2>
-      <locataire-card :locataire="locataire"></locataire-card>
-    </div>
+    <h2>Locataire du lot</h2>
+    <locataire-card :locataire="locataire" v-if="locataire"></locataire-card>
+    <v-card v-else class="pa-3 mb-2">
+      Ce lot n'a pas de locataire
+    </v-card>
   </div>
 </template>
 
@@ -78,14 +79,17 @@ export default {
       .then((response) => {
         this.proprietaire = response.data
         return axios.get(
-          `${process.env.API_URL || ''}/API/locataire/lot/${this.lot.numero}`,
+          `${process.env.API_URL || ''}/API/locataire/details/${
+            this.lot.locataire
+          }`,
           {
             headers: { authorization: `Bearer: ${this.$store.state.token}` }
           }
         )
       })
       .then((response) => {
-        this.locataire = response.data
+        if (response.data !== "Nous n'avons pas pu trouver ce locataire")
+          this.locataire = response.data
       })
       .catch((error) => {
         this.error = error

@@ -27,6 +27,20 @@ exports.getById = (req, res, next) => {
     .catch((error) => next(error))
 }
 
+exports.getByLoc = (req, res, next) => {
+  Lots.findOne({ where: { locataire: req.params.id } })
+    .then((foundLot) => {
+      if (!foundLot) {
+        const error = new Error("Nous n'avons pas pu trouver ce lot")
+        error.statusCode = 220
+        error.tosend = "Nous n'avons pas pu trouver ce lot"
+        throw error
+      }
+      res.json(foundLot)
+    })
+    .catch((error) => next(error))
+}
+
 exports.create = [
   validator
     .body('numero', 'Vous devez renseigner un numéro')
@@ -45,7 +59,7 @@ exports.create = [
     .isLength({ min: 1 })
     .trim(),
   validator
-    .body('proprietaire', 'Vous devez renseigner un lot')
+    .body('proprietaire', 'Vous devez renseigner un propriétaire')
     .isLength({ min: 1 })
     .trim(),
   (req, res, next) => {
@@ -79,7 +93,8 @@ exports.create = [
             type: req.body.type,
             observation: req.body.observation,
             tantieme: req.body.tantieme,
-            proprietaire: req.body.proprietaire
+            proprietaire: req.body.proprietaire,
+            locataire: req.body.locataire
           })
         })
         .then(() => {
@@ -137,6 +152,7 @@ exports.edit = [
             foundLot.observation = req.body.observation
             foundLot.tantieme = req.body.tantieme
             foundLot.proprietaire = req.body.proprietaire
+            foundLot.locataire = req.body.locataire || null
           }
           return foundLot.save()
         })

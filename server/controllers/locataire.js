@@ -1,13 +1,24 @@
-// const { Op } = require('sequelize')
+const { Op } = require('sequelize')
 const validator = require('express-validator')
-const Lots = require('../models/lot')
 const Locataire = require('../models/locataire')
+const Proprietaire = require('../models/proprietaire')
 
 exports.getAll = (req, res, next) => {
   Locataire.findAll()
     .then((locataireList) => {
       const locListFiltered = locataireList.map((locataire) => {
         return locataire.dataValues
+      })
+      res.json(locListFiltered)
+    })
+    .catch((error) => next(error))
+}
+
+exports.search = (req, res, next) => {
+  Locataire.findAll({ where: { nom: { [Op.substring]: req.params.nom } } })
+    .then((locataireList) => {
+      const locListFiltered = locataireList.map((loc) => {
+        return loc.dataValues
       })
       res.json(locListFiltered)
     })
@@ -40,27 +51,13 @@ exports.getByProprio = (req, res, next) => {
     .catch((error) => next(error))
 }
 
-exports.getByLot = (req, res, next) => {
-  Locataire.findOne({ where: { lot: req.params.id } })
-    .then((foundLocataire) => {
-      if (!foundLocataire) {
-        const error = new Error("Nous n'avons pas pu trouver ce locataire")
-        error.statusCode = 220
-        error.tosend = "Nous n'avons pas pu trouver ce locataire"
-        throw error
-      }
-      res.json(foundLocataire)
-    })
-    .catch((error) => next(error))
-}
-
 exports.create = [
   validator
     .body('nom', 'Vous devez renseigner un nom')
     .isLength({ min: 1 })
     .trim(),
   validator
-    .body('lot', 'Vous devez renseigner un lot')
+    .body('proprietaire', 'Vous devez renseigner un propriétaire')
     .isLength({ min: 1 })
     .trim(),
   (req, res, next) => {
@@ -70,7 +67,6 @@ exports.create = [
       error.statusCode = 220
       throw error
     } else {
-      let propId = null
       Locataire.findOne({ where: { nom: req.body.nom } })
         .then((foundLoc) => {
           if (foundLoc) {
@@ -95,32 +91,22 @@ exports.create = [
               }
             }
           }
-          return Lots.findByPk(req.body.lot)
+          return Proprietaire.findByPk(req.body.proprietaire)
         })
-        .then((foundLot) => {
-          if (!foundLot) {
+        .then((foundProp) => {
+          if (!foundProp) {
             const error = new Error("Ce lot n'existe pas")
-            error.statusCode = 220
-            throw error
-          }
-          propId = foundLot.proprietaire
-          return Locataire.findOne({ where: { lot: req.body.lot } })
-        })
-        .then((foundLoc) => {
-          if (foundLoc) {
-            const error = new Error('Un locataire avec ce lot existe déjà')
             error.statusCode = 220
             throw error
           }
           return Locataire.create({
             nom: req.body.nom,
             prenom: req.body.prenom,
-            lot: req.body.lot,
             adresse: req.body.adresse,
             telephone: req.body.telephone,
             mobile: req.body.mobile,
             mail: req.body.mail,
-            idproprio: propId,
+            idproprio: foundProp.Id,
             observation: req.body.observation
           })
         })
@@ -137,10 +123,6 @@ exports.create = [
 exports.edit = [
   validator
     .body('nom', 'Vous devez renseigner un nom')
-    .isLength({ min: 1 })
-    .trim(),
-  validator
-    .body('lot', 'Vous devez renseigner un lot')
     .isLength({ min: 1 })
     .trim(),
   validator
@@ -166,7 +148,6 @@ exports.edit = [
           }
           foundLoc.nom = req.body.nom
           foundLoc.prenom = req.body.prenom
-          foundLoc.lot = req.body.lot
           foundLoc.adresse = req.body.adresse
           foundLoc.telephone = req.body.telephone
           foundLoc.mobile = req.body.mobile

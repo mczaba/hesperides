@@ -1,9 +1,7 @@
 <template>
   <v-card class="px-10 component mt-10">
     <v-card-title class="px-0">
-      <h3>
-        Créer un locataire
-      </h3>
+      <h3>Créer un locataire</h3>
     </v-card-title>
     <v-form ref="form">
       <v-text-field :rules="requiredRule" v-model="nom" label="Nom (requis)" />
@@ -12,18 +10,11 @@
       <v-text-field v-model="mobile" label="Mobile" />
       <v-text-field :rules="mailRule" v-model="mail" label="Email" />
       <v-textarea v-model="observation" label="Observations"></v-textarea>
-      <v-text-field
-        :rules="lotRule"
-        v-model.number="lot"
-        label="Numéro de lot (requis)"
-        type="number"
+      <prop-search
+        @propPicked="propPicked"
+        :type="'proprietaire'"
+        :resultPicked="proprietaire"
       />
-      <v-card v-if="proprietaire" class="indigo white--text mb-3">
-        <v-card-title>Propriétaire actuel :</v-card-title>
-        <v-card-text class="white--text"
-          >{{ proprietaire.nom }} {{ proprietaire.prenom }}</v-card-text
-        >
-      </v-card>
       <p v-if="error" class="error--text">{{ error }}</p>
       <p v-if="success" class="success--text">{{ success }}</p>
       <v-btn @click="submit" class="primary my-6">Créer le locataire</v-btn>
@@ -33,9 +24,13 @@
 
 <script>
 import axios from 'axios'
+import propSearch from '../../components/propSearch'
 
 export default {
   middleware: 'gestionnaire',
+  components: {
+    propSearch
+  },
   data() {
     return {
       nom: '',
@@ -44,7 +39,7 @@ export default {
       mobile: '',
       mail: '',
       observation: '',
-      lot: 0,
+      proprietaire: null,
       error: null,
       success: null,
       requiredRule: [(v) => v.length >= 1 || 'Vous devez renseigner ce champ'],
@@ -58,13 +53,19 @@ export default {
     }
   },
   methods: {
+    propPicked(value) {
+      this.proprietaire = value
+      if (this.error === 'Vous devez choisir un propriétaire') {
+        this.error = null
+      }
+    },
     submit() {
       if (this.$refs.form.validate()) {
         this.error = null
         this.success = null
         const fd = new FormData()
         fd.append('nom', this.nom)
-        fd.append('lot', this.lot)
+        fd.append('proprietaire', this.proprietaire.Id)
         if (this.prenom) {
           fd.append('prenom', this.prenom)
         }

@@ -1,9 +1,7 @@
 <template>
   <v-card class="px-10 component mt-10">
     <v-card-title class="px-0">
-      <h3>
-        Créer un lot
-      </h3>
+      <h3>Créer un lot</h3>
     </v-card-title>
     <v-form ref="form">
       <v-text-field
@@ -42,13 +40,16 @@
         label="Orientation"
       ></v-select>
       <v-textarea v-model="observation" label="Observations"></v-textarea>
-      <prop-search @propPicked="propPicked" />
-      <v-card v-if="proprietaire" class="indigo white--text mb-3">
-        <v-card-title>Propriétaire actuel :</v-card-title>
-        <v-card-text class="white--text"
-          >{{ proprietaire.nom }} {{ proprietaire.prenom }}</v-card-text
-        >
-      </v-card>
+      <prop-search
+        @propPicked="propPicked"
+        :type="'proprietaire'"
+        :resultPicked="proprietaire"
+      />
+      <prop-search
+        @propPicked="locPicked"
+        :type="'locataire'"
+        :resultPicked="locataire"
+      />
       <p v-if="error" class="error--text">{{ error }}</p>
       <p v-if="success" class="success--text">{{ success }}</p>
       <v-btn @click="submit" class="primary my-6">Créer le lot</v-btn>
@@ -76,6 +77,7 @@ export default {
       observation: '',
       tantieme: '',
       proprietaire: null,
+      locataire: null,
       selectListBatiment: ['A', 'B', 'C', 'D'],
       selectListEtage: [
         'Rez de chaussée',
@@ -118,6 +120,9 @@ export default {
         this.error = null
       }
     },
+    locPicked(value) {
+      this.locataire = value
+    },
     submit() {
       this.error = null
       this.success = null
@@ -130,18 +135,11 @@ export default {
         fd.append('type', this.type)
         fd.append('tantieme', this.tantieme)
         fd.append('proprietaire', this.proprietaire.Id)
-        if (this.batiment) {
-          fd.append('batiment', this.batiment)
-        }
-        if (this.porte) {
-          fd.append('porte', this.porte)
-        }
-        if (this.orientation) {
-          fd.append('orientation', this.orientation)
-        }
-        if (this.observation) {
-          fd.append('observation', this.observation)
-        }
+        if (this.batiment) fd.append('batiment', this.batiment)
+        if (this.porte) fd.append('porte', this.porte)
+        if (this.orientation) fd.append('orientation', this.orientation)
+        if (this.observation) fd.append('observation', this.observation)
+        if (this.locataire) fd.append('locataire', this.locataire.Id)
         axios
           .post(`${process.env.API_URL || ''}/API/lots/create`, fd, {
             headers: { authorization: `Bearer: ${this.$store.state.token}` }
