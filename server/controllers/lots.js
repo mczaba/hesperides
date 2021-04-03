@@ -5,9 +5,7 @@ const Proprietaire = require('../models/proprietaire')
 exports.getAll = (req, res, next) => {
   Lots.findAll()
     .then((lotsList) => {
-      const propListFiltered = lotsList.map((lot) => {
-        return lot.dataValues
-      })
+      const propListFiltered = lotsList.map((lot) => lot.dataValues)
       res.json(propListFiltered)
     })
     .catch((error) => next(error))
@@ -28,15 +26,10 @@ exports.getById = (req, res, next) => {
 }
 
 exports.getByLoc = (req, res, next) => {
-  Lots.findOne({ where: { locataire: req.params.id } })
-    .then((foundLot) => {
-      if (!foundLot) {
-        const error = new Error("Nous n'avons pas pu trouver ce lot")
-        error.statusCode = 220
-        error.tosend = "Nous n'avons pas pu trouver ce lot"
-        throw error
-      }
-      res.json(foundLot)
+  Lots.findAll({ where: { locataire: req.params.id } })
+    .then((lotList) => {
+      const lotListFiltered = lotList.map((lot) => lot.dataValues)
+      res.json(lotListFiltered)
     })
     .catch((error) => next(error))
 }
@@ -92,6 +85,7 @@ exports.create = [
             orientation: req.body.orientation,
             type: req.body.type,
             observation: req.body.observation,
+            superficie: req.body.superficie,
             tantieme: req.body.tantieme,
             proprietaire: req.body.proprietaire,
             locataire: req.body.locataire
@@ -149,6 +143,7 @@ exports.edit = [
             foundLot.porte = req.body.porte || null
             foundLot.orientation = req.body.orientation
             foundLot.type = req.body.type
+            foundLot.superficie = req.body.superficie
             foundLot.observation = req.body.observation
             foundLot.tantieme = req.body.tantieme
             foundLot.proprietaire = req.body.proprietaire

@@ -24,13 +24,13 @@
         </v-btn>
       </v-card>
     </div>
-    <div v-if="lot">
-      <h2>Lot :</h2>
-      <lot-card :lot="lot"></lot-card>
-    </div>
     <div v-if="proprietaire">
       <h2>Propriétaire :</h2>
       <prop-card :proprio="proprietaire"></prop-card>
+    </div>
+    <div v-if="lots.length > 0">
+      <h2>Lot(s) :</h2>
+      <lot-card v-for="lot in lots" :key="lot.numero" :lot="lot"></lot-card>
     </div>
   </div>
 </template>
@@ -50,7 +50,7 @@ export default {
     return {
       locataire: null,
       proprietaire: null,
-      lot: null,
+      lots: [],
       error: null
     }
   },
@@ -92,7 +92,8 @@ export default {
         )
       })
       .then((response) => {
-        this.lot = response.data
+        response.data.forEach((row) => this.lots.push(row))
+        this.lots.sort((a, b) => a - b)
       })
       .catch((error) => (this.error = error))
   },

@@ -28,6 +28,12 @@
         label="Tantiemes (requis)"
         type="number"
       />
+      <v-text-field
+        :rules="integerRule"
+        v-model="superficie"
+        label="Superficie"
+        type="number"
+      />
       <v-select
         :items="selectListBatiment"
         v-model="batiment"
@@ -76,6 +82,7 @@ export default {
       type: '',
       observation: '',
       tantieme: '',
+      superficie: '',
       proprietaire: null,
       locataire: null,
       selectListBatiment: ['A', 'B', 'C', 'D'],
@@ -101,6 +108,11 @@ export default {
       selectListOrientation: ['gauche', 'droite', 'face'],
       error: null,
       success: null,
+      integerRule: [
+        (v) =>
+          Number.isInteger(Number(v)) ||
+          'La superficie doit être un nombre entier'
+      ],
       requiredRule: [(v) => v.length >= 1 || 'Vous devez renseigner ce champ'],
       loginRule: [
         (v) => v.length >= 5 || 'Le login doit comporter au moins 5 caractères'
@@ -140,6 +152,7 @@ export default {
         if (this.orientation) fd.append('orientation', this.orientation)
         if (this.observation) fd.append('observation', this.observation)
         if (this.locataire) fd.append('locataire', this.locataire.Id)
+        if (this.superficie) fd.append('superficie', this.superficie)
         axios
           .post(`${process.env.API_URL || ''}/API/lots/create`, fd, {
             headers: { authorization: `Bearer: ${this.$store.state.token}` }

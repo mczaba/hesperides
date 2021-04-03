@@ -7,6 +7,8 @@
         <div>{{ lot.numero }}</div>
         <div class="caption grey--text">Tantième :</div>
         <div>{{ lot.tantieme }}</div>
+        <div v-if="lot.superficie" class="caption grey--text">Superficie :</div>
+        <div v-if="lot.superficie">{{ lot.superficie }}m²</div>
         <div v-if="lot.batiment" class="caption grey--text">Batiment :</div>
         <div v-if="lot.batiment">{{ lot.batiment }}</div>
         <div class="caption grey--text">Etage :</div>

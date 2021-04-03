@@ -31,6 +31,9 @@ const Lots = sequelize.define(
     observation: {
       type: Sequelize.TEXT
     },
+    superficie: {
+      type: Sequelize.INTEGER
+    },
     tantieme: {
       type: Sequelize.INTEGER,
       allowNull: false
