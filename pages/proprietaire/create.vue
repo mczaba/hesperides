@@ -18,9 +18,8 @@
       <v-text-field :rules="mailRule" v-model="mail" label="Email" />
       <v-select
         :items="selectListBatiment"
-        :rules="requiredRule"
         v-model="batiment"
-        label="Batiment (requis)"
+        label="Batiment"
       ></v-select>
       <v-checkbox v-model="resident" label="Résident"></v-checkbox>
       <v-textarea v-model="observations" label="Observations"></v-textarea>
@@ -73,30 +72,16 @@ export default {
         this.success = null
         const fd = new FormData()
         fd.append('nom', this.nom)
-        if (this.prenom) {
-          fd.append('prenom', this.prenom)
-        }
         fd.append('civilite', this.civilite)
-        if (this.adresse) {
-          fd.append('adresse', this.adresse)
-        }
-        if (this.telephone) {
-          fd.append('telephone', this.telephone)
-        }
-        if (this.mobile) {
-          fd.append('mobile', this.mobile)
-        }
-        if (this.mail) {
-          fd.append('mail', this.mail)
-        }
-        fd.append('batiment', this.batiment)
         fd.append('resident', this.resident)
-        if (this.observations) {
-          fd.append('observations', this.observations)
-        }
-        if (this.societe) {
-          fd.append('societe', this.societe)
-        }
+        if (this.prenom) fd.append('prenom', this.prenom)
+        if (this.adresse) fd.append('adresse', this.adresse)
+        if (this.telephone) fd.append('telephone', this.telephone)
+        if (this.mobile) fd.append('mobile', this.mobile)
+        if (this.mail) fd.append('mail', this.mail)
+        if (this.batiment) fd.append('batiment', this.batiment)
+        if (this.observations) fd.append('observations', this.observations)
+        if (this.societe) fd.append('societe', this.societe)
         axios
           .post(`${process.env.API_URL || ''}/API/proprietaire/create`, fd, {
             headers: { authorization: `Bearer: ${this.$store.state.token}` }

@@ -62,10 +62,6 @@ exports.create = [
     .isLength({ min: 1 })
     .trim(),
   validator
-    .body('batiment', 'Vous devez renseigner un batiment')
-    .isLength({ min: 1 })
-    .trim(),
-  validator
     .body(
       'resident',
       'Vous devez préciser si le propriétaire réside dans son lot'
@@ -123,10 +119,6 @@ exports.edit = [
     .trim(),
   validator
     .body('civilite', 'Vous devez renseigner une civilité')
-    .isLength({ min: 1 })
-    .trim(),
-  validator
-    .body('batiment', 'Vous devez renseigner un batiment')
     .isLength({ min: 1 })
     .trim(),
   validator

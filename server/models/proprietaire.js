@@ -35,8 +35,7 @@ const Proprietaire = sequelize.define(
       type: Sequelize.TEXT
     },
     batiment: {
-      type: Sequelize.TEXT('tiny'),
-      allowNull: false
+      type: Sequelize.TEXT('tiny')
     },
     resident: {
       type: Sequelize.BOOLEAN,

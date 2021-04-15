@@ -12,19 +12,14 @@
         v-model="civilite"
         label="Civilité (requis)"
       ></v-select>
-      <v-text-field
-        v-model="adresse"
-        :rules="requiredRule"
-        label="Adresse (requis)"
-      />
+      <v-text-field v-model="adresse" label="Adresse" />
       <v-text-field v-model="telephone" label="Téléphone" />
       <v-text-field v-model="mobile" label="Mobile" />
       <v-text-field :rules="mailRule" v-model="mail" label="Email" />
       <v-select
         :items="selectListBatiment"
-        :rules="requiredRule"
         v-model="batiment"
-        label="Batiment (requis)"
+        label="Batiment"
       ></v-select>
       <v-checkbox v-model="resident" label="Résident"></v-checkbox>
       <v-textarea v-model="observations" label="Observations"></v-textarea>
@@ -86,11 +81,11 @@ export default {
         this.nom = response.data.nom
         this.prenom = response.data.prenom || ''
         this.civilite = response.data.civilite
-        this.adresse = response.data.adresse
+        this.adresse = response.data.adresse || ''
         this.telephone = response.data.telephone || ''
         this.mobile = response.data.mobile || ''
         this.mail = response.data.mail || ''
-        this.batiment = response.data.batiment
+        this.batiment = response.data.batiment || ''
         this.resident = response.data.resident
         this.observations = response.data.observations || ''
         this.societe = response.data.societe || ''
