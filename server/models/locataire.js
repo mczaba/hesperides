@@ -27,10 +27,6 @@ const Locataire = sequelize.define(
     mail: {
       type: Sequelize.TEXT
     },
-    idproprio: {
-      type: Sequelize.INTEGER,
-      allowNull: false
-    },
     observation: {
       type: Sequelize.TEXT
     }

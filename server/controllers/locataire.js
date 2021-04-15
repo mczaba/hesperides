@@ -1,7 +1,6 @@
 const { Op } = require('sequelize')
 const validator = require('express-validator')
 const Locataire = require('../models/locataire')
-const Proprietaire = require('../models/proprietaire')
 
 exports.getAll = (req, res, next) => {
   Locataire.findAll()
@@ -56,10 +55,6 @@ exports.create = [
     .body('nom', 'Vous devez renseigner un nom')
     .isLength({ min: 1 })
     .trim(),
-  validator
-    .body('proprietaire', 'Vous devez renseigner un propriétaire')
-    .isLength({ min: 1 })
-    .trim(),
   (req, res, next) => {
     const errors = validator.validationResult(req)
     if (!errors.isEmpty()) {
@@ -91,14 +86,6 @@ exports.create = [
               }
             }
           }
-          return Proprietaire.findByPk(req.body.proprietaire)
-        })
-        .then((foundProp) => {
-          if (!foundProp) {
-            const error = new Error("Ce lot n'existe pas")
-            error.statusCode = 220
-            throw error
-          }
           return Locataire.create({
             nom: req.body.nom,
             prenom: req.body.prenom,
@@ -106,7 +93,6 @@ exports.create = [
             telephone: req.body.telephone,
             mobile: req.body.mobile,
             mail: req.body.mail,
-            idproprio: foundProp.Id,
             observation: req.body.observation
           })
         })
@@ -123,10 +109,6 @@ exports.create = [
 exports.edit = [
   validator
     .body('nom', 'Vous devez renseigner un nom')
-    .isLength({ min: 1 })
-    .trim(),
-  validator
-    .body('idproprio', 'Vous devez renseigner un locataire')
     .isLength({ min: 1 })
     .trim(),
   (req, res, next) => {
@@ -152,7 +134,6 @@ exports.edit = [
           foundLoc.telephone = req.body.telephone
           foundLoc.mobile = req.body.mobile
           foundLoc.mail = req.body.mail
-          foundLoc.idproprio = req.body.idproprio
           foundLoc.observation = req.body.observation
           return foundLoc.save()
         })

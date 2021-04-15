@@ -10,11 +10,6 @@
       <v-text-field v-model="mobile" label="Mobile" />
       <v-text-field :rules="mailRule" v-model="mail" label="Email" />
       <v-textarea v-model="observation" label="Observations"></v-textarea>
-      <prop-search
-        @propPicked="propPicked"
-        :type="'proprietaire'"
-        :resultPicked="proprietaire"
-      />
       <p v-if="error" class="error--text">{{ error }}</p>
       <p v-if="success" class="success--text">{{ success }}</p>
       <v-btn @click="submit" class="primary my-6">Modifier le locataire</v-btn>
@@ -24,13 +19,9 @@
 
 <script>
 import axios from 'axios'
-import propSearch from '../../../components/propSearch'
 
 export default {
   middleware: 'gestionnaire',
-  components: {
-    propSearch
-  },
   data() {
     return {
       nom: '',
@@ -39,7 +30,6 @@ export default {
       mobile: '',
       mail: '',
       observation: '',
-      proprietaire: null,
       error: null,
       success: null,
       requiredRule: [(v) => v.length >= 1 || 'Vous devez renseigner ce champ'],
@@ -69,36 +59,18 @@ export default {
         this.mobile = response.data.mobile || ''
         this.mail = response.data.mail || ''
         this.observation = response.data.observation || ''
-        return axios.get(
-          `${process.env.API_URL || ''}/API/proprietaire/details/${
-            response.data.idproprio
-          }`,
-          {
-            headers: { authorization: `Bearer: ${this.$store.state.token}` }
-          }
-        )
-      })
-      .then((response) => {
-        this.proprietaire = response.data
       })
       .catch((error) => {
         this.error = error
       })
   },
   methods: {
-    propPicked(value) {
-      this.proprietaire = value
-      if (this.error === 'Vous devez choisir un propriétaire') {
-        this.error = null
-      }
-    },
     submit() {
       if (this.$refs.form.validate()) {
         this.error = null
         this.success = null
         const fd = new FormData()
         fd.append('nom', this.nom)
-        fd.append('idproprio', this.proprietaire.Id)
         fd.append('prenom', this.prenom)
         fd.append('telephone', this.telephone)
         fd.append('mobile', this.mobile)
