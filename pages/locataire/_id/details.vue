@@ -24,9 +24,13 @@
         </v-btn>
       </v-card>
     </div>
-    <div v-if="proprietaire">
-      <h2>Propriétaire :</h2>
-      <prop-card :proprio="proprietaire"></prop-card>
+    <div v-if="propList.length > 0">
+      <h2>Propriétaire(s) :</h2>
+      <prop-card
+        v-for="prop in propList"
+        :key="prop.Id"
+        :proprio="prop"
+      ></prop-card>
     </div>
     <div v-if="lots.length > 0">
       <h2>Lot(s) :</h2>
@@ -49,7 +53,7 @@ export default {
   data() {
     return {
       locataire: null,
-      proprietaire: null,
+      propList: [],
       lots: [],
       error: null
     }
@@ -60,6 +64,7 @@ export default {
     }
   },
   mounted() {
+    const propList = []
     axios
       .get(
         `${process.env.API_URL || ''}/API/locataire/details/${
@@ -72,17 +77,6 @@ export default {
       .then((response) => {
         this.locataire = response.data
         return axios.get(
-          `${process.env.API_URL || ''}/API/proprietaire/details/${
-            this.locataire.idproprio
-          }`,
-          {
-            headers: { authorization: `Bearer: ${this.$store.state.token}` }
-          }
-        )
-      })
-      .then((response) => {
-        this.proprietaire = response.data
-        return axios.get(
           `${process.env.API_URL || ''}/API/lots/locataire/${
             this.locataire.Id
           }`,
@@ -92,8 +86,24 @@ export default {
         )
       })
       .then((response) => {
-        response.data.forEach((row) => this.lots.push(row))
+        response.data.forEach((row) => {
+          this.lots.push(row)
+          if (!propList.includes(row.proprietaire))
+            propList.push(row.proprietaire)
+        })
         this.lots.sort((a, b) => a - b)
+        const promiseArray = propList.map((id) =>
+          axios.get(
+            `${process.env.API_URL || ''}/API/proprietaire/details/${id}`,
+            {
+              headers: { authorization: `Bearer: ${this.$store.state.token}` }
+            }
+          )
+        )
+        return axios.all(promiseArray)
+      })
+      .then((response) => {
+        response.forEach((request) => this.propList.push(request.data))
       })
       .catch((error) => (this.error = error))
   },
