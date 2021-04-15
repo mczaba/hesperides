@@ -136,6 +136,7 @@ export default {
     }
   },
   mounted() {
+    const locList = []
     axios
       .get(
         `${process.env.API_URL || ''}/API/proprietaire/details/${
@@ -160,18 +161,25 @@ export default {
         )
       })
       .then((response) => {
-        response.data.forEach((lot) => this.lots.push(lot))
-        return axios.get(
-          `${process.env.API_URL || ''}/API/locataire/proprio/${
-            this.$route.params.id
-          }`,
-          {
-            headers: { authorization: `Bearer: ${this.$store.state.token}` }
-          }
+        response.data.forEach((lot) => {
+          this.lots.push(lot)
+          if (lot.locataire && !locList.includes(lot.locataire))
+            locList.push(lot.locataire)
+        })
+        const promiseArray = locList.map((id) =>
+          axios.get(
+            `${process.env.API_URL || ''}/API/locataire/details/${id}`,
+            {
+              headers: { authorization: `Bearer: ${this.$store.state.token}` }
+            }
+          )
         )
+        return axios.all(promiseArray)
       })
       .then((response) => {
-        response.data.forEach((locataire) => this.locataires.push(locataire))
+        response.forEach((request) => {
+          if (request.data.Id) this.locataires.push(request.data)
+        })
       })
       .catch((error) => (this.error = error))
   },

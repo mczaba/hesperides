@@ -39,17 +39,6 @@ exports.getById = (req, res, next) => {
     .catch((error) => next(error))
 }
 
-exports.getByProprio = (req, res, next) => {
-  Locataire.findAll({ where: { idproprio: req.params.id } })
-    .then((locataireList) => {
-      const locListFiltered = locataireList.map((locataire) => {
-        return locataire.dataValues
-      })
-      res.json(locListFiltered)
-    })
-    .catch((error) => next(error))
-}
-
 exports.create = [
   validator
     .body('nom', 'Vous devez renseigner un nom')

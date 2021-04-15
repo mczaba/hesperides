@@ -6,7 +6,6 @@ const token = require('../middlewares/token')
 
 router.get('/all', token.isAuth, locataireController.getAll)
 router.get('/details/:id', token.isAuth, locataireController.getById)
-router.get('/proprio/:id', token.isAuth, locataireController.getByProprio)
 router.get('/search/:nom', token.isAuth, locataireController.search)
 router.post('/create', token.isGestionnaire, locataireController.create)
 router.post('/edit/:id', token.isGestionnaire, locataireController.edit)
