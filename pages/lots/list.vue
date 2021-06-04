@@ -10,6 +10,12 @@
           class="shrink filterInput"
         >
         </v-text-field>
+        <v-text-field
+          v-model.number="filter.porte"
+          label="Porte"
+          class="shrink filterInput"
+        >
+        </v-text-field>
         <v-select
           :items="selectEtageList"
           v-model="filter.etage"
@@ -92,6 +98,7 @@ export default {
       lotsList: [],
       filter: {
         numero: null,
+        porte: null,
         batiment: '',
         type: '',
         etage: ''
@@ -128,6 +135,11 @@ export default {
       return this.lotsList.filter((lot) => {
         if (this.filter.numero) {
           if (lot.numero !== this.filter.numero) {
+            return false
+          }
+        }
+        if (this.filter.porte) {
+          if (lot.porte !== this.filter.porte) {
             return false
           }
         }

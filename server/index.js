@@ -10,9 +10,6 @@ const mkdirp = require('mkdirp')
 const config = require('../nuxt.config.js')
 config.dev = process.env.NODE_ENV !== 'production'
 
-// Import db
-const sequelize = require('./util/db')
-
 // Import routes
 const authRouter = require('./routes/auth')
 const propRouter = require('./routes/proprietaire')
@@ -97,8 +94,6 @@ async function start() {
   app.use(nuxt.render)
 
   // Listen the server
-
-  sequelize.sync()
 
   app.listen(port, host)
   consola.ready({

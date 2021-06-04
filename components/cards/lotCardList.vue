@@ -3,21 +3,25 @@
     <v-row no-gutters>
       <v-col cols="10">
         <v-row no-gutters wrap align="center">
-          <v-col class="my-1" cols="6" md="3">
+          <v-col class="my-1" cols="6" md="4">
             <div class="caption grey--text">Numéro</div>
             <div>{{ lot.numero }}</div>
           </v-col>
-          <v-col class="my-1" cols="6" md="3">
-            <div class="caption grey--text">Etage</div>
-            <div>{{ lot.etage }}</div>
+          <v-col class="my-1" cols="6" md="4">
+            <div class="caption grey--text">Porte</div>
+            <div>{{ lot.porte }}</div>
           </v-col>
-          <v-col class="my-1" cols="6" md="3">
+          <v-col class="my-1" cols="6" md="4">
             <div class="caption grey--text">Type</div>
             <div>{{ lot.type }}</div>
           </v-col>
-          <v-col v-if="lot.batiment" class="my-1" cols="6" md="3">
+          <v-col v-if="lot.batiment" class="my-1" cols="4">
             <div class="caption grey--text">Batiment</div>
             <div>{{ lot.batiment }}</div>
+          </v-col>
+          <v-col class="my-1" cols="4">
+            <div class="caption grey--text">Etage</div>
+            <div>{{ lot.etage }}</div>
           </v-col>
         </v-row>
       </v-col>
