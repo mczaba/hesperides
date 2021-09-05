@@ -90,6 +90,7 @@
       <v-btn v-if="mobileView && user" @click.stop="drawer = !drawer" icon
         ><v-icon>mdi-menu</v-icon></v-btn
       >
+      <v-btn v-if="user && user.admin" @click="dump">Export DB</v-btn>
       <v-spacer />
       <v-menu v-if="user" v-model="showMenu" offset-y>
         <template v-slot:activator="{ on, attrs }">
@@ -115,6 +116,8 @@
 </template>
 
 <script>
+import download from 'downloadjs'
+import axios from 'axios'
 import changeMail from '../components/changeMailForm'
 import changePass from '../components/changePassForm'
 
@@ -232,6 +235,19 @@ export default {
       this.$store.commit('logOut')
       this.showMenu = false
       this.$router.push('/')
+    },
+    dump() {
+      // window.open(`${process.env.API_URL || ''}/API/db/dump`)
+      axios
+        .get(`${process.env.API_URL || ''}/API/db/dump`, {
+          headers: { authorization: `Bearer: ${this.$store.state.token}` },
+          responseType: 'blob'
+        })
+        .then((res) => {
+          const content = res.headers['content-type']
+          download(res.data, 'dump.sql', content)
+        })
+        .catch((err) => console.error(err.message))
     }
   }
 }

@@ -18,6 +18,7 @@ const locataireRouter = require('./routes/locataire')
 const documentRouter = require('./routes/document')
 const favouriteRouter = require('./routes/favourite')
 const entrepriseRouter = require('./routes/entreprise')
+const dbRouter = require('./routes/db')
 
 // multer config
 const fileStorage = multer.diskStorage({
@@ -84,6 +85,7 @@ async function start() {
   app.use('/API/document', documentRouter)
   app.use('/API/favourite', favouriteRouter)
   app.use('/API/entreprise', entrepriseRouter)
+  app.use('/API/db', dbRouter)
 
   // error middleware
   app.use((error, req, res, next) => {
