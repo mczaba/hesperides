@@ -89,3 +89,6 @@ sw.*
 
 # Vim swap files
 *.swp
+
+.nvmrc
+dump/dump.sql

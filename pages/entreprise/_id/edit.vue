@@ -10,7 +10,7 @@
         v-model="type"
         label="Type (requis)"
       />
-      <v-text-field v-model="adresse" label="Adresse" />
+      <v-textarea v-model="adresse" label="Adresse"></v-textarea>
       <v-textarea
         :rules="requiredRule"
         v-model="telephone"

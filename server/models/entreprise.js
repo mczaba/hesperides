@@ -20,7 +20,7 @@ const Entreprise = sequelize.define(
       allowNull: false
     },
     adresse: {
-      type: Sequelize.STRING
+      type: Sequelize.TEXT
     },
     telephone: {
       type: Sequelize.TEXT,
